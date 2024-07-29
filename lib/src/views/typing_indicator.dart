@@ -1,3 +1,7 @@
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
@@ -117,51 +121,47 @@ class _TypingIndicatorState extends State<TypingIndicator>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _indicatorSpaceAnimation,
-      builder: (context, child) {
-        return SizedBox(
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _indicatorSpaceAnimation,
+        builder: (context, child) => SizedBox(
           height: _indicatorSpaceAnimation.value,
           child: child,
-        );
-      },
-      child: Stack(
-        children: [
-          _AnimatedBubble(
-            animation: _smallBubbleAnimation,
-            left: 8,
-            bottom: 8,
-            bubble: _CircleBubble(
-              size: 8,
-              bubbleColor: widget.bubbleColor,
+        ),
+        child: Stack(
+          children: [
+            _AnimatedBubble(
+              animation: _smallBubbleAnimation,
+              left: 8,
+              bottom: 8,
+              bubble: _CircleBubble(
+                size: 8,
+                bubbleColor: widget.bubbleColor,
+              ),
             ),
-          ),
-          _AnimatedBubble(
-            animation: _mediumBubbleAnimation,
-            left: 10,
-            bottom: 10,
-            bubble: _CircleBubble(
-              size: 16,
-              bubbleColor: widget.bubbleColor,
+            _AnimatedBubble(
+              animation: _mediumBubbleAnimation,
+              left: 10,
+              bottom: 10,
+              bubble: _CircleBubble(
+                size: 16,
+                bubbleColor: widget.bubbleColor,
+              ),
             ),
-          ),
-          _AnimatedBubble(
-            animation: _largeBubbleAnimation,
-            left: 12,
-            bottom: 12,
-            bubble: _StatusBubble(
-              repeatingController: _repeatingController,
-              dotIntervals: _dotIntervals,
-              flashingCircleDarkColor: widget.flashingCircleDarkColor,
-              flashingCircleBrightColor: widget.flashingCircleBrightColor,
-              bubbleColor: widget.bubbleColor,
+            _AnimatedBubble(
+              animation: _largeBubbleAnimation,
+              left: 12,
+              bottom: 12,
+              bubble: _StatusBubble(
+                repeatingController: _repeatingController,
+                dotIntervals: _dotIntervals,
+                flashingCircleDarkColor: widget.flashingCircleDarkColor,
+                flashingCircleBrightColor: widget.flashingCircleBrightColor,
+                bubbleColor: widget.bubbleColor,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class _CircleBubble extends StatelessWidget {
@@ -174,16 +174,14 @@ class _CircleBubble extends StatelessWidget {
   final Color bubbleColor;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: bubbleColor,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: bubbleColor,
+        ),
+      );
 }
 
 class _AnimatedBubble extends StatelessWidget {
@@ -200,23 +198,19 @@ class _AnimatedBubble extends StatelessWidget {
   final Widget bubble;
 
   @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: left,
-      bottom: bottom,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Transform.scale(
+  Widget build(BuildContext context) => Positioned(
+        left: left,
+        bottom: bottom,
+        child: AnimatedBuilder(
+          animation: animation,
+          builder: (context, child) => Transform.scale(
             scale: animation.value,
             alignment: Alignment.bottomLeft,
             child: child,
-          );
-        },
-        child: bubble,
-      ),
-    );
-  }
+          ),
+          child: bubble,
+        ),
+      );
 }
 
 class _StatusBubble extends StatelessWidget {
@@ -235,43 +229,41 @@ class _StatusBubble extends StatelessWidget {
   final Color bubbleColor;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 85,
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(27),
-        color: bubbleColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _FlashingCircle(
-            index: 0,
-            repeatingController: repeatingController,
-            dotIntervals: dotIntervals,
-            flashingCircleDarkColor: flashingCircleDarkColor,
-            flashingCircleBrightColor: flashingCircleBrightColor,
-          ),
-          _FlashingCircle(
-            index: 1,
-            repeatingController: repeatingController,
-            dotIntervals: dotIntervals,
-            flashingCircleDarkColor: flashingCircleDarkColor,
-            flashingCircleBrightColor: flashingCircleBrightColor,
-          ),
-          _FlashingCircle(
-            index: 2,
-            repeatingController: repeatingController,
-            dotIntervals: dotIntervals,
-            flashingCircleDarkColor: flashingCircleDarkColor,
-            flashingCircleBrightColor: flashingCircleBrightColor,
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        width: 85,
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(27),
+          color: bubbleColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _FlashingCircle(
+              index: 0,
+              repeatingController: repeatingController,
+              dotIntervals: dotIntervals,
+              flashingCircleDarkColor: flashingCircleDarkColor,
+              flashingCircleBrightColor: flashingCircleBrightColor,
+            ),
+            _FlashingCircle(
+              index: 1,
+              repeatingController: repeatingController,
+              dotIntervals: dotIntervals,
+              flashingCircleDarkColor: flashingCircleDarkColor,
+              flashingCircleBrightColor: flashingCircleBrightColor,
+            ),
+            _FlashingCircle(
+              index: 2,
+              repeatingController: repeatingController,
+              dotIntervals: dotIntervals,
+              flashingCircleDarkColor: flashingCircleDarkColor,
+              flashingCircleBrightColor: flashingCircleBrightColor,
+            ),
+          ],
+        ),
+      );
 }
 
 class _FlashingCircle extends StatelessWidget {
@@ -290,28 +282,26 @@ class _FlashingCircle extends StatelessWidget {
   final Color flashingCircleBrightColor;
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: repeatingController,
-      builder: (context, child) {
-        final circleFlashPercent = dotIntervals[index].transform(
-          repeatingController.value,
-        );
-        final circleColorPercent = sin(pi * circleFlashPercent);
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: repeatingController,
+        builder: (context, child) {
+          final circleFlashPercent = dotIntervals[index].transform(
+            repeatingController.value,
+          );
+          final circleColorPercent = sin(pi * circleFlashPercent);
 
-        return Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.lerp(
-              flashingCircleDarkColor,
-              flashingCircleBrightColor,
-              circleColorPercent,
+          return Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.lerp(
+                flashingCircleDarkColor,
+                flashingCircleBrightColor,
+                circleColorPercent,
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
 }

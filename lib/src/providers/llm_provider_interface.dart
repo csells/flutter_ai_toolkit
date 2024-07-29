@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-library flutter_ai_toolkit;
+import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
-export 'src/models/llm_config.dart';
-export 'src/providers/echo_provider.dart';
-export 'src/views/llm_chat_view.dart';
+abstract class LlmProvider {
+  LlmConfig get config;
+  Stream<String> generateStream(String prompt);
+}

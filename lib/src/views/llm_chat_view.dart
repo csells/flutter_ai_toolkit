@@ -3,39 +3,45 @@
 // found in the LICENSE file.
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
 import '../models/chat_message.dart';
+import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 
 class LlmChatView extends StatefulWidget {
-  const LlmChatView(this.llmConfig, {super.key});
+  const LlmChatView(this.provider, {super.key});
 
-  final LlmConfig llmConfig;
+  final LlmProvider provider;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
 }
 
 class _LlmChatViewState extends State<LlmChatView> {
-  final TextEditingController _controller = TextEditingController();
   final _transcript = List<ChatMessage>.empty(growable: true);
-  final bool _isLlmTyping = false;
+  bool _isLlmTyping = false;
 
   @override
   Widget build(BuildContext context) => Column(
-        children: <Widget>[
-          Expanded(
-            child: ChatTranscriptView(_transcript),
-          ),
-          ChatInput(
-            controller: _controller,
-            isLlmTyping: _isLlmTyping,
-            submit: (String value) => setState(
-              () => _transcript.add(ChatMessage.user(value)),
-            ),
-          ),
+        children: [
+          Expanded(child: ChatTranscriptView(_transcript)),
+          ChatInput(isLlmTyping: _isLlmTyping, submit: (text) => _submit(text)),
         ],
       );
+
+  Future<void> _submit(String prompt) async {
+    setState(() {
+      _transcript.add(ChatMessage.user(prompt));
+      _isLlmTyping = true;
+    });
+
+    // TODO: stream this response
+    final response = await widget.provider.generateStream(prompt).toList();
+
+    setState(() {
+      _transcript.add(ChatMessage.llm(response.join('')));
+      _isLlmTyping = false;
+    });
+  }
 }
