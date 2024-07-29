@@ -26,7 +26,7 @@ class _LlmChatViewState extends State<LlmChatView> {
   Widget build(BuildContext context) => Column(
         children: [
           Expanded(child: ChatTranscriptView(_transcript)),
-          ChatInput(isLlmTyping: _isLlmTyping, submit: (text) => _submit(text)),
+          ChatInput(pauseInput: _isLlmTyping, submit: (text) => _submit(text)),
         ],
       );
 

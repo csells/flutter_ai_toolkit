@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class ChatInput extends StatefulWidget {
   const ChatInput({
     required this.submit,
-    required this.isLlmTyping,
+    required this.pauseInput,
     super.key,
   });
 
@@ -15,7 +15,7 @@ class ChatInput extends StatefulWidget {
   final void Function(String) submit;
 
   /// Prevents submitting new messages when true
-  final bool isLlmTyping;
+  final bool pauseInput;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
@@ -39,8 +39,11 @@ class _ChatInputState extends State<ChatInput> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
               child: TextField(
+                minLines: 1,
+                maxLines: 1024,
                 controller: _controller,
                 focusNode: _focusNode,
+                textInputAction: TextInputAction.done,
                 onSubmitted: (value) => _submit(value),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -55,17 +58,20 @@ class _ChatInputState extends State<ChatInput> {
             valueListenable: _controller,
             builder: (context, value, child) => IconButton(
               icon: const Icon(Icons.send),
-              onPressed: _controller.text.isEmpty || widget.isLlmTyping
-                  ? null
-                  : () => _submit(_controller.text),
+              onPressed: _canTakeInput ? () => _submit(value.text) : null,
             ),
           ),
         ],
       );
 
-  void _submit(String text) {
-    widget.submit(text);
-    _controller.clear();
+  bool get _canTakeInput => _controller.text.isNotEmpty && !widget.pauseInput;
+
+  void _submit(String prompt) {
+    if (_canTakeInput) {
+      widget.submit(prompt);
+      _controller.clear();
+    }
+
     _focusNode.requestFocus();
   }
 }
