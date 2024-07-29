@@ -36,73 +36,63 @@ class InferenceConfigurationPanel extends StatelessWidget {
   final void Function(double) updateTemp;
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Text('Top K', style: Theme.of(context).textTheme.bodyLarge),
-        Text('Number of tokens to be sampled from for each decoding step.',
-            style: Theme.of(context).textTheme.bodySmall),
-        Slider(
-          value: topK.toDouble(),
-          min: 1,
-          max: 100,
-          divisions: 100,
-          onChanged: (newTopK) => updateTopK(newTopK.toInt()),
-        ),
-        Text(
-          topK.toString(),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.grey),
-        ),
-        const Divider(),
-        Text('Temperature', style: Theme.of(context).textTheme.bodyLarge),
-        Text('Randomness when decoding the next token.',
-            style: Theme.of(context).textTheme.bodySmall),
-        Slider(
-          value: temp,
-          min: 0,
-          max: 1,
-          onChanged: updateTemp,
-        ),
-        Text(
-          temp.roundTo(3).toString(),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.grey),
-        ),
-        const Divider(),
-        Text('Max Tokens', style: Theme.of(context).textTheme.bodyLarge),
-        Text(
-            'Maximum context window for the LLM. Larger windows can tax '
-            'certain devices.',
-            style: Theme.of(context).textTheme.bodySmall),
-        Slider(
-          value: maxTokens.toDouble(),
-          min: 512,
-          max: 8192,
-          onChanged: (newMaxTokens) => updateMaxTokens(newMaxTokens.toInt()),
-        ),
-        Text(
-          maxTokens.toString(),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.grey),
-        ),
-        const Divider(),
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Text(
-            'Close',
-            style: Theme.of(context).textTheme.headlineMedium,
+  Widget build(BuildContext context) => ListView(
+        children: [
+          Text('Top K', style: Theme.of(context).textTheme.bodyLarge),
+          Text('Number of tokens to be sampled from for each decoding step.',
+              style: Theme.of(context).textTheme.bodySmall),
+          Slider(
+            value: topK.toDouble(),
+            min: 1,
+            max: 100,
+            divisions: 100,
+            onChanged: (newTopK) => updateTopK(newTopK.toInt()),
           ),
-        ),
-      ],
-    );
-  }
+          Text(
+            topK.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Colors.grey),
+          ),
+          const Divider(),
+          Text('Temperature', style: Theme.of(context).textTheme.bodyLarge),
+          Text('Randomness when decoding the next token.',
+              style: Theme.of(context).textTheme.bodySmall),
+          Slider(
+            value: temp,
+            min: 0,
+            max: 1,
+            onChanged: updateTemp,
+          ),
+          Text(
+            temp.roundTo(3).toString(),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Colors.grey),
+          ),
+          const Divider(),
+          Text('Max Tokens', style: Theme.of(context).textTheme.bodyLarge),
+          Text(
+              'Maximum context window for the LLM. Larger windows can tax '
+              'certain devices.',
+              style: Theme.of(context).textTheme.bodySmall),
+          Slider(
+            value: maxTokens.toDouble(),
+            min: 512,
+            max: 8192,
+            onChanged: (newMaxTokens) => updateMaxTokens(newMaxTokens.toInt()),
+          ),
+          Text(
+            maxTokens.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Colors.grey),
+          ),
+        ],
+      );
 }
 
 extension on double {
