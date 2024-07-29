@@ -9,8 +9,11 @@ class App extends StatelessWidget {
 
   const App({super.key});
   @override
-  Widget build(BuildContext context) => const MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
         title: title,
-        home: ChatPage(),
+        home: const ChatPage(),
+        themeMode: ThemeMode.system,
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
       );
 }
