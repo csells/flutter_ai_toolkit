@@ -23,10 +23,12 @@ class ChatInput extends StatefulWidget {
 
 class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -34,9 +36,19 @@ class _ChatInputState extends State<ChatInput> {
   Widget build(BuildContext context) => Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _controller,
-              onSubmitted: (value) => _submit(value),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                onSubmitted: (value) => _submit(value),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  hintText: "Prompt the LLM",
+                ),
+              ),
             ),
           ),
           ValueListenableBuilder(
@@ -54,5 +66,6 @@ class _ChatInputState extends State<ChatInput> {
   void _submit(String text) {
     widget.submit(text);
     _controller.clear();
+    _focusNode.requestFocus();
   }
 }

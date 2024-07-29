@@ -15,7 +15,7 @@ class EchoProvider implements LlmProvider {
   @override
   Stream<String> generateStream(String prompt) async* {
     yield 'echo: ';
-    // await Future.delayed(const Duration(seconds: 1)); // TODO: remove
+    await Future.delayed(const Duration(seconds: 1)); // TODO: remove
     yield prompt;
   }
 }
