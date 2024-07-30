@@ -22,8 +22,12 @@ class GeminiProvider extends LlmProvider {
   Stream<String> generateStream(String prompt) async* {
     final response = _chat.sendMessageStream(Content.text(prompt));
     await for (final chunk in response) {
-      final text = chunk.text;
-      if (text != null) yield text;
+      try {
+        final text = chunk.text;
+        if (text != null) yield text;
+      } on Exception catch (ex) {
+        yield 'ERROR: ${ex.toString()}';
+      }
     }
   }
 }
