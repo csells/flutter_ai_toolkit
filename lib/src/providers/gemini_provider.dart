@@ -8,19 +8,20 @@ import 'llm_provider_interface.dart';
 
 class GeminiProvider extends LlmProvider {
   GeminiProvider({
-    required this.model,
-    required this.apiKey,
-    super.config,
-  });
+    required String model,
+    required String apiKey,
+    GenerationConfig? config,
+  }) {
+    final llm = GenerativeModel(model: model, apiKey: apiKey);
+    _chat = llm.startChat(); // TODO: history
+  }
 
-  final String model;
-  final String apiKey;
+  late final ChatSession _chat;
 
   @override
   Stream<String> generateStream(String prompt) async* {
-    final llm = GenerativeModel(model: model, apiKey: apiKey);
-    final content = [Content.text(prompt)];
-    await for (final chunk in llm.generateContentStream(content)) {
+    final response = _chat.sendMessageStream(Content.text(prompt));
+    await for (final chunk in response) {
       final text = chunk.text;
       if (text != null) yield text;
     }

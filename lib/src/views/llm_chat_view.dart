@@ -36,7 +36,7 @@ class _LlmChatViewState extends State<LlmChatView> {
       _isLlmTyping = true;
     });
 
-    // TODO: stream this response
+    // TODO: show this response stream as it comes
     final response = await widget.provider.generateStream(prompt).toList();
 
     setState(() {

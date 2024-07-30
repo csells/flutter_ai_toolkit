@@ -107,7 +107,7 @@ packages:
     source: sdk
     version: "0.0.0"
   google_generative_ai:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_generative_ai
       sha256: "76e35d93b8c1cd888f69a1a371f8c5dc54cec372b6c74a4c0a5d506e7cf82c1a"

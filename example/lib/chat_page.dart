@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'configuration_panel.dart';
 import 'main.dart';
@@ -14,7 +15,14 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _config = LlmConfig();
+  // number of tokens to be sampled from for each decoding step
+  int _topK = 40;
+
+  // context size window for the LLM
+  int _maxTokens = 1024;
+
+  // randomness when decoding the next token
+  double _temp = 0.8;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -23,12 +31,12 @@ class _ChatPageState extends State<ChatPage> {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: InferenceConfigurationPanel(
-              topK: _config.topK,
-              temp: _config.temp,
-              maxTokens: _config.maxTokens,
-              updateTopK: (val) => setState(() => _config.topK = val),
-              updateTemp: (val) => setState(() => _config.temp = val),
-              updateMaxTokens: (val) => setState(() => _config.maxTokens = val),
+              topK: _topK,
+              temp: _temp,
+              maxTokens: _maxTokens,
+              updateTopK: (val) => setState(() => _topK = val),
+              updateTemp: (val) => setState(() => _temp = val),
+              updateMaxTokens: (val) => setState(() => _maxTokens = val),
             ),
           ),
         ),
@@ -37,7 +45,11 @@ class _ChatPageState extends State<ChatPage> {
           child: LlmChatView(GeminiProvider(
             model: 'gemini-1.5-flash',
             apiKey: Platform.environment['GEMINI_API_KEY']!,
-            config: _config,
+            config: GenerationConfig(
+              // NOTE: no config for max tokens
+              topK: _topK,
+              temperature: _temp,
+            ),
           )),
         ),
       );
