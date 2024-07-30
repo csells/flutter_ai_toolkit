@@ -6,16 +6,12 @@ import 'package:flutter/material.dart';
 
 class ChatInput extends StatefulWidget {
   const ChatInput({
-    required this.submit,
-    required this.pauseInput,
+    required this.onSubmit,
     super.key,
   });
 
   /// Callback for submitting new messages
-  final void Function(String) submit;
-
-  /// Prevents submitting new messages when true
-  final bool pauseInput;
+  final void Function(String)? onSubmit;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
@@ -64,11 +60,12 @@ class _ChatInputState extends State<ChatInput> {
         ],
       );
 
-  bool get _canTakeInput => _controller.text.isNotEmpty && !widget.pauseInput;
+  bool get _canTakeInput =>
+      widget.onSubmit != null && _controller.text.isNotEmpty;
 
   void _submit(String prompt) {
     if (_canTakeInput) {
-      widget.submit(prompt);
+      widget.onSubmit!(prompt);
       _controller.clear();
     }
 

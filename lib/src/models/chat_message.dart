@@ -2,51 +2,52 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatMessage {
   ChatMessage._({
     required this.id,
-    required this.body,
     required this.origin,
-    required int cursorPosition,
 
     /// Always true for a user's message, but only true for the LLM once it has
     /// finished composing its reply.
     required bool isComplete,
-  })  : _cursorPosition = cursorPosition,
+    required String body,
+  })  : _body = body,
         _isComplete = isComplete;
 
-  factory ChatMessage.origin(String body, MessageOrigin origin) =>
-      origin == MessageOrigin.user
-          ? ChatMessage.user(body)
-          : ChatMessage.llm(body);
+  factory ChatMessage.origin(String body, MessageOrigin origin) {
+    assert(origin == MessageOrigin.user && body.isNotEmpty ||
+        origin == MessageOrigin.llm && body.isEmpty);
 
-  factory ChatMessage.llm(String body, {int? cursorPosition}) => ChatMessage._(
+    return origin == MessageOrigin.user
+        ? ChatMessage.user(body)
+        : ChatMessage.llm();
+  }
+
+  factory ChatMessage.llm() => ChatMessage._(
         id: const Uuid().v4(),
-        body: body,
         origin: MessageOrigin.llm,
-        cursorPosition: cursorPosition ?? 0,
         isComplete: false,
+        body: '',
       );
 
   factory ChatMessage.user(String body) => ChatMessage._(
         id: const Uuid().v4(),
-        body: body,
         origin: MessageOrigin.user,
-        cursorPosition: body.length,
         isComplete: true,
+        body: body,
       );
 
   final String id;
-  final String body;
   final MessageOrigin origin;
 
-  int _cursorPosition;
   bool _isComplete;
+  String _body;
 
-  int get cursorPosition => _cursorPosition;
+  String get body => _body;
+
+  void append(String text) => _body += text;
 
   /// Always true for a user's message, but only true for the LLM once it has
   /// finished composing its reply.
@@ -67,11 +68,6 @@ class ChatMessage {
 
     _isComplete = true;
   }
-
-  bool get displayingFullString => cursorPosition == body.length;
-  String get displayString => body;
-
-  void advanceCursor() => ++_cursorPosition;
 }
 
 enum MessageOrigin {
@@ -86,18 +82,5 @@ enum MessageOrigin {
   bool get isLlm => switch (this) {
         MessageOrigin.user => false,
         MessageOrigin.llm => true,
-      };
-
-  String get transcriptName => switch (this) {
-        MessageOrigin.user => 'USER',
-        MessageOrigin.llm => 'LLM',
-      };
-
-  Alignment alignmentFromTextDirection(TextDirection textDirection) =>
-      switch (textDirection) {
-        TextDirection.ltr =>
-          isUser ? Alignment.centerRight : Alignment.centerLeft,
-        TextDirection.rtl =>
-          isUser ? Alignment.centerLeft : Alignment.centerRight,
       };
 }

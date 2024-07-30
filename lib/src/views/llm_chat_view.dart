@@ -20,28 +20,32 @@ class LlmChatView extends StatefulWidget {
 
 class _LlmChatViewState extends State<LlmChatView> {
   final _transcript = List<ChatMessage>.empty(growable: true);
-  bool _isLlmTyping = false;
+  ChatMessage? _pendingLlmResponse;
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
           Expanded(child: ChatTranscriptView(_transcript)),
-          ChatInput(pauseInput: _isLlmTyping, submit: (text) => _submit(text)),
+          ChatInput(onSubmit: _pendingLlmResponse == null ? _submit : null),
         ],
       );
 
   Future<void> _submit(String prompt) async {
     setState(() {
       _transcript.add(ChatMessage.user(prompt));
-      _isLlmTyping = true;
+      _pendingLlmResponse = ChatMessage.llm();
+      _transcript.add(_pendingLlmResponse!);
     });
 
-    // TODO: show this response stream as it comes
-    final response = await widget.provider.generateStream(prompt).toList();
+    await for (final text in widget.provider.generateStream(prompt)) {
+      setState(() {
+        _pendingLlmResponse!.append(text);
+      });
+    }
 
     setState(() {
-      _transcript.add(ChatMessage.llm(response.join('')));
-      _isLlmTyping = false;
+      _pendingLlmResponse!.isComplete = true;
+      _pendingLlmResponse = null;
     });
   }
 }

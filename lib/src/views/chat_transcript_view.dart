@@ -24,7 +24,7 @@ class ChatTranscriptView extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: message.displayString.isNotEmpty
+              child: message.body.isNotEmpty
                   ? ChatMessageBubble(
                       message: message,
                       width: constraints.maxWidth * 0.8,

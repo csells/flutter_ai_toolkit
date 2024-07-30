@@ -31,7 +31,7 @@ class ChatMessageBubble extends StatelessWidget {
         Flexible(
           flex: 6,
           child: BubbleSpecialThree(
-            text: message.displayString,
+            text: message.body,
             color: message.origin.isUser ? userBgColor : llmBgColor,
             isSender: message.origin.isUser,
             textStyle: const TextStyle(color: Colors.white),
