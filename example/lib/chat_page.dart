@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
@@ -32,7 +34,11 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: LlmChatView(EchoProvider(_config)),
+          child: LlmChatView(GeminiProvider(
+            model: 'gemini-1.5-flash',
+            apiKey: Platform.environment['GEMINI_API_KEY']!,
+            config: _config,
+          )),
         ),
       );
 }

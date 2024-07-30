@@ -5,6 +5,8 @@
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
 abstract class LlmProvider {
-  LlmConfig get config;
+  LlmProvider({LlmConfig? config}) : config = config ?? LlmConfig();
+
+  LlmConfig config;
   Stream<String> generateStream(String prompt);
 }
