@@ -19,7 +19,7 @@ class _ChatPageState extends State<ChatPage> {
   int _topK = 40;
 
   // context size window for the LLM
-  int _maxTokens = 1024;
+  final int _maxTokens = 1024;
 
   // randomness when decoding the next token
   double _temp = 0.8;
@@ -36,7 +36,8 @@ class _ChatPageState extends State<ChatPage> {
               maxTokens: _maxTokens,
               updateTopK: (val) => setState(() => _topK = val),
               updateTemp: (val) => setState(() => _temp = val),
-              updateMaxTokens: (val) => setState(() => _maxTokens = val),
+              // NOTE: not used for Gemini
+              // updateMaxTokens: (val) => setState(() => _maxTokens = val),
             ),
           ),
         ),

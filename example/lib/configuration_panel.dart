@@ -11,9 +11,9 @@ class InferenceConfigurationPanel extends StatelessWidget {
     required this.topK,
     required this.temp,
     required this.maxTokens,
-    required this.updateTopK,
-    required this.updateTemp,
-    required this.updateMaxTokens,
+    this.updateTopK,
+    this.updateTemp,
+    this.updateMaxTokens,
     super.key,
   });
 
@@ -21,19 +21,19 @@ class InferenceConfigurationPanel extends StatelessWidget {
   final int topK;
 
   /// Handler to update [topK].
-  final void Function(int) updateTopK;
+  final void Function(int)? updateTopK;
 
   /// Context size window for the LLM.
   final int maxTokens;
 
   /// Handler to update [maxTokens].
-  final void Function(int) updateMaxTokens;
+  final void Function(int)? updateMaxTokens;
 
   /// Randomness when decoding the next token.
   final double temp;
 
   /// Handler to update [temp].
-  final void Function(double) updateTemp;
+  final void Function(double)? updateTemp;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -41,12 +41,15 @@ class InferenceConfigurationPanel extends StatelessWidget {
           Text('Top K', style: Theme.of(context).textTheme.bodyLarge),
           Text('Number of tokens to be sampled from for each decoding step.',
               style: Theme.of(context).textTheme.bodySmall),
-          Slider(
-            value: topK.toDouble(),
-            min: 1,
-            max: 100,
-            divisions: 100,
-            onChanged: (newTopK) => updateTopK(newTopK.toInt()),
+          Opacity(
+            opacity: updateTopK == null ? 0.5 : 1,
+            child: Slider(
+              value: topK.toDouble(),
+              min: 1,
+              max: 100,
+              divisions: 100,
+              onChanged: (newTopK) => updateTopK?.call(newTopK.toInt()),
+            ),
           ),
           Text(
             topK.toString(),
@@ -59,11 +62,14 @@ class InferenceConfigurationPanel extends StatelessWidget {
           Text('Temperature', style: Theme.of(context).textTheme.bodyLarge),
           Text('Randomness when decoding the next token.',
               style: Theme.of(context).textTheme.bodySmall),
-          Slider(
-            value: temp,
-            min: 0,
-            max: 1,
-            onChanged: updateTemp,
+          Opacity(
+            opacity: updateTemp == null ? 0.5 : 1,
+            child: Slider(
+              value: temp,
+              min: 0,
+              max: 1,
+              onChanged: updateTemp,
+            ),
           ),
           Text(
             temp.roundTo(3).toString(),
@@ -78,11 +84,15 @@ class InferenceConfigurationPanel extends StatelessWidget {
               'Maximum context window for the LLM. Larger windows can tax '
               'certain devices.',
               style: Theme.of(context).textTheme.bodySmall),
-          Slider(
-            value: maxTokens.toDouble(),
-            min: 512,
-            max: 8192,
-            onChanged: (newMaxTokens) => updateMaxTokens(newMaxTokens.toInt()),
+          Opacity(
+            opacity: updateMaxTokens == null ? 0.5 : 1,
+            child: Slider(
+              value: maxTokens.toDouble(),
+              min: 512,
+              max: 8192,
+              onChanged: (newMaxTokens) =>
+                  updateMaxTokens?.call(newMaxTokens.toInt()),
+            ),
           ),
           Text(
             maxTokens.toString(),
