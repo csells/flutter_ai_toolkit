@@ -13,7 +13,9 @@ dependencies:
   chat_bubbles: ^1.6.0
   uuid: ^4.4.2
   google_generative_ai: ^0.4.3
-
+  flutter_markdown_selectionarea: ^0.6.17+1
+  flutter_markdown: ^0.7.3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

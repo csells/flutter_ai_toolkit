@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'llm_provider_interface.dart';
@@ -13,20 +12,13 @@ class GeminiProvider extends LlmProvider {
     required String apiKey,
     GenerationConfig? config,
   }) {
-    // output to the Debug console
-    debugPrint(
-      'GeminiProvider: '
-      'topK= ${config?.topK ?? 'null'}, '
-      'temp= ${config?.temperature ?? 'null'}',
-    );
-
     final llm = GenerativeModel(
       model: model,
       apiKey: apiKey,
       generationConfig: config,
     );
 
-    _chat = llm.startChat(); // TODO: history
+    _chat = llm.startChat();
   }
 
   late final ChatSession _chat;
