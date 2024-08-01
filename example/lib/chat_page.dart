@@ -43,15 +43,18 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: LlmChatView(GeminiProvider(
-            model: 'gemini-1.5-flash',
-            apiKey: Platform.environment['GEMINI_API_KEY']!,
-            config: GenerationConfig(
-              // NOTE: no config for max tokens
-              topK: _topK,
-              temperature: _temp,
+          child: LlmChatView(
+            // EchoProvider(),
+            GeminiProvider(
+              model: 'gemini-1.5-flash',
+              apiKey: Platform.environment['GEMINI_API_KEY']!,
+              config: GenerationConfig(
+                // NOTE: no config for max tokens
+                topK: _topK,
+                temperature: _temp,
+              ),
             ),
-          )),
+          ),
         ),
       );
 }

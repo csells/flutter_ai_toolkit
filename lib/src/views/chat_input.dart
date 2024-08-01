@@ -39,6 +39,7 @@ class _ChatInputState extends State<ChatInput> {
                 maxLines: 1024,
                 controller: _controller,
                 focusNode: _focusNode,
+                autofocus: true,
                 textInputAction: TextInputAction.done,
                 onSubmitted: (value) => _submit(value),
                 decoration: InputDecoration(
