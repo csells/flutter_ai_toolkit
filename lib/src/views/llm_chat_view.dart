@@ -38,14 +38,9 @@ class _LlmChatViewState extends State<LlmChatView> {
     });
 
     await for (final text in widget.provider.generateStream(prompt)) {
-      setState(() {
-        _pendingLlmResponse!.append(text);
-      });
+      setState(() => _pendingLlmResponse!.append(text));
     }
 
-    setState(() {
-      _pendingLlmResponse!.isComplete = true;
-      _pendingLlmResponse = null;
-    });
+    setState(() => _pendingLlmResponse = null);
   }
 }

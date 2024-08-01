@@ -7,6 +7,8 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'configuration_panel.dart';
 import 'main.dart';
 
+const kTesting = true;
+
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
@@ -44,16 +46,17 @@ class _ChatPageState extends State<ChatPage> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: LlmChatView(
-            // EchoProvider(),
-            GeminiProvider(
-              model: 'gemini-1.5-flash',
-              apiKey: Platform.environment['GEMINI_API_KEY']!,
-              config: GenerationConfig(
-                // NOTE: no config for max tokens
-                topK: _topK,
-                temperature: _temp,
-              ),
-            ),
+            kTesting
+                ? EchoProvider()
+                : GeminiProvider(
+                    model: 'gemini-1.5-flash',
+                    apiKey: Platform.environment['GEMINI_API_KEY']!,
+                    config: GenerationConfig(
+                      // NOTE: no config for max tokens
+                      topK: _topK,
+                      temperature: _temp,
+                    ),
+                  ),
           ),
         ),
       );
