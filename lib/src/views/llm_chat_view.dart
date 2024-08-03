@@ -12,7 +12,10 @@ import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 
 class LlmChatView extends StatefulWidget {
-  const LlmChatView(this.provider, {super.key});
+  const LlmChatView({
+    required this.provider,
+    super.key,
+  });
 
   final LlmProvider provider;
 
@@ -50,12 +53,19 @@ class _LlmResponse {
 class _LlmChatViewState extends State<LlmChatView> {
   final _transcript = List<ChatMessage>.empty(growable: true);
   _LlmResponse? _current;
+  String? _initialInput;
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Expanded(child: ChatTranscriptView(_transcript)),
+          Expanded(
+            child: ChatTranscriptView(
+              transcript: _transcript,
+              onEditMessage: _current == null ? _onEditMessage : null,
+            ),
+          ),
           ChatInput(
+            initialInput: _initialInput,
             submitting: _current != null,
             onSubmit: _onSubmit,
             onCancel: _onCancel,
@@ -64,6 +74,8 @@ class _LlmChatViewState extends State<LlmChatView> {
       );
 
   Future<void> _onSubmit(String prompt) async {
+    _initialInput = null;
+
     final userMessage = ChatMessage.user(prompt);
     final llmMessage = ChatMessage.llm();
 
@@ -79,4 +91,19 @@ class _LlmChatViewState extends State<LlmChatView> {
   }
 
   void _onCancel() => _current?.cancel();
+
+  void _onEditMessage(ChatMessage message) {
+    assert(_current == null);
+
+    // remove the last llm message
+    assert(_transcript.last.origin == MessageOrigin.llm);
+    _transcript.removeLast();
+
+    // remove the last user message
+    assert(_transcript.last.origin == MessageOrigin.user);
+    final userMessage = _transcript.removeLast();
+
+    // set the text of the controller to the last userMessage
+    setState(() => _initialInput = userMessage.body);
+  }
 }

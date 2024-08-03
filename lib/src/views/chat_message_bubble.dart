@@ -15,11 +15,13 @@ class ChatMessageBubble extends StatelessWidget {
   const ChatMessageBubble({
     required this.message,
     required this.width,
+    this.onEdit,
     super.key,
   });
 
   final ChatMessage message;
   final double width;
+  final void Function()? onEdit;
 
   // Colors.blue[400]
   static const llmBgColor = Color(0xFF42A5F5);
@@ -36,43 +38,54 @@ class ChatMessageBubble extends StatelessWidget {
           if (message.origin.isUser) Flexible(flex: 2, child: Container()),
           Flexible(
             flex: 6,
-            child: BubbleSpecialThreePlus(
-              color: message.origin.isUser ? userBgColor : llmBgColor,
-              isSender: message.origin.isUser,
-              child: message.body.isEmpty
-                  ? SizedBox(
-                      width: 24,
-                      child: JumpingDotsProgressIndicator(
-                        fontSize:
-                            Theme.of(context).textTheme.bodyLarge!.fontSize!,
-                        color: Colors.white,
-                      ),
-                    )
-                  : SelectionArea(
-                      child: MarkdownBody(
-                        data: message.body,
-                        styleSheet: MarkdownStyleSheet(
-                          p: whiteTextStyle,
-                          listBullet: whiteTextStyle,
-                          tableBorder: TableBorder.all(color: Colors.white),
-                          tableHead: whiteTextStyle,
-                          tableBody: whiteTextStyle,
-                          h1: whiteTextStyle,
-                          h2: whiteTextStyle,
-                          h3: whiteTextStyle,
-                          h4: whiteTextStyle,
-                          h5: whiteTextStyle,
-                          h6: whiteTextStyle,
-                          checkbox: whiteTextStyle,
-                          code: const TextStyle(
-                            fontFamily: 'Courier New',
-                            fontWeight: FontWeight.bold,
+            child: Column(
+              children: [
+                BubbleSpecialThreePlus(
+                  color: message.origin.isUser ? userBgColor : llmBgColor,
+                  isSender: message.origin.isUser,
+                  child: message.body.isEmpty
+                      ? SizedBox(
+                          width: 24,
+                          child: JumpingDotsProgressIndicator(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .fontSize!,
+                            color: Colors.white,
                           ),
-                          blockquote:
-                              blackTextStyle, // NOTE: doesn't seem to work
+                        )
+                      : SelectionArea(
+                          child: MarkdownBody(
+                            data: message.body,
+                            styleSheet: MarkdownStyleSheet(
+                              p: whiteTextStyle,
+                              listBullet: whiteTextStyle,
+                              tableBorder: TableBorder.all(color: Colors.white),
+                              tableHead: whiteTextStyle,
+                              tableBody: whiteTextStyle,
+                              h1: whiteTextStyle,
+                              h2: whiteTextStyle,
+                              h3: whiteTextStyle,
+                              h4: whiteTextStyle,
+                              h5: whiteTextStyle,
+                              h6: whiteTextStyle,
+                              checkbox: whiteTextStyle,
+                              code: const TextStyle(
+                                fontFamily: 'Courier New',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              blockquote:
+                                  blackTextStyle, // NOTE: doesn't seem to work
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                ),
+                if (onEdit != null)
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          onPressed: onEdit, icon: const Icon(Icons.edit))),
+              ],
             ),
           ),
           if (message.origin.isLlm) Flexible(flex: 2, child: Container()),

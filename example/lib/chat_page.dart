@@ -7,7 +7,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'configuration_panel.dart';
 import 'main.dart';
 
-const kTesting = false;
+const kTesting = true;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -46,7 +46,7 @@ class _ChatPageState extends State<ChatPage> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: LlmChatView(
-            kTesting
+            provider: kTesting
                 ? EchoProvider()
                 : GeminiProvider(
                     model: 'gemini-1.5-flash',

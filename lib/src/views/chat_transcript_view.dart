@@ -8,9 +8,14 @@ import '../models/chat_message.dart';
 import 'chat_message_bubble.dart';
 
 class ChatTranscriptView extends StatelessWidget {
-  const ChatTranscriptView(this.transcript, {super.key});
+  const ChatTranscriptView({
+    required this.transcript,
+    this.onEditMessage,
+    super.key,
+  });
 
   final List<ChatMessage> transcript;
+  final void Function(ChatMessage message)? onEditMessage;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -20,6 +25,8 @@ class ChatTranscriptView extends StatelessWidget {
           itemBuilder: (context, index) {
             final messageIndex = transcript.length - index - 1;
             final message = transcript[messageIndex];
+            final isLastUserMessage =
+                message.origin.isUser && messageIndex >= transcript.length - 2;
 
             return Padding(
               padding: const EdgeInsets.only(top: 6),
@@ -27,6 +34,9 @@ class ChatTranscriptView extends StatelessWidget {
                 message: message,
                 width: constraints.maxWidth * 0.8,
                 key: ValueKey('message-${message.id}'),
+                onEdit: isLastUserMessage && onEditMessage != null
+                    ? () => onEditMessage?.call(message)
+                    : null,
               ),
             );
           },

@@ -9,9 +9,11 @@ class ChatInput extends StatefulWidget {
     required this.submitting,
     required this.onSubmit,
     required this.onCancel,
+    this.initialInput,
     super.key,
   });
 
+  final String? initialInput;
   final bool submitting;
   final void Function(String) onSubmit;
   final void Function() onCancel;
@@ -25,6 +27,13 @@ enum _InputState { disabled, enabled, submitting }
 class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
+
+  @override
+  void didUpdateWidget(covariant ChatInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialInput != null) _controller.text = widget.initialInput!;
+    _focusNode.requestFocus();
+  }
 
   @override
   void dispose() {
