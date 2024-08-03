@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../models/chat_message.dart';
@@ -18,29 +20,61 @@ class LlmChatView extends StatefulWidget {
   State<LlmChatView> createState() => _LlmChatViewState();
 }
 
+class _LlmResponse {
+  final ChatMessage message;
+  final void Function()? onDone;
+  StreamSubscription<String>? _subscription;
+
+  _LlmResponse({
+    required Stream<String> stream,
+    required this.message,
+    this.onDone,
+  }) {
+    _subscription = stream.listen(
+      (text) => message.append(text),
+      onDone: onDone,
+      onError: (e) => message.append('ERROR: $e'),
+      cancelOnError: true,
+    );
+  }
+
+  void cancel() {
+    assert(_subscription != null);
+    _subscription!.cancel();
+    _subscription = null;
+    message.append('CANCELED');
+    onDone?.call();
+  }
+}
+
 class _LlmChatViewState extends State<LlmChatView> {
   final _transcript = List<ChatMessage>.empty(growable: true);
-  ChatMessage? _pendingLlmResponse;
+  _LlmResponse? _current;
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
           Expanded(child: ChatTranscriptView(_transcript)),
-          ChatInput(onSubmit: _pendingLlmResponse == null ? _submit : null),
+          ChatInput(
+            submitting: _current != null,
+            onSubmit: _onSubmit,
+            onCancel: _onCancel,
+          ),
         ],
       );
 
-  Future<void> _submit(String prompt) async {
-    setState(() {
-      _transcript.add(ChatMessage.user(prompt));
-      _pendingLlmResponse = ChatMessage.llm();
-      _transcript.add(_pendingLlmResponse!);
-    });
+  Future<void> _onSubmit(String prompt) async {
+    final userMessage = ChatMessage.user(prompt);
+    final llmMessage = ChatMessage.llm();
 
-    await for (final text in widget.provider.generateStream(prompt)) {
-      setState(() => _pendingLlmResponse!.append(text));
-    }
+    setState(() => _transcript.addAll([userMessage, llmMessage]));
 
-    setState(() => _pendingLlmResponse = null);
+    _current = _LlmResponse(
+      stream: widget.provider.generateStream(prompt),
+      message: llmMessage,
+      onDone: () => setState(() => _current = null),
+    );
   }
+
+  void _onCancel() => _current?.cancel();
 }

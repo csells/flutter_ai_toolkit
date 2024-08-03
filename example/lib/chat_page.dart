@@ -7,7 +7,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'configuration_panel.dart';
 import 'main.dart';
 
-const kTesting = true;
+const kTesting = false;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});

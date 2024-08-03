@@ -6,16 +6,21 @@ import 'package:flutter/material.dart';
 
 class ChatInput extends StatefulWidget {
   const ChatInput({
+    required this.submitting,
     required this.onSubmit,
+    required this.onCancel,
     super.key,
   });
 
-  /// Callback for submitting new messages
-  final void Function(String)? onSubmit;
+  final bool submitting;
+  final void Function(String) onSubmit;
+  final void Function() onCancel;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
 }
+
+enum _InputState { disabled, enabled, submitting }
 
 class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
@@ -41,7 +46,7 @@ class _ChatInputState extends State<ChatInput> {
                 focusNode: _focusNode,
                 autofocus: true,
                 textInputAction: TextInputAction.done,
-                onSubmitted: (value) => _submit(value),
+                onSubmitted: (value) => _onSubmit(value),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(32),
@@ -52,24 +57,42 @@ class _ChatInputState extends State<ChatInput> {
             ),
           ),
           ValueListenableBuilder(
-            valueListenable: _controller,
-            builder: (context, value, child) => IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: _canTakeInput ? () => _submit(value.text) : null,
-            ),
-          ),
+              valueListenable: _controller,
+              builder: (context, value, child) => switch (_inputState) {
+                    _InputState.disabled => const IconButton(
+                        onPressed: null,
+                        icon: Icon(Icons.send),
+                      ),
+                    _InputState.enabled => IconButton(
+                        onPressed: () => _onSubmit(value.text),
+                        icon: const Icon(Icons.send),
+                      ),
+                    _InputState.submitting => IconButton(
+                        onPressed: _onCancel,
+                        icon: const Icon(Icons.stop),
+                      ),
+                  }),
         ],
       );
 
-  bool get _canTakeInput =>
-      widget.onSubmit != null && _controller.text.isNotEmpty;
+  _InputState get _inputState {
+    if (widget.submitting) return _InputState.submitting;
+    if (_controller.text.isNotEmpty) return _InputState.enabled;
+    assert(!widget.submitting && _controller.text.isEmpty);
+    return _InputState.disabled;
+  }
 
-  void _submit(String prompt) {
-    if (_canTakeInput) {
-      widget.onSubmit!(prompt);
-      _controller.clear();
-    }
+  void _onSubmit(String prompt) {
+    assert(_inputState == _InputState.enabled);
+    widget.onSubmit(prompt);
+    _controller.clear();
+    _focusNode.requestFocus();
+  }
 
+  void _onCancel() {
+    assert(_inputState == _InputState.submitting);
+    widget.onCancel();
+    _controller.clear();
     _focusNode.requestFocus();
   }
 }

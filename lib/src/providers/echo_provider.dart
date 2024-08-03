@@ -7,7 +7,7 @@ import 'llm_provider_interface.dart';
 class EchoProvider extends LlmProvider {
   @override
   Stream<String> generateStream(String prompt) async* {
-    await Future.delayed(const Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     yield 'echo: ';
     await Future.delayed(const Duration(milliseconds: 500));
     yield prompt;
