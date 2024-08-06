@@ -32,7 +32,6 @@ class ChatTranscriptView extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6),
               child: ChatMessageBubble(
                 message: message,
-                width: constraints.maxWidth * 0.8,
                 key: ValueKey('message-${message.id}'),
                 onEdit: isLastUserMessage && onEditMessage != null
                     ? () => onEditMessage?.call(message)
