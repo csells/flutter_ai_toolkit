@@ -15,6 +15,7 @@ dependencies:
   google_generative_ai: ^0.4.3
   flutter_markdown_selectionarea: ^0.6.17+1
   progress_indicators: ^1.0.0
+  image_picker: ^1.1.2
   
 dev_dependencies:
   flutter_test:

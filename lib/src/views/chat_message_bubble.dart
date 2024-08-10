@@ -107,6 +107,7 @@ class ChatMessageBubble extends StatelessWidget {
 
   Future<void> _onCopy(BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: message.body));
+
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
