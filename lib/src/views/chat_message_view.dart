@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ai_toolkit/src/views/bubble_special_three_plus.dart';
 // using flutter_markdown_selectionarea until the following bug is fixed:
 // https://github.com/flutter/flutter/issues/107073
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
@@ -12,8 +11,8 @@ import 'package:progress_indicators/progress_indicators.dart';
 
 import '../models/chat_message.dart';
 
-class ChatMessageBubble extends StatelessWidget {
-  const ChatMessageBubble({
+class ChatMessageView extends StatelessWidget {
+  const ChatMessageView({
     required this.message,
     this.onEdit,
     super.key,
@@ -31,54 +30,47 @@ class ChatMessageBubble extends StatelessWidget {
   static const whiteTextStyle = TextStyle(color: Colors.white);
   static const blackTextStyle = TextStyle(color: Colors.black);
 
+  bool get _isUser => message.origin.isUser;
+  bool get _hasMessage => message.body.isNotEmpty;
+
   @override
   Widget build(BuildContext context) => Row(
         children: [
-          if (message.origin.isUser) Flexible(flex: 2, child: Container()),
+          if (_isUser) Flexible(flex: 2, child: Container()),
           Flexible(
             flex: 6,
             child: Column(
               children: [
-                BubbleSpecialThreePlus(
-                  color: message.origin.isUser ? userBgColor : llmBgColor,
-                  isSender: message.origin.isUser,
-                  child: message.body.isEmpty
-                      ? SizedBox(
-                          width: 24,
-                          child: JumpingDotsProgressIndicator(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .fontSize!,
-                            color: Colors.white,
-                          ),
-                        )
-                      : SelectionArea(
-                          child: MarkdownBody(
-                            data: message.body,
-                            styleSheet: MarkdownStyleSheet(
-                              p: whiteTextStyle,
-                              listBullet: whiteTextStyle,
-                              tableBorder: TableBorder.all(color: Colors.white),
-                              tableHead: whiteTextStyle,
-                              tableBody: whiteTextStyle,
-                              h1: whiteTextStyle,
-                              h2: whiteTextStyle,
-                              h3: whiteTextStyle,
-                              h4: whiteTextStyle,
-                              h5: whiteTextStyle,
-                              h6: whiteTextStyle,
-                              a: whiteTextStyle,
-                              checkbox: whiteTextStyle,
-                              code: const TextStyle(
-                                fontFamily: 'Courier New',
-                                fontWeight: FontWeight.bold,
+                Align(
+                  alignment: _isUser ? Alignment.topRight : Alignment.topLeft,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.only(
+                        topLeft:
+                            _isUser ? const Radius.circular(16) : Radius.zero,
+                        topRight:
+                            _isUser ? Radius.zero : const Radius.circular(16),
+                        bottomLeft: const Radius.circular(16),
+                        bottomRight: const Radius.circular(16),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: !_hasMessage
+                          ? SizedBox(
+                              width: 24,
+                              child: JumpingDotsProgressIndicator(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize!,
                               ),
-                              blockquote:
-                                  blackTextStyle, // NOTE: doesn't seem to work
-                            ),
-                          ),
-                        ),
+                            )
+                          : SelectionArea(
+                              child: MarkdownBody(data: message.body)),
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: message.origin.isUser

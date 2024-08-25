@@ -5,7 +5,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../models/chat_message.dart';
-import 'chat_message_bubble.dart';
+import 'chat_message_view.dart';
 
 class ChatTranscriptView extends StatelessWidget {
   const ChatTranscriptView({
@@ -30,7 +30,7 @@ class ChatTranscriptView extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: ChatMessageBubble(
+              child: ChatMessageView(
                 message: message,
                 key: ValueKey('message-${message.id}'),
                 onEdit: isLastUserMessage && onEditMessage != null

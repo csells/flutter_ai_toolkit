@@ -63,7 +63,7 @@ class _ChatInputState extends State<ChatInput> {
                   onSubmitted: (value) => _onSubmit(value),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     hintText: "Prompt the LLM",
                   ),
