@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'chat_page.dart';
 
-void main() => runApp(const App());
+void main() async {
+  await dotenv.load();
+  runApp(const App());
+}
 
 class App extends StatelessWidget {
   static const title = 'LLM Chat Example';

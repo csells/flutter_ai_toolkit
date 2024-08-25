@@ -25,7 +25,8 @@ class GeminiProvider extends LlmProvider {
 
   @override
   Stream<String> generateStream(String prompt) async* {
-    final response = _chat.sendMessageStream(Content.text(prompt));
+    final content = Content('user', [TextPart(prompt)]);
+    final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {
       try {
         final text = chunk.text;

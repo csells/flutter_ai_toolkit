@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'configuration_panel.dart';
@@ -50,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
                 ? EchoProvider()
                 : GeminiProvider(
                     model: 'gemini-1.5-flash',
-                    apiKey: Platform.environment['GEMINI_API_KEY']!,
+                    apiKey: dotenv.get('GEMINI_API_KEY'),
                     config: GenerationConfig(
                       // NOTE: no config for max tokens
                       topK: _topK,
