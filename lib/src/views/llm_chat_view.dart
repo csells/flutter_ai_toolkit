@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 
@@ -82,7 +83,10 @@ class _LlmChatViewState extends State<LlmChatView> {
     _transcript.addAll([userMessage, llmMessage]);
 
     _current = _LlmResponse(
-      stream: widget.provider.generateStream(prompt),
+      stream: widget.provider.generateStream(prompt, attachments: [
+        DataAttachment(mimeType: 'image/jpg', bytes: Uint8List(64)),
+        FileAttachment(url: Uri.parse('https://example.com/foo.jpg')),
+      ]),
       message: llmMessage,
       onDone: () => setState(() => _current = null),
     );

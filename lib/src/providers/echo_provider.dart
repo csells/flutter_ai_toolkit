@@ -6,10 +6,20 @@ import 'llm_provider_interface.dart';
 
 class EchoProvider extends LlmProvider {
   @override
-  Stream<String> generateStream(String prompt) async* {
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
     await Future.delayed(const Duration(milliseconds: 1000));
     yield 'echo: ';
     await Future.delayed(const Duration(milliseconds: 500));
     yield prompt;
+    final strings = attachments.map((a) => _attachmentTo(a));
+    yield '\n\nattachments: $strings';
   }
+
+  String _attachmentTo(Attachment attachment) => switch (attachment) {
+        (DataAttachment a) => 'data: ${a.mimeType}, ${a.bytes.length} bytes',
+        (FileAttachment a) => 'file: ${a.url}',
+      };
 }

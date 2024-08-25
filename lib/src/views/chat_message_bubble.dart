@@ -68,6 +68,7 @@ class ChatMessageBubble extends StatelessWidget {
                               h4: whiteTextStyle,
                               h5: whiteTextStyle,
                               h6: whiteTextStyle,
+                              a: whiteTextStyle,
                               checkbox: whiteTextStyle,
                               code: const TextStyle(
                                 fontFamily: 'Courier New',

@@ -24,7 +24,10 @@ class GeminiProvider extends LlmProvider {
   late final ChatSession _chat;
 
   @override
-  Stream<String> generateStream(String prompt) async* {
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
     final content = Content('user', [TextPart(prompt)]);
     final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {
