@@ -28,7 +28,10 @@ class GeminiProvider extends LlmProvider {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
-    final content = Content('user', [TextPart(prompt)]);
+    final content = Content('user', [
+      TextPart(prompt),
+      ...attachments.map((a) => _partFrom(a)),
+    ]);
     final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {
       try {
@@ -39,4 +42,9 @@ class GeminiProvider extends LlmProvider {
       }
     }
   }
+
+  Part _partFrom(Attachment attachment) => switch (attachment) {
+        (DataAttachment a) => DataPart(a.mimeType, a.bytes),
+        (FileAttachment a) => FilePart(a.url),
+      };
 }

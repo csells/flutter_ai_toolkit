@@ -4,6 +4,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+
+import '../providers/llm_provider_interface.dart';
 
 class ChatInput extends StatefulWidget {
   const ChatInput({
@@ -18,7 +21,7 @@ class ChatInput extends StatefulWidget {
   final bool submitting;
 
   final String? initialInput;
-  final void Function(String) onSubmit;
+  final void Function(String, Iterable<Attachment>) onSubmit;
   final void Function() onCancel;
 
   @override
@@ -30,6 +33,7 @@ enum _InputState { disabled, enabled, submitting }
 class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
+  final _attachments = <Attachment>[];
 
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
@@ -46,42 +50,51 @@ class _ChatInputState extends State<ChatInput> {
   }
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder(
-        valueListenable: _controller,
-        builder: (context, value, child) => Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
-                child: TextField(
-                  minLines: 1,
-                  maxLines: 1024,
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  autofocus: true,
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (value) => _onSubmit(value),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+  Widget build(BuildContext context) => Column(
+        children: [
+          Container(
+            height: 104,
+            padding: const EdgeInsets.only(top: 12, bottom: 12, left: 12),
+            child: _AttachmentsView(_attachments),
+          ),
+          ValueListenableBuilder(
+            valueListenable: _controller,
+            builder: (context, value, child) => Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
+                    child: TextField(
+                      minLines: 1,
+                      maxLines: 1024,
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (value) => _onSubmit(value),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        hintText: "Prompt the LLM",
+                      ),
                     ),
-                    hintText: "Prompt the LLM",
                   ),
                 ),
-              ),
+                IconButton(
+                  onPressed: _onCamera,
+                  icon: const Icon(Icons.camera_alt),
+                ),
+                _SubmitButton(
+                  text: _controller.text,
+                  inputState: _inputState,
+                  onSubmit: _onSubmit,
+                  onCancel: _onCancel,
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: _onCamera,
-              icon: const Icon(Icons.camera_alt),
-            ),
-            _SubmitButton(
-              text: _controller.text,
-              inputState: _inputState,
-              onSubmit: _onSubmit,
-              onCancel: _onCancel,
-            ),
-          ],
-        ),
+          ),
+        ],
       );
 
   _InputState get _inputState {
@@ -96,7 +109,8 @@ class _ChatInputState extends State<ChatInput> {
     if (_controller.text.isEmpty) return;
 
     assert(_inputState == _InputState.enabled);
-    widget.onSubmit(prompt);
+    widget.onSubmit(prompt, List.from(_attachments));
+    _attachments.clear();
     _controller.clear();
     _focusNode.requestFocus();
   }
@@ -105,6 +119,7 @@ class _ChatInputState extends State<ChatInput> {
     assert(_inputState == _InputState.submitting);
     widget.onCancel();
     _controller.clear();
+    _attachments.clear();
     _focusNode.requestFocus();
   }
 
@@ -114,7 +129,15 @@ class _ChatInputState extends State<ChatInput> {
       final pic = picker.supportsImageSource(ImageSource.camera)
           ? await picker.pickImage(source: ImageSource.camera)
           : await picker.pickImage(source: ImageSource.gallery);
-      if (pic != null) _controller.text += '\n${pic.path}\n';
+      if (pic == null) return;
+      final mimeType = pic.mimeType ?? lookupMimeType(pic.path);
+      if (mimeType == null) throw Exception('Missing mime type');
+
+      final bytes = await pic.readAsBytes();
+      setState(() => _attachments.add(DataAttachment(
+            mimeType: mimeType,
+            bytes: bytes,
+          )));
     } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
@@ -126,6 +149,32 @@ class _ChatInputState extends State<ChatInput> {
       );
     }
   }
+}
+
+class _AttachmentsView extends StatelessWidget {
+  const _AttachmentsView(List<Attachment> attachments)
+      : _attachments = attachments;
+
+  final List<Attachment> _attachments;
+
+  @override
+  Widget build(BuildContext context) => ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for (final a in _attachments)
+            Container(
+              padding: const EdgeInsets.only(right: 12),
+              width: 80,
+              height: 80,
+              child: _attachmentWidget(a),
+            ),
+        ],
+      );
+
+  Widget _attachmentWidget(Attachment attachment) => switch (attachment) {
+        (DataAttachment a) => Image.memory(a.bytes),
+        (FileAttachment a) => Image.network(a.url.toString()),
+      };
 }
 
 class _SubmitButton extends StatelessWidget {

@@ -14,11 +14,11 @@ class EchoProvider extends LlmProvider {
     yield 'echo: ';
     await Future.delayed(const Duration(milliseconds: 500));
     yield prompt;
-    final strings = attachments.map((a) => _attachmentTo(a));
+    final strings = attachments.map((a) => _stringFrom(a));
     yield '\n\nattachments: $strings';
   }
 
-  String _attachmentTo(Attachment attachment) => switch (attachment) {
+  String _stringFrom(Attachment attachment) => switch (attachment) {
         (DataAttachment a) => 'data: ${a.mimeType}, ${a.bytes.length} bytes',
         (FileAttachment a) => 'file: ${a.url}',
       };
