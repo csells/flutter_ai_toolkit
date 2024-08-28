@@ -11,6 +11,7 @@ import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../models/chat_message.dart';
+import 'attachment_view.dart';
 
 class ChatMessageView extends StatefulWidget {
   const ChatMessageView({
@@ -82,6 +83,16 @@ class _UserMessageView extends StatelessWidget {
             flex: 6,
             child: Column(
               children: [
+                ...[
+                  for (final attachment in message.attachments)
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: SizedBox(
+                          height: 80,
+                          width: 200,
+                          child: AttachmentView(attachment),
+                        )),
+                ],
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(

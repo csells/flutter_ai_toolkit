@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../providers/llm_provider_interface.dart';
+import 'attachment_view.dart';
 import 'view_styles.dart';
 
 class ChatInput extends StatefulWidget {
@@ -299,12 +300,7 @@ class _RemoveableAttachment extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(right: 12),
             height: 80,
-            child: switch (attachment) {
-              (FileAttachment a) => _FileAttachmentView(a),
-              (ImageAttachment a) => Image.memory(a.bytes),
-              (LinkAttachment _) =>
-                throw Exception('Link attachments not supported'),
-            },
+            child: AttachmentView(attachment),
           ),
           _CircleButton(
             icon: Icons.close,
@@ -313,53 +309,6 @@ class _RemoveableAttachment extends StatelessWidget {
             onPressed: () => onRemove(attachment),
           ),
         ],
-      );
-}
-
-class _FileAttachmentView extends StatelessWidget {
-  const _FileAttachmentView(this.attachment);
-  final FileAttachment attachment;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        height: 80,
-        padding: const EdgeInsets.all(8),
-        decoration: ShapeDecoration(
-          color: unnamedColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: ShapeDecoration(
-                color: placeholderTextColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Icon(Icons.attach_file, color: iconColor, size: 24),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(attachment.name, style: body2TextStyle),
-                  Text(
-                    attachment.mimeType,
-                    style: body2TextStyle.copyWith(
-                      color: placeholderTextColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       );
 }
 
