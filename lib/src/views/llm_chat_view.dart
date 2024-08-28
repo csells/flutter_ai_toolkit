@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 
 import '../models/chat_message.dart';
 import '../providers/llm_provider_interface.dart';
@@ -56,21 +57,25 @@ class _LlmChatViewState extends State<LlmChatView> {
   String? _initialInput;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Expanded(
-            child: ChatTranscriptView(
-              transcript: _transcript,
-              onEditMessage: _current == null ? _onEditMessage : null,
+  Widget build(BuildContext context) => Container(
+        color: backgroundColor,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Expanded(
+              child: ChatTranscriptView(
+                transcript: _transcript,
+                onEditMessage: _current == null ? _onEditMessage : null,
+              ),
             ),
-          ),
-          ChatInput(
-            initialInput: _initialInput,
-            submitting: _current != null,
-            onSubmit: _onSubmit,
-            onCancel: _onCancel,
-          ),
-        ],
+            ChatInput(
+              initialInput: _initialInput,
+              submitting: _current != null,
+              onSubmit: _onSubmit,
+              onCancel: _onCancel,
+            ),
+          ],
+        ),
       );
 
   Future<void> _onSubmit(

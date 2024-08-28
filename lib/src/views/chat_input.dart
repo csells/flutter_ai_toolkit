@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 
 import '../providers/llm_provider_interface.dart';
+import 'view_styles.dart';
 
 class ChatInput extends StatefulWidget {
   const ChatInput({
@@ -35,6 +36,11 @@ class _ChatInputState extends State<ChatInput> {
   final _focusNode = FocusNode();
   final _attachments = <Attachment>[];
 
+  final _border = OutlineInputBorder(
+    borderSide: const BorderSide(width: 1, color: outlineColor),
+    borderRadius: BorderRadius.circular(24),
+  );
+
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -59,39 +65,53 @@ class _ChatInputState extends State<ChatInput> {
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
-            builder: (context, value, child) => Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
-                    child: TextField(
-                      minLines: 1,
-                      maxLines: 1024,
-                      controller: _controller,
-                      focusNode: _focusNode,
-                      autofocus: true,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) => _onSubmit(value),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
+            builder: (context, value, child) => SizedBox(
+              height: 68,
+              child: Row(
+                children: [
+                  _AttachmentActionBar(onAttachment: _onAttachment),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: SizedBox(
+                        height: 52,
+                        child: TextField(
+                          enabled: _inputState != _InputState.submitting,
+                          minLines: 1,
+                          maxLines: 1024,
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          autofocus: true,
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (value) => _onSubmit(value),
+                          style: body2TextStyle,
+                          decoration: InputDecoration(
+                            // need to set all four xxxBorder args (but not
+                            // border itself) override Material styles
+                            errorBorder: _border,
+                            focusedBorder: _border,
+                            enabledBorder: _border,
+                            disabledBorder: _border,
+                            hintText: "Ask me anything...",
+                            hintStyle: body2TextStyle.copyWith(
+                              color: placeholderTextColor,
+                            ),
+                          ),
                         ),
-                        hintText: "Prompt the LLM",
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: _onCamera,
-                  icon: const Icon(Icons.camera_alt),
-                ),
-                _SubmitButton(
-                  text: _controller.text,
-                  inputState: _inputState,
-                  onSubmit: _onSubmit,
-                  onCancel: _onCancel,
-                ),
-              ],
+                  _SubmitButton(
+                    text: _controller.text,
+                    inputState: _inputState,
+                    onSubmit: _onSubmit,
+                    onCancel: _onCancel,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -123,6 +143,45 @@ class _ChatInputState extends State<ChatInput> {
     _focusNode.requestFocus();
   }
 
+  void _onAttachment(Attachment attachment) =>
+      setState(() => _attachments.add(attachment));
+}
+
+class _AttachmentActionBar extends StatefulWidget {
+  const _AttachmentActionBar({required this.onAttachment});
+  final Function(Attachment attachment) onAttachment;
+
+  @override
+  State<_AttachmentActionBar> createState() => _AttachmentActionBarState();
+}
+
+class _AttachmentActionBarState extends State<_AttachmentActionBar> {
+  var _expanded = false;
+
+  @override
+  Widget build(BuildContext context) => OverflowBar(
+        children: _expanded
+            ? [
+                IconButton(
+                  onPressed: _onExpandContract,
+                  iconSize: 40,
+                  icon: const Icon(Icons.add_circle, color: iconColor),
+                ),
+                IconButton(
+                  onPressed: _onCamera,
+                  iconSize: 40,
+                  icon: const Icon(Icons.camera, color: iconColor),
+                ),
+              ]
+            : [
+                IconButton(
+                  onPressed: _onExpandContract,
+                  iconSize: 40,
+                  icon: const Icon(Icons.add_circle, color: iconColor),
+                ),
+              ],
+      );
+
   Future<void> _onCamera() async {
     final picker = ImagePicker();
     try {
@@ -134,10 +193,10 @@ class _ChatInputState extends State<ChatInput> {
       if (mimeType == null) throw Exception('Missing mime type');
 
       final bytes = await pic.readAsBytes();
-      setState(() => _attachments.add(DataAttachment(
-            mimeType: mimeType,
-            bytes: bytes,
-          )));
+      widget.onAttachment(DataAttachment(
+        mimeType: mimeType,
+        bytes: bytes,
+      ));
     } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
@@ -149,6 +208,8 @@ class _ChatInputState extends State<ChatInput> {
       );
     }
   }
+
+  void _onExpandContract() => setState(() => _expanded = !_expanded);
 }
 
 class _AttachmentsView extends StatelessWidget {
@@ -195,16 +256,19 @@ class _SubmitButton extends StatelessWidget {
         // disabled Send button
         _InputState.disabled => const IconButton(
             onPressed: null,
-            icon: Icon(Icons.send),
+            iconSize: 40,
+            icon: Icon(Icons.check_circle),
           ),
         // enabled Send button
         _InputState.enabled => IconButton(
             onPressed: () => onSubmit(text),
-            icon: const Icon(Icons.send),
+            iconSize: 40,
+            icon: const Icon(Icons.check_circle),
           ),
         // enabled Cancel button
         _InputState.submitting => IconButton(
             onPressed: onCancel,
+            iconSize: 40,
             icon: const Icon(Icons.stop),
           ),
       };

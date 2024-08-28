@@ -19,5 +19,6 @@ class App extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
+        debugShowCheckedModeBanner: false,
       );
 }
