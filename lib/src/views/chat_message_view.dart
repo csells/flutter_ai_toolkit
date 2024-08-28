@@ -28,110 +28,34 @@ class ChatMessageView extends StatefulWidget {
 
 class _ChatMessageViewState extends State<ChatMessageView> {
   bool get _isUser => widget.message.origin.isUser;
-  bool get _hasMessage => widget.message.text.isNotEmpty;
   final bool _isSelected = false;
 
   @override
-  Widget build(BuildContext context) => _isUser
-      ? Row(
-          children: [
-            Flexible(flex: 2, child: Container()),
-            Flexible(
-              flex: 6,
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: unnamedColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.zero,
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(widget.message.text),
-                      ),
-                    ),
+  Widget build(BuildContext context) => Column(
+        children: [
+          _isUser
+              ? _UserMessageView(widget.message)
+              : _LlmMessageView(widget.message),
+          if (_isSelected)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(width: 12),
+                if (_isUser)
+                  IconButton(
+                    onPressed: widget.onEdit,
+                    icon: const Icon(Icons.edit),
                   ),
-                  if (_isSelected)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const SizedBox(width: 12),
-                        IconButton(
-                          onPressed: widget.onEdit,
-                          icon: const Icon(Icons.edit),
-                        ),
-                        IconButton(
-                          // TODO: disable copy if the LLM is still generating
-                          onPressed: () => _onCopy(context),
-                          icon: const Icon(Icons.copy),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                    ),
-                ],
-              ),
+                IconButton(
+                  // TODO: disable copy if the LLM is still generating
+                  onPressed: () => _onCopy(context),
+                  icon: const Icon(Icons.copy),
+                ),
+                const SizedBox(width: 12),
+              ],
             ),
-          ],
-        )
-      : Row(
-          children: [
-            Flexible(
-              flex: 6,
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 20,
-                        width: 20,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFE5E5E5),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.star,
-                          color: iconColor,
-                          size: 12,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 28),
-                        child: !_hasMessage
-                            ? SizedBox(
-                                width: 24,
-                                child:
-                                    JumpingDotsProgressIndicator(fontSize: 24),
-                              )
-                            : MarkdownBody(data: widget.message.text),
-                      ),
-                    ],
-                  ),
-                  if (_isSelected)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(width: 12),
-                        IconButton(
-                          // TODO: disable copy if the LLM is still generating
-                          onPressed: () => _onCopy(context),
-                          icon: const Icon(Icons.copy),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            Flexible(flex: 2, child: Container()),
-          ],
-        );
+        ],
+      );
 
   Future<void> _onCopy(BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: widget.message.text));
@@ -144,4 +68,86 @@ class _ChatMessageViewState extends State<ChatMessageView> {
       ),
     );
   }
+}
+
+class _UserMessageView extends StatelessWidget {
+  const _UserMessageView(this.message);
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          Flexible(flex: 2, child: Container()),
+          Flexible(
+            flex: 6,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: unnamedColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.zero,
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(message.text),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+}
+
+class _LlmMessageView extends StatelessWidget {
+  const _LlmMessageView(this.message);
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          Flexible(
+            flex: 6,
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE5E5E5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.star,
+                        color: iconColor,
+                        size: 12,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28),
+                      child: message.text.isEmpty
+                          ? SizedBox(
+                              width: 24,
+                              child: JumpingDotsProgressIndicator(fontSize: 24),
+                            )
+                          : MarkdownBody(data: message.text),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Flexible(flex: 2, child: Container()),
+        ],
+      );
 }
