@@ -59,18 +59,20 @@ class _ChatInputState extends State<ChatInput> {
   Widget build(BuildContext context) => Column(
         children: [
           Container(
-            height: 104,
+            height: _attachments.isNotEmpty ? 104 : 0,
             padding: const EdgeInsets.only(top: 12, bottom: 12, left: 12),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (final a in _attachments)
-                  _RemoveableAttachment(
-                    attachment: a,
-                    onRemove: _onRemoveAttachment,
-                  ),
-              ],
-            ),
+            child: _attachments.isNotEmpty
+                ? ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (final a in _attachments)
+                        _RemoveableAttachment(
+                          attachment: a,
+                          onRemove: _onRemoveAttachment,
+                        ),
+                    ],
+                  )
+                : const SizedBox(),
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
@@ -141,7 +143,7 @@ class _ChatInputState extends State<ChatInput> {
     widget.onSubmit(prompt, List.from(_attachments));
     _attachments.clear();
     _controller.clear();
-    _focusNode.requestFocus();
+    _focusNode.requestFocus(); // TODO: this isn't working
   }
 
   void _onCancel() {
@@ -149,7 +151,7 @@ class _ChatInputState extends State<ChatInput> {
     widget.onCancel();
     _controller.clear();
     _attachments.clear();
-    _focusNode.requestFocus();
+    _focusNode.requestFocus(); // TODO: this isn't working
   }
 
   void _onAttachment(Attachment attachment) =>

@@ -95,12 +95,13 @@ class _LlmChatViewState extends State<LlmChatView> {
     _current = _LlmResponse(
       stream: widget.provider.generateStream(prompt, attachments: attachments),
       message: llmMessage,
-      onDone: () => setState(() => _current = null),
+      onDone: _onDone,
     );
 
     setState(() {});
   }
 
+  void _onDone() => setState(() => _current = null);
   void _onCancel() => _current?.cancel();
 
   void _onEditMessage(ChatMessage message) {
