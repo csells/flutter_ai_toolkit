@@ -76,53 +76,47 @@ class _ChatInputState extends State<ChatInput> {
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
-            builder: (context, value, child) => SizedBox(
-              height: 68,
-              child: Row(
-                children: [
-                  _AttachmentActionBar(onAttachment: _onAttachment),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: SizedBox(
-                        height: 52,
-                        child: TextField(
-                          enabled: _inputState != _InputState.submitting,
-                          minLines: 1,
-                          maxLines: 1024,
-                          controller: _controller,
-                          focusNode: _focusNode,
-                          autofocus: true,
-                          textInputAction: TextInputAction.done,
-                          onSubmitted: (value) => _onSubmit(value),
-                          style: body2TextStyle,
-                          decoration: InputDecoration(
-                            // need to set all four xxxBorder args (but not
-                            // border itself) override Material styles
-                            errorBorder: _border,
-                            focusedBorder: _border,
-                            enabledBorder: _border,
-                            disabledBorder: _border,
-                            hintText: "Ask me anything...",
-                            hintStyle: body2TextStyle.copyWith(
-                              color: placeholderTextColor,
-                            ),
-                          ),
+            builder: (context, value, child) => Row(
+              children: [
+                _AttachmentActionBar(onAttachment: _onAttachment),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: TextField(
+                      enabled: _inputState != _InputState.submitting,
+                      minLines: 1,
+                      maxLines: 1024,
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (value) => _onSubmit(value),
+                      style: body2TextStyle,
+                      decoration: InputDecoration(
+                        // need to set all four xxxBorder args (but not
+                        // border itself) override Material styles
+                        errorBorder: _border,
+                        focusedBorder: _border,
+                        enabledBorder: _border,
+                        disabledBorder: _border,
+                        hintText: "Ask me anything...",
+                        hintStyle: body2TextStyle.copyWith(
+                          color: placeholderTextColor,
                         ),
                       ),
                     ),
                   ),
-                  _SubmitButton(
-                    text: _controller.text,
-                    inputState: _inputState,
-                    onSubmit: _onSubmit,
-                    onCancel: _onCancel,
-                  ),
-                ],
-              ),
+                ),
+                _SubmitButton(
+                  text: _controller.text,
+                  inputState: _inputState,
+                  onSubmit: _onSubmit,
+                  onCancel: _onCancel,
+                ),
+              ],
             ),
           ),
         ],
