@@ -280,14 +280,13 @@ class _AttachmentsView extends StatelessWidget {
           for (final a in attachments)
             Container(
               padding: const EdgeInsets.only(right: 12),
-              width: 80,
               height: 80,
-              child: attachmentWidget(a),
+              child: _attachmentView(a),
             ),
         ],
       );
 
-  Widget attachmentWidget(Attachment attachment) => switch (attachment) {
+  Widget _attachmentView(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => _FileAttachmentView(a),
         (ImageAttachment a) => Image.memory(a.bytes),
         (LinkAttachment _) => throw Exception('Link attachments not supported'),
@@ -299,8 +298,46 @@ class _FileAttachmentView extends StatelessWidget {
   final FileAttachment attachment;
 
   @override
-  Widget build(BuildContext context) =>
-      Text('File: ${attachment.name} (${attachment.mimeType})');
+  Widget build(BuildContext context) => Container(
+        height: 80,
+        padding: const EdgeInsets.all(8),
+        decoration: ShapeDecoration(
+          color: unnamedColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: ShapeDecoration(
+                color: placeholderTextColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Icon(Icons.attach_file, color: iconColor, size: 24),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(attachment.name, style: body2TextStyle),
+                  Text(
+                    attachment.mimeType,
+                    style: body2TextStyle.copyWith(
+                      color: placeholderTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 class _SubmitButton extends StatelessWidget {
