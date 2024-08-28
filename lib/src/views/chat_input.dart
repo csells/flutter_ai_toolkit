@@ -61,7 +61,16 @@ class _ChatInputState extends State<ChatInput> {
           Container(
             height: 104,
             padding: const EdgeInsets.only(top: 12, bottom: 12, left: 12),
-            child: _AttachmentsView(_attachments),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (final a in _attachments)
+                  _RemoveableAttachment(
+                    attachment: a,
+                    onRemove: _onRemoveAttachment,
+                  ),
+              ],
+            ),
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
@@ -125,7 +134,7 @@ class _ChatInputState extends State<ChatInput> {
   }
 
   void _onSubmit(String prompt) {
-    // NOTE: the mobile vkb can still cause a submission even if there is no text
+    // the mobile vkb can still cause a submission even if there is no text
     if (_controller.text.isEmpty) return;
 
     assert(_inputState == _InputState.enabled);
@@ -145,6 +154,9 @@ class _ChatInputState extends State<ChatInput> {
 
   void _onAttachment(Attachment attachment) =>
       setState(() => _attachments.add(attachment));
+
+  _onRemoveAttachment(Attachment attachment) =>
+      setState(() => _attachments.remove(attachment));
 }
 
 class _AttachmentActionBar extends StatefulWidget {
@@ -246,51 +258,66 @@ class _CircleButton extends StatelessWidget {
   const _CircleButton({
     required this.icon,
     this.onPressed,
-    Color? color,
-  }) : color = color ?? iconColor;
+    this.color = iconColor,
+    this.size = 40,
+  });
 
   final IconData icon;
   final VoidCallback? onPressed;
   final Color color;
+  final double size;
 
   @override
-  Widget build(BuildContext context) => ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
-          fixedSize: const Size.square(40),
-          padding: const EdgeInsets.all(0),
-          backgroundColor: color,
-          disabledBackgroundColor: disabledButtonColor,
+  Widget build(BuildContext context) => InkWell(
+        onTap: onPressed,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _enabled ? color : disabledButtonColor,
+          ),
+          child: Icon(
+            icon,
+            color: _enabled ? backgroundColor : iconColor,
+            size: size * 0.6,
+          ),
         ),
-        child: Icon(icon, color: enabled ? backgroundColor : iconColor),
       );
 
-  bool get enabled => onPressed != null;
+  bool get _enabled => onPressed != null;
 }
 
-class _AttachmentsView extends StatelessWidget {
-  const _AttachmentsView(this.attachments);
-  final List<Attachment> attachments;
+class _RemoveableAttachment extends StatelessWidget {
+  const _RemoveableAttachment({
+    required this.attachment,
+    required this.onRemove,
+  });
+
+  final Attachment attachment;
+  final Function(Attachment) onRemove;
 
   @override
-  Widget build(BuildContext context) => ListView(
-        scrollDirection: Axis.horizontal,
+  Widget build(BuildContext context) => Stack(
         children: [
-          for (final a in attachments)
-            Container(
-              padding: const EdgeInsets.only(right: 12),
-              height: 80,
-              child: _attachmentView(a),
-            ),
+          Container(
+            padding: const EdgeInsets.only(right: 12),
+            height: 80,
+            child: switch (attachment) {
+              (FileAttachment a) => _FileAttachmentView(a),
+              (ImageAttachment a) => Image.memory(a.bytes),
+              (LinkAttachment _) =>
+                throw Exception('Link attachments not supported'),
+            },
+          ),
+          _CircleButton(
+            icon: Icons.close,
+            // color: placeholderTextColor,
+            size: 20,
+            onPressed: () => onRemove(attachment),
+          ),
         ],
       );
-
-  Widget _attachmentView(Attachment attachment) => switch (attachment) {
-        (FileAttachment a) => _FileAttachmentView(a),
-        (ImageAttachment a) => Image.memory(a.bytes),
-        (LinkAttachment _) => throw Exception('Link attachments not supported'),
-      };
 }
 
 class _FileAttachmentView extends StatelessWidget {
