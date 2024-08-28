@@ -87,7 +87,7 @@ class _LlmChatViewState extends State<LlmChatView> {
   ) async {
     _initialInput = null;
 
-    final userMessage = ChatMessage.user(prompt);
+    final userMessage = ChatMessage.user(prompt, attachments);
     final llmMessage = ChatMessage.llm();
 
     _transcript.addAll([userMessage, llmMessage]);
@@ -108,14 +108,14 @@ class _LlmChatViewState extends State<LlmChatView> {
     assert(_current == null);
 
     // remove the last llm message
-    assert(_transcript.last.origin == MessageOrigin.llm);
+    assert(_transcript.last.origin.isLlm);
     _transcript.removeLast();
 
     // remove the last user message
-    assert(_transcript.last.origin == MessageOrigin.user);
+    assert(_transcript.last.origin.isUser);
     final userMessage = _transcript.removeLast();
 
     // set the text of the controller to the last userMessage
-    setState(() => _initialInput = userMessage.body);
+    setState(() => _initialInput = userMessage.text);
   }
 }

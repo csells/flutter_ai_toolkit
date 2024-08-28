@@ -78,7 +78,7 @@ class _ChatInputState extends State<ChatInput> {
             valueListenable: _controller,
             builder: (context, value, child) => Row(
               children: [
-                _AttachmentActionBar(onAttachment: _onAttachment),
+                _AttachmentActionMenu(onAttachment: _onAttachment),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -137,7 +137,7 @@ class _ChatInputState extends State<ChatInput> {
     widget.onSubmit(prompt, List.from(_attachments));
     _attachments.clear();
     _controller.clear();
-    _focusNode.requestFocus(); // TODO: this isn't working
+    _focusNode.requestFocus();
   }
 
   void _onCancel() {
@@ -145,7 +145,7 @@ class _ChatInputState extends State<ChatInput> {
     widget.onCancel();
     _controller.clear();
     _attachments.clear();
-    _focusNode.requestFocus(); // TODO: this isn't working
+    _focusNode.requestFocus();
   }
 
   void _onAttachment(Attachment attachment) =>
@@ -155,15 +155,15 @@ class _ChatInputState extends State<ChatInput> {
       setState(() => _attachments.remove(attachment));
 }
 
-class _AttachmentActionBar extends StatefulWidget {
-  const _AttachmentActionBar({required this.onAttachment});
+class _AttachmentActionMenu extends StatefulWidget {
+  const _AttachmentActionMenu({required this.onAttachment});
   final Function(Attachment attachment) onAttachment;
 
   @override
-  State<_AttachmentActionBar> createState() => _AttachmentActionBarState();
+  State<_AttachmentActionMenu> createState() => _AttachmentActionMenuState();
 }
 
-class _AttachmentActionBarState extends State<_AttachmentActionBar> {
+class _AttachmentActionMenuState extends State<_AttachmentActionMenu> {
   var _expanded = false;
   late final bool _canCamera;
 

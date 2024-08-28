@@ -4,41 +4,41 @@
 
 import 'package:uuid/uuid.dart';
 
+import '../providers/llm_provider_interface.dart';
+
 class ChatMessage {
   ChatMessage._({
     required this.id,
     required this.origin,
-    required String body,
-  }) : _body = body;
-
-  factory ChatMessage.origin(String body, MessageOrigin origin) {
-    assert(origin == MessageOrigin.user && body.isNotEmpty ||
-        origin == MessageOrigin.llm && body.isEmpty);
-
-    return origin == MessageOrigin.user
-        ? ChatMessage.user(body)
-        : ChatMessage.llm();
-  }
+    required String text,
+    required this.attachments,
+  })  : _text = text,
+        assert(
+          origin.isUser && text.isNotEmpty || origin.isLlm && text.isEmpty,
+        );
 
   factory ChatMessage.llm() => ChatMessage._(
         id: const Uuid().v4(),
         origin: MessageOrigin.llm,
-        body: '',
+        text: '',
+        attachments: [],
       );
 
-  factory ChatMessage.user(String body) => ChatMessage._(
+  factory ChatMessage.user(String text, Iterable<Attachment> attachments) =>
+      ChatMessage._(
         id: const Uuid().v4(),
         origin: MessageOrigin.user,
-        body: body,
+        text: text,
+        attachments: attachments,
       );
 
   final String id;
   final MessageOrigin origin;
-  String _body;
+  String _text;
+  final Iterable<Attachment> attachments;
 
-  String get body => _body;
-
-  void append(String text) => _body += text;
+  String get text => _text;
+  void append(String text) => _text += text;
 }
 
 enum MessageOrigin {
