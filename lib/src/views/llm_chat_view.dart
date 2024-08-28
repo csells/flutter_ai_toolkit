@@ -37,16 +37,19 @@ class _LlmResponse {
     _subscription = stream.listen(
       (text) => message.append(text),
       onDone: onDone,
-      onError: (e) => message.append('ERROR: $e'),
       cancelOnError: true,
+      onError: _error,
     );
   }
 
-  void cancel() {
+  void cancel() => _close('CANCELED');
+  void _error(dynamic err) => _close('ERROR: $err');
+
+  void _close(String s) {
     assert(_subscription != null);
     _subscription!.cancel();
     _subscription = null;
-    message.append('CANCELED');
+    message.append(s);
     onDone?.call();
   }
 }

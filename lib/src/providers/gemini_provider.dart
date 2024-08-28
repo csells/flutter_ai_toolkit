@@ -34,17 +34,14 @@ class GeminiProvider extends LlmProvider {
     ]);
     final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {
-      try {
-        final text = chunk.text;
-        if (text != null) yield text;
-      } on Exception catch (ex) {
-        yield 'ERROR: ${ex.toString()}';
-      }
+      final text = chunk.text;
+      if (text != null) yield text;
     }
   }
 
   Part _partFrom(Attachment attachment) => switch (attachment) {
-        (DataAttachment a) => DataPart(a.mimeType, a.bytes),
-        (FileAttachment a) => FilePart(a.url),
+        (FileAttachment a) => DataPart(a.mimeType, a.bytes),
+        (ImageAttachment a) => DataPart(a.mimeType, a.bytes),
+        (LinkAttachment a) => FilePart(a.url),
       };
 }

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 
 import '../providers/llm_provider_interface.dart';
 import 'view_styles.dart';
@@ -157,85 +157,150 @@ class _AttachmentActionBar extends StatefulWidget {
 
 class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   var _expanded = false;
+  late final bool _canCamera;
 
   @override
-  Widget build(BuildContext context) => OverflowBar(
-        children: _expanded
-            ? [
-                IconButton(
-                  onPressed: _onExpandContract,
-                  iconSize: 40,
-                  icon: const Icon(Icons.add_circle, color: iconColor),
-                ),
-                IconButton(
-                  onPressed: _onCamera,
-                  iconSize: 40,
-                  icon: const Icon(Icons.camera, color: iconColor),
-                ),
-              ]
-            : [
-                IconButton(
-                  onPressed: _onExpandContract,
-                  iconSize: 40,
-                  icon: const Icon(Icons.add_circle, color: iconColor),
-                ),
-              ],
+  void initState() {
+    super.initState();
+    _canCamera = ImagePicker().supportsImageSource(ImageSource.camera);
+  }
+
+  @override
+  Widget build(BuildContext context) => Container(
+        decoration: _expanded
+            ? BoxDecoration(
+                color: buttonBackground1Color,
+                borderRadius: BorderRadius.circular(20),
+              )
+            : null,
+        child: OverflowBar(
+          children: _expanded
+              ? [
+                  _CircleButton(
+                    onPressed: _onToggleMenu,
+                    icon: Icons.close,
+                    color: buttonBackground2Color,
+                  ),
+                  if (_canCamera)
+                    _CircleButton(
+                      onPressed: _onCamera,
+                      icon: Icons.camera_alt,
+                    ),
+                  _CircleButton(
+                    onPressed: _onGallery,
+                    icon: Icons.image,
+                  ),
+                  _CircleButton(
+                    onPressed: _onFile,
+                    icon: Icons.attach_file,
+                  ),
+                ]
+              : [
+                  _CircleButton(
+                    onPressed: _onToggleMenu,
+                    icon: Icons.add,
+                  ),
+                ],
+        ),
       );
 
-  Future<void> _onCamera() async {
+  void _onToggleMenu() => setState(() => _expanded = !_expanded);
+  Future<void> _onCamera() => _pickImage(ImageSource.camera);
+  Future<void> _onGallery() => _pickImage(ImageSource.gallery);
+
+  Future<void> _pickImage(ImageSource source) async {
+    _onToggleMenu(); // close the menu
+
     final picker = ImagePicker();
     try {
-      final pic = picker.supportsImageSource(ImageSource.camera)
-          ? await picker.pickImage(source: ImageSource.camera)
-          : await picker.pickImage(source: ImageSource.gallery);
+      final pic = await picker.pickImage(source: source);
       if (pic == null) return;
-      final mimeType = pic.mimeType ?? lookupMimeType(pic.path);
-      if (mimeType == null) throw Exception('Missing mime type');
-
-      final bytes = await pic.readAsBytes();
-      widget.onAttachment(DataAttachment(
-        mimeType: mimeType,
-        bytes: bytes,
-      ));
+      widget.onAttachment(await ImageAttachment.fromFile(pic));
     } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Unable to pick an image: $ex'),
-          duration: const Duration(seconds: 2),
-        ),
+        SnackBar(content: Text('Unable to pick an image: $ex')),
       );
     }
   }
 
-  void _onExpandContract() => setState(() => _expanded = !_expanded);
+  Future<void> _onFile() async {
+    _onToggleMenu(); // close the menu
+
+    try {
+      final file = await openFile();
+      if (file == null) return;
+      widget.onAttachment(await FileAttachment.fromFile(file));
+    } on Exception catch (ex) {
+      final context = this.context;
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to pick a file: $ex')),
+      );
+    }
+  }
+}
+
+class _CircleButton extends StatelessWidget {
+  const _CircleButton({
+    required this.icon,
+    this.onPressed,
+    Color? color,
+  }) : color = color ?? iconColor;
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          fixedSize: const Size.square(40),
+          padding: const EdgeInsets.all(0),
+          backgroundColor: color,
+          disabledBackgroundColor: disabledButtonColor,
+        ),
+        child: Icon(icon, color: enabled ? backgroundColor : iconColor),
+      );
+
+  bool get enabled => onPressed != null;
 }
 
 class _AttachmentsView extends StatelessWidget {
-  const _AttachmentsView(List<Attachment> attachments)
-      : _attachments = attachments;
-
-  final List<Attachment> _attachments;
+  const _AttachmentsView(this.attachments);
+  final List<Attachment> attachments;
 
   @override
   Widget build(BuildContext context) => ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for (final a in _attachments)
+          for (final a in attachments)
             Container(
               padding: const EdgeInsets.only(right: 12),
               width: 80,
               height: 80,
-              child: _attachmentWidget(a),
+              child: attachmentWidget(a),
             ),
         ],
       );
 
-  Widget _attachmentWidget(Attachment attachment) => switch (attachment) {
-        (DataAttachment a) => Image.memory(a.bytes),
-        (FileAttachment a) => Image.network(a.url.toString()),
+  Widget attachmentWidget(Attachment attachment) => switch (attachment) {
+        (FileAttachment a) => _FileAttachmentView(a),
+        (ImageAttachment a) => Image.memory(a.bytes),
+        (LinkAttachment _) => throw Exception('Link attachments not supported'),
       };
+}
+
+class _FileAttachmentView extends StatelessWidget {
+  const _FileAttachmentView(this.attachment);
+  final FileAttachment attachment;
+
+  @override
+  Widget build(BuildContext context) =>
+      Text('File: ${attachment.name} (${attachment.mimeType})');
 }
 
 class _SubmitButton extends StatelessWidget {
@@ -254,22 +319,18 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (inputState) {
         // disabled Send button
-        _InputState.disabled => const IconButton(
-            onPressed: null,
-            iconSize: 40,
-            icon: Icon(Icons.check_circle),
+        _InputState.disabled => const _CircleButton(
+            icon: Icons.subdirectory_arrow_right,
           ),
         // enabled Send button
-        _InputState.enabled => IconButton(
+        _InputState.enabled => _CircleButton(
             onPressed: () => onSubmit(text),
-            iconSize: 40,
-            icon: const Icon(Icons.check_circle),
+            icon: Icons.subdirectory_arrow_right,
           ),
-        // enabled Cancel button
-        _InputState.submitting => IconButton(
+        // enabled Stop button
+        _InputState.submitting => _CircleButton(
             onPressed: onCancel,
-            iconSize: 40,
-            icon: const Icon(Icons.stop),
+            icon: Icons.stop,
           ),
       };
 }

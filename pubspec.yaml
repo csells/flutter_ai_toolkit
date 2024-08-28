@@ -17,6 +17,8 @@ dependencies:
   image_picker: ^1.1.2
   mime: ^1.0.6
   google_fonts: ^6.2.1
+  file_selector: ^1.0.3
+  cross_file: ^0.3.4+2
   
 dev_dependencies:
   flutter_test:
