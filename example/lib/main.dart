@@ -1,10 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'chat_page.dart';
+import 'constants.dart';
+import 'firebase_options.dart'; // from `flutterfire config`
 
 void main() async {
-  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (kUseFirebase) {
+    // for Firebase Vertext AI provider
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    // for Gemini AI provider (GEMINI_API_KEY)
+    await dotenv.load();
+  }
+
   runApp(const App());
 }
 

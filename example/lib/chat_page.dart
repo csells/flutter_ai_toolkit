@@ -1,12 +1,12 @@
+import 'package:firebase_vertexai/firebase_vertexai.dart' as vertex;
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:google_generative_ai/google_generative_ai.dart' as gemini;
 
 import 'configuration_panel.dart';
+import 'constants.dart';
 import 'main.dart';
-
-const kTesting = false;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -44,15 +44,24 @@ class _ChatPageState extends State<ChatPage> {
         body: LlmChatView(
           provider: kTesting
               ? EchoProvider()
-              : GeminiProvider(
-                  model: 'gemini-1.5-flash',
-                  apiKey: dotenv.get('GEMINI_API_KEY'),
-                  config: GenerationConfig(
-                    topK: _topK,
-                    temperature: _temp,
-                    maxOutputTokens: _maxTokens,
-                  ),
-                ),
+              : kUseFirebase
+                  ? FirebaseVertexProvider(
+                      model: 'gemini-1.5-flash',
+                      config: vertex.GenerationConfig(
+                        topK: _topK,
+                        temperature: _temp,
+                        maxOutputTokens: _maxTokens,
+                      ),
+                    )
+                  : GeminiProvider(
+                      model: 'gemini-1.5-flash',
+                      apiKey: dotenv.get('GEMINI_API_KEY'),
+                      config: gemini.GenerationConfig(
+                        topK: _topK,
+                        temperature: _temp,
+                        maxOutputTokens: _maxTokens,
+                      ),
+                    ),
         ),
       );
 }
