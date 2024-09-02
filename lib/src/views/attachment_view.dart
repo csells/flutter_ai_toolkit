@@ -10,7 +10,10 @@ class AttachmentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (attachment) {
         (FileAttachment a) => _FileAttachmentView(a),
-        (ImageAttachment a) => Image.memory(a.bytes),
+        (ImageAttachment a) => Align(
+            alignment: Alignment.centerRight,
+            child: Image.memory(a.bytes),
+          ),
         (LinkAttachment _) => throw Exception('Link attachments not supported'),
       };
 }

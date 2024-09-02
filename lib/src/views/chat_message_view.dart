@@ -17,11 +17,15 @@ class ChatMessageView extends StatefulWidget {
   const ChatMessageView({
     required this.message,
     this.onEdit,
+    this.onSelected,
+    this.selected = false,
     super.key,
   });
 
   final ChatMessage message;
   final void Function()? onEdit;
+  final void Function(bool)? onSelected;
+  final bool selected;
 
   @override
   State<ChatMessageView> createState() => _ChatMessageViewState();
@@ -29,34 +33,37 @@ class ChatMessageView extends StatefulWidget {
 
 class _ChatMessageViewState extends State<ChatMessageView> {
   bool get _isUser => widget.message.origin.isUser;
-  final bool _isSelected = false;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          _isUser
-              ? _UserMessageView(widget.message)
-              : _LlmMessageView(widget.message),
-          if (_isSelected)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(width: 12),
-                if (_isUser)
+  Widget build(BuildContext context) => GestureDetector(
+        onLongPress: _onSelect,
+        child: Column(
+          children: [
+            _isUser
+                ? _UserMessageView(widget.message)
+                : _LlmMessageView(widget.message),
+            if (widget.selected)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 12),
+                  if (_isUser)
+                    IconButton(
+                      onPressed: widget.onEdit,
+                      icon: const Icon(Icons.edit),
+                    ),
                   IconButton(
-                    onPressed: widget.onEdit,
-                    icon: const Icon(Icons.edit),
+                    onPressed: () => _onCopy(context),
+                    icon: const Icon(Icons.copy),
                   ),
-                IconButton(
-                  // TODO: disable copy if the LLM is still generating
-                  onPressed: () => _onCopy(context),
-                  icon: const Icon(Icons.copy),
-                ),
-                const SizedBox(width: 12),
-              ],
-            ),
-        ],
+                  const SizedBox(width: 12),
+                ],
+              ),
+          ],
+        ),
       );
+
+  void _onSelect() => widget.onSelected?.call(!widget.selected);
 
   Future<void> _onCopy(BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: widget.message.text));

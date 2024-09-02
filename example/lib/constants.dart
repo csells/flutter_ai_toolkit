@@ -1,5 +1,4 @@
-// if true, use EchoProvider
-const kTesting = false;
+enum ProviderType { echo, firebaseVertext, googleGemini }
 
-// if true, use FirebaseVertexProvider, else use GeminiProvider
-const kUseFirebase = true;
+// Set the provider type to use
+const providerType = ProviderType.echo;

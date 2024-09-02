@@ -6,6 +6,9 @@ import 'llm_provider_interface.dart';
 
 class EchoProvider extends LlmProvider {
   @override
+  String get displayName => 'Echo (Testing)';
+
+  @override
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],

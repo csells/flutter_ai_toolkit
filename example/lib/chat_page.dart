@@ -25,9 +25,48 @@ class _ChatPageState extends State<ChatPage> {
   // randomness when decoding the next token
   var _temp = 0.8;
 
+  late final LlmProvider provider;
+
+  @override
+  void initState() {
+    super.initState();
+    provider = _initProvider();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(() {
+      fn();
+      provider = _initProvider();
+    });
+  }
+
+  LlmProvider _initProvider() => switch (providerType) {
+        ProviderType.echo => EchoProvider(),
+        ProviderType.firebaseVertext => FirebaseVertexProvider(
+            model: 'gemini-1.5-flash',
+            config: vertex.GenerationConfig(
+              topK: _topK,
+              temperature: _temp,
+              maxOutputTokens: _maxTokens,
+            ),
+          ),
+        ProviderType.googleGemini => GeminiProvider(
+            model: 'gemini-1.5-flash',
+            apiKey: dotenv.get('GEMINI_API_KEY'),
+            config: gemini.GenerationConfig(
+              topK: _topK,
+              temperature: _temp,
+              maxOutputTokens: _maxTokens,
+            ),
+          ),
+      };
+
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(App.title)),
+        appBar: AppBar(
+          title: Text('${App.title} - ${provider.displayName}'),
+        ),
         drawer: Drawer(
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -41,27 +80,6 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
         ),
-        body: LlmChatView(
-          provider: kTesting
-              ? EchoProvider()
-              : kUseFirebase
-                  ? FirebaseVertexProvider(
-                      model: 'gemini-1.5-flash',
-                      config: vertex.GenerationConfig(
-                        topK: _topK,
-                        temperature: _temp,
-                        maxOutputTokens: _maxTokens,
-                      ),
-                    )
-                  : GeminiProvider(
-                      model: 'gemini-1.5-flash',
-                      apiKey: dotenv.get('GEMINI_API_KEY'),
-                      config: gemini.GenerationConfig(
-                        topK: _topK,
-                        temperature: _temp,
-                        maxOutputTokens: _maxTokens,
-                      ),
-                    ),
-        ),
+        body: LlmChatView(provider: provider),
       );
 }

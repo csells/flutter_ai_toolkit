@@ -9,14 +9,15 @@ import 'firebase_options.dart'; // from `flutterfire config`
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (kUseFirebase) {
-    // for Firebase Vertext AI provider
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } else {
-    // for Gemini AI provider (GEMINI_API_KEY)
-    await dotenv.load();
+  switch (providerType) {
+    case ProviderType.firebaseVertext:
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    case ProviderType.googleGemini:
+      await dotenv.load();
+    case ProviderType.echo:
+      break;
   }
 
   runApp(const App());

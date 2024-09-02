@@ -7,6 +7,9 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'llm_provider_interface.dart';
 
 class GeminiProvider extends LlmProvider {
+  @override
+  String get displayName => 'Google Gemini AI';
+
   GeminiProvider({
     required String model,
     required String apiKey,

@@ -7,6 +7,9 @@ import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'llm_provider_interface.dart';
 
 class FirebaseVertexProvider extends LlmProvider {
+  @override
+  String get displayName => 'Firebase Vertex AI';
+
   FirebaseVertexProvider({
     required String model,
     GenerationConfig? config,
