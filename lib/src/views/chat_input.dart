@@ -75,6 +75,7 @@ class _ChatInputState extends State<ChatInput> {
                   )
                 : const SizedBox(),
           ),
+          const SizedBox(height: 6),
           ValueListenableBuilder(
             valueListenable: _controller,
             builder: (context, value, child) => Row(

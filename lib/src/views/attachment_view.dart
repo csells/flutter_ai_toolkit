@@ -33,9 +33,10 @@ class _FileAttachmentView extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              height: double.infinity,
+              height: 64,
               padding: const EdgeInsets.all(10),
               decoration: ShapeDecoration(
                 color: placeholderTextColor,
@@ -43,19 +44,29 @@ class _FileAttachmentView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Icon(Icons.attach_file, color: iconColor, size: 24),
+              child: const Icon(
+                Icons.attach_file,
+                color: iconColor,
+                size: 24,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const SizedBox(width: 8),
+            Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(attachment.name, style: body2TextStyle),
+                  Text(
+                    attachment.name,
+                    style: body2TextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   Text(
                     attachment.mimeType,
                     style: body2TextStyle.copyWith(
                       color: placeholderTextColor,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

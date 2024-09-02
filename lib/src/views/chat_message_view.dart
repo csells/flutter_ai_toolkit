@@ -92,13 +92,17 @@ class _UserMessageView extends StatelessWidget {
               children: [
                 ...[
                   for (final attachment in message.attachments)
-                    Align(
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Align(
                         alignment: Alignment.topRight,
                         child: SizedBox(
                           height: 80,
                           width: 200,
                           child: AttachmentView(attachment),
-                        )),
+                        ),
+                      ),
+                    ),
                 ],
                 Align(
                   alignment: Alignment.topRight,
