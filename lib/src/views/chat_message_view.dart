@@ -94,6 +94,7 @@ class _UserMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const Flexible(flex: 2, child: SizedBox()),
           Flexible(
