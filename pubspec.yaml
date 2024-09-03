@@ -13,13 +13,13 @@ dependencies:
   uuid: ^4.4.2
   google_generative_ai: ^0.4.3
   flutter_markdown_selectionarea: ^0.6.17+1
-  progress_indicators: ^1.0.0
   image_picker: ^1.1.2
   mime: ^1.0.6
   google_fonts: ^6.2.1
   file_selector: ^1.0.3
   cross_file: ^0.3.4+2
   firebase_vertexai: ^0.2.3
+  gap: ^3.0.1
   
 dev_dependencies:
   flutter_test:

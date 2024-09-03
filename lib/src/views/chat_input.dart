@@ -4,10 +4,12 @@
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
+import 'circle_button.dart';
 import 'view_styles.dart';
 
 class ChatInput extends StatefulWidget {
@@ -75,12 +77,12 @@ class _ChatInputState extends State<ChatInput> {
                   )
                 : const SizedBox(),
           ),
-          const SizedBox(height: 6),
+          const Gap(6),
           ValueListenableBuilder(
             valueListenable: _controller,
             builder: (context, value, child) => Row(
               children: [
-                _AttachmentActionMenu(onAttachment: _onAttachment),
+                _AttachmentActionBar(onAttachment: _onAttachment),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -157,15 +159,15 @@ class _ChatInputState extends State<ChatInput> {
       setState(() => _attachments.remove(attachment));
 }
 
-class _AttachmentActionMenu extends StatefulWidget {
-  const _AttachmentActionMenu({required this.onAttachment});
+class _AttachmentActionBar extends StatefulWidget {
+  const _AttachmentActionBar({required this.onAttachment});
   final Function(Attachment attachment) onAttachment;
 
   @override
-  State<_AttachmentActionMenu> createState() => _AttachmentActionMenuState();
+  State<_AttachmentActionBar> createState() => _AttachmentActionBarState();
 }
 
-class _AttachmentActionMenuState extends State<_AttachmentActionMenu> {
+class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   var _expanded = false;
   late final bool _canCamera;
 
@@ -176,49 +178,37 @@ class _AttachmentActionMenuState extends State<_AttachmentActionMenu> {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: _expanded
-            ? BoxDecoration(
-                color: buttonBackground1Color,
-                borderRadius: BorderRadius.circular(20),
-              )
-            : null,
-        child: OverflowBar(
-          children: _expanded
-              ? [
-                  _CircleButton(
-                    onPressed: _onToggleMenu,
-                    icon: Icons.close,
-                    color: buttonBackground2Color,
-                  ),
-                  if (_canCamera)
-                    _CircleButton(
-                      onPressed: _onCamera,
-                      icon: Icons.camera_alt,
-                    ),
-                  _CircleButton(
-                    onPressed: _onGallery,
-                    icon: Icons.image,
-                  ),
-                  _CircleButton(
-                    onPressed: _onFile,
-                    icon: Icons.attach_file,
-                  ),
-                ]
-              : [
-                  _CircleButton(
-                    onPressed: _onToggleMenu,
-                    icon: Icons.add,
-                  ),
-                ],
-        ),
-      );
+  Widget build(BuildContext context) => _expanded
+      ? CircleButtonBar([
+          CircleButton(
+            onPressed: _onToggleMenu,
+            icon: Icons.close,
+            color: buttonBackground2Color,
+          ),
+          if (_canCamera)
+            CircleButton(
+              onPressed: _onCamera,
+              icon: Icons.camera_alt,
+            ),
+          CircleButton(
+            onPressed: _onGallery,
+            icon: Icons.image,
+          ),
+          CircleButton(
+            onPressed: _onFile,
+            icon: Icons.attach_file,
+          ),
+        ])
+      : CircleButton(
+          onPressed: _onToggleMenu,
+          icon: Icons.add,
+        );
 
   void _onToggleMenu() => setState(() => _expanded = !_expanded);
-  Future<void> _onCamera() => _pickImage(ImageSource.camera);
-  Future<void> _onGallery() => _pickImage(ImageSource.gallery);
+  void _onCamera() => _pickImage(ImageSource.camera);
+  void _onGallery() => _pickImage(ImageSource.gallery);
 
-  Future<void> _pickImage(ImageSource source) async {
+  void _pickImage(ImageSource source) async {
     _onToggleMenu(); // close the menu
 
     final picker = ImagePicker();
@@ -235,7 +225,7 @@ class _AttachmentActionMenuState extends State<_AttachmentActionMenu> {
     }
   }
 
-  Future<void> _onFile() async {
+  void _onFile() async {
     _onToggleMenu(); // close the menu
 
     try {
@@ -250,40 +240,6 @@ class _AttachmentActionMenuState extends State<_AttachmentActionMenu> {
       );
     }
   }
-}
-
-class _CircleButton extends StatelessWidget {
-  const _CircleButton({
-    required this.icon,
-    this.onPressed,
-    this.color = iconColor,
-    this.size = 40,
-  });
-
-  final IconData icon;
-  final VoidCallback? onPressed;
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onPressed,
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _enabled ? color : disabledButtonColor,
-          ),
-          child: Icon(
-            icon,
-            color: _enabled ? backgroundColor : iconColor,
-            size: size * 0.6,
-          ),
-        ),
-      );
-
-  bool get _enabled => onPressed != null;
 }
 
 class _RemoveableAttachment extends StatelessWidget {
@@ -303,7 +259,7 @@ class _RemoveableAttachment extends StatelessWidget {
             height: 80,
             child: AttachmentView(attachment),
           ),
-          _CircleButton(
+          CircleButton(
             icon: Icons.close,
             // color: placeholderTextColor,
             size: 20,
@@ -329,16 +285,16 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (inputState) {
         // disabled Send button
-        _InputState.disabled => const _CircleButton(
+        _InputState.disabled => const CircleButton(
             icon: Icons.subdirectory_arrow_right,
           ),
         // enabled Send button
-        _InputState.enabled => _CircleButton(
+        _InputState.enabled => CircleButton(
             onPressed: () => onSubmit(text),
             icon: Icons.subdirectory_arrow_right,
           ),
         // enabled Stop button
-        _InputState.submitting => _CircleButton(
+        _InputState.submitting => CircleButton(
             onPressed: onCancel,
             icon: Icons.stop,
           ),

@@ -4,14 +4,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ai_toolkit/src/views/circle_button.dart';
 import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 // using flutter_markdown_selectionarea until the following bug is fixed:
 // https://github.com/flutter/flutter/issues/107073
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
-import 'package:progress_indicators/progress_indicators.dart';
+import 'package:gap/gap.dart';
 
 import '../models/chat_message.dart';
 import 'attachment_view.dart';
+import 'jumping_dots_progress.dart';
 
 class ChatMessageView extends StatefulWidget {
   const ChatMessageView({
@@ -42,22 +44,24 @@ class _ChatMessageViewState extends State<ChatMessageView> {
             _isUser
                 ? _UserMessageView(widget.message)
                 : _LlmMessageView(widget.message),
+            const Gap(6),
             if (widget.selected)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 12),
-                  if (_isUser)
-                    IconButton(
-                      onPressed: widget.onEdit,
-                      icon: const Icon(Icons.edit),
+              Align(
+                alignment:
+                    _isUser ? Alignment.centerRight : Alignment.centerLeft,
+                child: CircleButtonBar(
+                  [
+                    if (_isUser)
+                      CircleButton(
+                        onPressed: widget.onEdit,
+                        icon: Icons.edit,
+                      ),
+                    CircleButton(
+                      onPressed: () => _onCopy(context),
+                      icon: Icons.copy,
                     ),
-                  IconButton(
-                    onPressed: () => _onCopy(context),
-                    icon: const Icon(Icons.copy),
-                  ),
-                  const SizedBox(width: 12),
-                ],
+                  ],
+                ),
               ),
           ],
         ),
@@ -158,9 +162,9 @@ class _LlmMessageView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 28),
                       child: message.text.isEmpty
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 24,
-                              child: JumpingDotsProgressIndicator(fontSize: 24),
+                              child: JumpingDotsProgress(fontSize: 24),
                             )
                           : MarkdownBody(data: message.text),
                     ),

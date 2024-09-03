@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../providers/llm_provider_interface.dart';
 import 'view_styles.dart';
@@ -50,7 +51,7 @@ class _FileAttachmentView extends StatelessWidget {
                 size: 24,
               ),
             ),
-            const SizedBox(width: 8),
+            const Gap(8),
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
