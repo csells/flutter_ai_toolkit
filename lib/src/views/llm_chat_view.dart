@@ -57,7 +57,7 @@ class _LlmResponse {
 class _LlmChatViewState extends State<LlmChatView> {
   final _transcript = List<ChatMessage>.empty(growable: true);
   _LlmResponse? _current;
-  String? _initialInput;
+  ChatMessage? _initialMessage;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -72,7 +72,7 @@ class _LlmChatViewState extends State<LlmChatView> {
               ),
             ),
             ChatInput(
-              initialInput: _initialInput,
+              initialMessage: _initialMessage,
               submitting: _current != null,
               onSubmit: _onSubmit,
               onCancel: _onCancel,
@@ -85,7 +85,7 @@ class _LlmChatViewState extends State<LlmChatView> {
     String prompt,
     Iterable<Attachment> attachments,
   ) async {
-    _initialInput = null;
+    _initialMessage = null;
 
     final userMessage = ChatMessage.user(prompt, attachments);
     final llmMessage = ChatMessage.llm();
@@ -116,6 +116,6 @@ class _LlmChatViewState extends State<LlmChatView> {
     final userMessage = _transcript.removeLast();
 
     // set the text of the controller to the last userMessage
-    setState(() => _initialInput = userMessage.text);
+    setState(() => _initialMessage = userMessage);
   }
 }

@@ -53,7 +53,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                   [
                     if (_isUser)
                       CircleButton(
-                        onPressed: widget.onEdit,
+                        onPressed: _onEdit,
                         icon: Icons.edit,
                       ),
                     CircleButton(
@@ -69,7 +69,13 @@ class _ChatMessageViewState extends State<ChatMessageView> {
 
   void _onSelect() => widget.onSelected?.call(!widget.selected);
 
+  void _onEdit() {
+    widget.onSelected?.call(false);
+    widget.onEdit?.call();
+  }
+
   Future<void> _onCopy(BuildContext context) async {
+    widget.onSelected?.call(false);
     await Clipboard.setData(ClipboardData(text: widget.message.text));
 
     if (!context.mounted) return;
@@ -89,7 +95,7 @@ class _UserMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
         children: [
-          Flexible(flex: 2, child: Container()),
+          const Flexible(flex: 2, child: SizedBox()),
           Flexible(
             flex: 6,
             child: Column(
@@ -173,7 +179,7 @@ class _LlmMessageView extends StatelessWidget {
               ],
             ),
           ),
-          Flexible(flex: 2, child: Container()),
+          const Flexible(flex: 2, child: SizedBox()),
         ],
       );
 }

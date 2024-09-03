@@ -4,6 +4,7 @@
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,14 +18,14 @@ class ChatInput extends StatefulWidget {
     required this.submitting,
     required this.onSubmit,
     required this.onCancel,
-    this.initialInput,
+    this.initialMessage,
     super.key,
   });
 
   // TODO: hoist this up to the top-level state; should not be passing it in!
   final bool submitting;
 
-  final String? initialInput;
+  final ChatMessage? initialMessage;
   final void Function(String, Iterable<Attachment>) onSubmit;
   final void Function() onCancel;
 
@@ -47,7 +48,10 @@ class _ChatInputState extends State<ChatInput> {
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initialInput != null) _controller.text = widget.initialInput!;
+    if (widget.initialMessage != null) {
+      _controller.text = widget.initialMessage!.text;
+      _attachments.addAll(widget.initialMessage!.attachments);
+    }
     _focusNode.requestFocus();
   }
 
