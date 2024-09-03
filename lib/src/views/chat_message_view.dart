@@ -50,17 +50,33 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 alignment:
                     _isUser ? Alignment.centerRight : Alignment.centerLeft,
                 child: CircleButtonBar(
-                  [
-                    if (_isUser)
-                      CircleButton(
-                        onPressed: _onEdit,
-                        icon: Icons.edit,
-                      ),
-                    CircleButton(
-                      onPressed: () => _onCopy(context),
-                      icon: Icons.copy,
-                    ),
-                  ],
+                  _isUser
+                      ? [
+                          CircleButton(
+                            onPressed: _onEdit,
+                            icon: Icons.edit,
+                          ),
+                          CircleButton(
+                            onPressed: () => _onCopy(context),
+                            icon: Icons.copy,
+                          ),
+                          CircleButton(
+                            onPressed: _onSelect,
+                            icon: Icons.close,
+                            color: buttonBackground2Color,
+                          ),
+                        ]
+                      : [
+                          CircleButton(
+                            onPressed: _onSelect,
+                            icon: Icons.close,
+                            color: buttonBackground2Color,
+                          ),
+                          CircleButton(
+                            onPressed: () => _onCopy(context),
+                            icon: Icons.copy,
+                          ),
+                        ],
                 ),
               ),
           ],
