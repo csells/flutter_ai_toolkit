@@ -22,7 +22,6 @@ class ChatInput extends StatefulWidget {
     super.key,
   });
 
-  // TODO: hoist this up to the top-level state; should not be passing it in!
   final bool submitting;
 
   final ChatMessage? initialMessage;
@@ -220,7 +219,10 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       final pic = await picker.pickImage(source: source);
       if (pic == null) return;
       widget.onAttachment(await ImageAttachment.fromFile(pic));
-    } on Exception catch (ex) {
+    } on Exception catch (ex, stackTrace) {
+      debugPrint('Exception when picking image: $ex');
+      debugPrint('Stack trace: $stackTrace');
+
       final context = this.context;
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -236,7 +238,10 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       final file = await openFile();
       if (file == null) return;
       widget.onAttachment(await FileAttachment.fromFile(file));
-    } on Exception catch (ex) {
+    } on Exception catch (ex, stackTrace) {
+      debugPrint('Exception when picking image: $ex');
+      debugPrint('Stack trace: $stackTrace');
+
       final context = this.context;
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
