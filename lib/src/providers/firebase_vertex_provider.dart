@@ -31,7 +31,7 @@ class FirebaseVertexProvider extends LlmProvider {
   }) async* {
     final content = Content('user', [
       TextPart(prompt),
-      ...attachments.map((a) => _partFrom(a)),
+      ...attachments.map(_partFrom),
     ]);
     final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {

@@ -17,7 +17,7 @@ class EchoProvider extends LlmProvider {
     yield 'echo: ';
     await Future.delayed(const Duration(milliseconds: 500));
     yield prompt;
-    final strings = attachments.map((a) => _stringFrom(a));
+    final strings = attachments.map(_stringFrom);
     yield '\n\nattachments: $strings';
   }
 
