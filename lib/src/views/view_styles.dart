@@ -1,14 +1,25 @@
 import 'package:flutter/widgets.dart';
 
+// Color 0
 const backgroundColor = Color(0xFFFFFFFF);
-const unnamedColor = Color(0xFFF4F4F4);
+
+// Color 100
+const userMessageColor = Color(0xFFF5F5F5);
+
+// Color 200
 const outlineColor = Color(0xFFE5E5E5);
 const disabledButtonColor = Color(0xFFE5E5E5);
-const placeholderTextColor = Color(0xFFC9C9C9);
-const buttonBackground1Color = Color(0xFF2E2E2E);
-const iconColor = Color(0xFF2E2E2E);
-const textColor = Color(0xFF2E2E2E);
-const buttonBackground2Color = Color(0xFF525252);
+
+// Color 300
+const placeholderTextColor = Color(0xFFCACACA);
+
+// Color 400
+const buttonBackground2Color = Color(0xFF535353);
+
+// Color 500
+const buttonBackground1Color = Color(0xFF2F2F2F);
+const iconColor = Color(0xFF2F2F2F);
+const textColor = Color(0xFF2F2F2F);
 
 const displayTextStyle = TextStyle(
   color: textColor,

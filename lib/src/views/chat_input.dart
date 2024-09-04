@@ -227,10 +227,7 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       final pic = await picker.pickImage(source: source);
       if (pic == null) return;
       widget.onAttachment(await ImageAttachment.fromFile(pic));
-    } on Exception catch (ex, stackTrace) {
-      debugPrint('Exception when picking image: $ex');
-      debugPrint('Stack trace: $stackTrace');
-
+    } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -246,10 +243,7 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       final file = await openFile();
       if (file == null) return;
       widget.onAttachment(await FileAttachment.fromFile(file));
-    } on Exception catch (ex, stackTrace) {
-      debugPrint('Exception when picking image: $ex');
-      debugPrint('Stack trace: $stackTrace');
-
+    } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

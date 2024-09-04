@@ -28,7 +28,7 @@ class _FileAttachmentView extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.all(8),
         decoration: ShapeDecoration(
-          color: unnamedColor,
+          color: userMessageColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

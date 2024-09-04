@@ -135,7 +135,7 @@ class _UserMessageView extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: unnamedColor,
+                      color: userMessageColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.zero,
