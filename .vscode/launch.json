@@ -5,11 +5,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "example",
+      "name": "gemini",
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main.dart",
+      "program": "lib/gemini.dart",
+      // comment "args" to reset the google api key if you get:
+      // "ERROR: API key not valid. Please pass a valid API key."
+      // "args": ["--dart-entrypoint-args", "/reset"],
+    },
+    {
+      "name": "vertex",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/vertex.dart",
     },
  ]
 }

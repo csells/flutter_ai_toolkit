@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBcgvnhQeUg5BaAEsW-e1ox0y0X0rMjtf8</string>
+	<string>AIzaSyD7Khtpqmsb340R3kWuj_18hUiGss2fJ3g</string>
 	<key>GCM_SENDER_ID</key>
-	<string>992768337055</string>
+	<string>781366022955</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.example</string>
 	<key>PROJECT_ID</key>
-	<string>fffun2</string>
+	<string>flutter-ai-toolkit-examp-60bad</string>
 	<key>STORAGE_BUCKET</key>
-	<string>fffun2.appspot.com</string>
+	<string>flutter-ai-toolkit-examp-60bad.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:992768337055:ios:35529b23754ecdf9fa6eaa</string>
+	<string>1:781366022955:ios:e97ab5c81a8579df8a2b6e</string>
 </dict>
 </plist>
