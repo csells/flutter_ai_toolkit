@@ -2,7 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:file_selector/file_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
 import 'package:gap/gap.dart';
@@ -38,6 +41,7 @@ class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
   final _attachments = <Attachment>[];
+  final _isMobile = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   final _border = OutlineInputBorder(
     borderSide: const BorderSide(width: 1, color: outlineColor),
@@ -99,12 +103,16 @@ class _ChatInputState extends State<ChatInput> {
                       controller: _controller,
                       focusNode: _focusNode,
                       autofocus: true,
-                      textInputAction: TextInputAction.done,
+                      // on mobile, pressing enter should add a new line
+                      // on web+desktop, pressing enter should submit the prompt
+                      textInputAction: _isMobile
+                          ? TextInputAction.newline
+                          : TextInputAction.done,
                       onSubmitted: (value) => _onSubmit(value),
                       style: body2TextStyle,
                       decoration: InputDecoration(
                         // need to set all four xxxBorder args (but not
-                        // border itself) override Material styles
+                        // border itself) to override Material styles
                         errorBorder: _border,
                         focusedBorder: _border,
                         enabledBorder: _border,
