@@ -28,44 +28,24 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: title,
-        home: const ChatPage(),
+        home: ChatPage(
+          provider: kUseFirebase
+              ? FirebaseVertexProvider(
+                  model: 'gemini-1.5-flash',
+                )
+              : GeminiProvider(
+                  model: 'gemini-1.5-flash',
+                  apiKey: dotenv.get('GEMINI_API_KEY'),
+                ),
+        ),
         theme: ThemeData.light(),
         debugShowCheckedModeBanner: false,
       );
 }
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
-
-  @override
-  State<ChatPage> createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
-  late final LlmProvider provider;
-
-  @override
-  void initState() {
-    super.initState();
-    provider = _initProvider();
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(() {
-      fn();
-      provider = _initProvider();
-    });
-  }
-
-  LlmProvider _initProvider() => kUseFirebase
-      ? FirebaseVertexProvider(
-          model: 'gemini-1.5-flash',
-        )
-      : GeminiProvider(
-          model: 'gemini-1.5-flash',
-          apiKey: dotenv.get('GEMINI_API_KEY'),
-        );
+class ChatPage extends StatelessWidget {
+  const ChatPage({required this.provider, super.key});
+  final LlmProvider provider;
 
   @override
   Widget build(BuildContext context) => Scaffold(
