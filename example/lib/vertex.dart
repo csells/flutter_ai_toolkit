@@ -32,9 +32,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('${App.title} - ${provider.displayName}'),
-        ),
+        appBar: AppBar(title: const Text(App.title)),
         body: LlmChatView(provider: provider),
       );
 }

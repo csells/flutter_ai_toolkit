@@ -6,9 +6,6 @@ import 'llm_provider_interface.dart';
 
 class EchoProvider extends LlmProvider {
   @override
-  String get displayName => 'Echo (Testing)';
-
-  @override
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
@@ -22,8 +19,8 @@ class EchoProvider extends LlmProvider {
   }
 
   String _stringFrom(Attachment attachment) => switch (attachment) {
-        (FileAttachment a) => 'data: ${a.mimeType}, ${a.bytes.length} bytes',
+        (FileAttachment a) => 'file: ${a.mimeType}, ${a.bytes.length} bytes',
         (ImageAttachment a) => 'image: ${a.mimeType}, ${a.bytes.length} bytes',
-        (LinkAttachment a) => 'file: ${a.url}',
+        (LinkAttachment a) => 'link: ${a.url}',
       };
 }

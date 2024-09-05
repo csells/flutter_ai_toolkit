@@ -1,22 +1,22 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+Hello and welcome to the Flutter AI Toolkit!
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+The AI Toolkit is a set of AI chat-related widgets to make it easy to add an AI chat window to your Flutter app. The AI Toolkit is organized around an abstract LLM provider API to make it easy to swap out the LLM provider that you'd like your chat provider to use. Out of the box, it comes with support for two LLM provider integrations: Google Gemini AI and Firebase Vertex AI.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## Alpha Features
+The AI Toolkit is currently under active development and at the alpha stage, with the following features currently available:
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+- multi-turn chat (remembering context along the way)
+- streaming responses
+- multi-line chat text input
+- cancel in-progress request
+- edit the last prompt (starting with long-press as the UI gesture)
+- rich text response display
+- copy any response (starting with long-press as the UI gesture)
+- multi-media attachments
+- swappable support for LLM providers; oob support for Gemini and Vertex
+- support for all Flutter platforms, focusing initially on mobile and web
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+![alt text](README/screenshot.png)
 
 ## Getting started
 

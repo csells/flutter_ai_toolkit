@@ -60,8 +60,6 @@ final class LinkAttachment extends Attachment {
 }
 
 abstract class LlmProvider {
-  String get displayName;
-
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments,

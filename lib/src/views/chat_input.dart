@@ -181,11 +181,15 @@ class _AttachmentActionBar extends StatefulWidget {
 class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   var _expanded = false;
   late final bool _canCamera;
+  late final bool _canFile;
 
   @override
   void initState() {
     super.initState();
     _canCamera = ImagePicker().supportsImageSource(ImageSource.camera);
+    // work around for this bug:
+    // https://github.com/csells/flutter_ai_toolkit/issues/18
+    _canFile = !kIsWeb;
   }
 
   @override
@@ -205,7 +209,7 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
             onPressed: _onGallery,
             icon: Icons.image,
           ),
-          CircleButton(
+          if(_canFile) CircleButton(
             onPressed: _onFile,
             icon: Icons.attach_file,
           ),
