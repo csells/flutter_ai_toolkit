@@ -37,3 +37,21 @@ const like = 'sample';
 TODO: Tell users more about the package: where to find more information, how to
 contribute to the package, how to file issues, what response they can expect
 from the package authors, and more.
+
+## Examples
+### Gemini
+Get an API key
+
+### Firebase Vertex
+- make sure that the firebase CLI is installed on your machine
+- log into your firebase account: firebase login
+- make sure that the flutterfire CLI is installed on your machine (link)
+- cd into the example fold
+- flutterfire config (link)
+  - if you have trouble creating a new project, I recommend using console.firebase.google.com to create a project and letting flutterfire config create the apps
+- you should now have a firebase_options.dart file
+- enable the Firebase ML API (link: https://console.cloud.google.com/apis/library/firebaseml.googleapis.com?project=YOUR-PROJECT-ID)
+  - where do I get my project ID?
+    - look for projectId in firebase_options.dart
+- enable the Vertex AI API (link: https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=YOUR-PROJECT-ID)
+  - this requires enabling billing (link: firebase vertex API billing)
