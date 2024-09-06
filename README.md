@@ -18,7 +18,7 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 
 Here's an example of [a sample app](example/lib/gemini.dart) hosting the AI Tookit running on Android:
 
-<img src="README/screenshot.png" height="800"/>
+<img src="https://raw.githubusercontent.com/csells/flutter_ai_toolkit/main/README/screenshot.png" height="800"/>
 
 If you'd like to see it in action, check out [the online demo](https://flutter-ai-toolkit-examp-60bad.web.app/).
 
