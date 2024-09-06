@@ -55,7 +55,7 @@ To configure the `GeminiProvider` you two things:
 1. model string, which you can ready about in [the Gemini models docs](https://ai.google.dev/gemini-api/docs/models/gemini), and 
 1. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
 
-With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="example/gemini.dart">example/gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
+With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="blob/main/example/gemini.dart">example/gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
 
 Note: Be careful not to check your API key into a git repo or share it with anyone.
 
@@ -66,7 +66,7 @@ Unfortunately, there's no real way to keep your Gemini API key safe -- if you sh
 3. Log into your Firebase account from the CLI via `firebase login`. This gives the FlutterFire CLI the credentials it needs to do its work for you.
 4. Install [the FlutterFire CLI](https://firebase.google.com/docs/flutter/setup). You'll use this tool to generate the configuration code you need to initialize Firebase inside your Flutter app.
 5. In your terminal, using `cd` to change to the `flutter_ai_toolkit/example` folder
-6. Run `flutterfire config` to generate the `firebase_options.dart` file you need to include in any of the Firebase samples (just <a href="example/vertex.dart">example/vertex.dart</a> today). Make sure to choose the project you created in step #1.
+6. Run `flutterfire config` to generate the `firebase_options.dart` file you need to include in any of the Firebase samples (just <a href="blob/main/example/vertex.dart">example/vertex.dart</a> today). Make sure to choose the project you created in step #1.
 7. To enable the Firebase ML API for use in your project, surf to https://console.cloud.google.com/apis/library/firebaseml.googleapis.com?project=YOUR-PROJECT-ID and press the Enable button. You can find your Firebase project's project ID in the `firebase_options.dart` file in any of the Dart data structions that contain a `projectId` field.
 8. And finally, to enable the Vertex AI API, surf to https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=YOUR-PROJECT-ID and click Enable. This one requires enabling billing, so be sure to be careful to set a quality and notifications while you're at it, too.
 
