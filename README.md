@@ -20,7 +20,7 @@ Here's an example of [a sample app](example/lib/gemini.dart) hosting the AI Took
 
 <img src="README/screenshot.png" height="800"/>
 
-If you'd like to see it in action, check out [the online demo](TODO).
+If you'd like to see it in action, check out [the online demo](https://flutter-ai-toolkit-examp-60bad.web.app/).
 
 ## Getting started
 Using the AI Toolkit is a matter of choosing which LLM provider you'd like to use (Gemini or Vertex), creating an instance and passing it to the `LlmChatView` widget, which is the main entry point for the AI Toolkit:
