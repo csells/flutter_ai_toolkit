@@ -30,3 +30,4 @@ build/
 example/.env
 example/lib/firebase_options.dart
 example/firebase.json
+example/.firebaserc
