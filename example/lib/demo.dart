@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 late final SharedPreferences prefs;
 
@@ -92,17 +91,11 @@ class _GoogleApiKeyPageState extends State<GoogleApiKeyPage> {
             valueListenable: _controller,
             builder: (context, value, child) => Column(
               children: [
-                const Text('To run this sample, you need a Google API key.\n'
-                    'Get your Google API Key from the following URL:'),
-                GestureDetector(
-                  onTap: () => launchUrl(url),
-                  child: Text(
-                    url.toString(),
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
+                const Text('To run this sample, get a Google API Key from:'),
+                const Gap(16),
+                SelectableText(
+                  url.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Gap(16),
                 const Text('Paste your API key here:'),
