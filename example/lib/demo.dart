@@ -9,12 +9,6 @@ late final SharedPreferences prefs;
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-
-  // Check for /reset command line argument
-  if (args.contains('/reset')) {
-    await prefs.remove('google_api_key');
-  }
-
   runApp(App(prefs: prefs));
 }
 
@@ -46,16 +40,19 @@ class _AppState extends State<App> {
                 onApiKey: _setApiKey,
               )
             : ChatPage(
-                provider: GeminiProvider(
-                  model: 'gemini-1.5-flash',
-                  apiKey: _googleApiKey!,
-                ),
+                googleApiKey: _googleApiKey!,
+                onResetApiKey: _resetApiKey,
               ),
       );
 
   void _setApiKey(String apiKey) {
     setState(() => _googleApiKey = apiKey);
     widget.prefs.setString('google_api_key', apiKey);
+  }
+
+  void _resetApiKey() {
+    setState(() => _googleApiKey = null);
+    widget.prefs.remove('google_api_key');
   }
 }
 
@@ -137,12 +134,36 @@ class _GoogleApiKeyPageState extends State<GoogleApiKeyPage> {
 }
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({required this.provider, super.key});
-  final LlmProvider provider;
+  const ChatPage({
+    required this.googleApiKey,
+    required this.onResetApiKey,
+    super.key,
+  });
+
+  final String googleApiKey;
+  final void Function() onResetApiKey;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text(App.title)),
-        body: LlmChatView(provider: provider),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text('Reset API Key'),
+                onTap: () {
+                  onResetApiKey();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+        body: LlmChatView(
+          provider: GeminiProvider(
+            model: 'gemini-1.5-flash',
+            apiKey: googleApiKey,
+          ),
+        ),
       );
 }
