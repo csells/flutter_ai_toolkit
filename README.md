@@ -7,18 +7,20 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 
 - multi-turn chat (remembering context along the way)
 - streaming responses
-- multi-line chat text input
+- multi-line chat text input (via Alt/Opt+Enter on web/desktop)
 - cancel in-progress request
 - edit the last prompt (starting with long-press as the UI gesture)
 - rich text response display
 - copy any response (starting with long-press as the UI gesture)
-- multi-media attachments
+- multi-media attachments ([the web currently doesn't like file attachments](https://github.com/csells/flutter_ai_toolkit/issues/18), so they're disabled)
 - swappable support for LLM providers; oob support for Gemini and Vertex
 - support for all Flutter platforms, focusing initially on mobile and web
 
-![alt text](README/screenshot.png)
+<img src="README/screenshot.png" height="800"/>
 
 ## Getting started
+
+To use the 
 
 TODO: List prerequisites and provide or point to information on how to
 start using the package.
