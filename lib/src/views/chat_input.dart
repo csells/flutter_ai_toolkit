@@ -2,21 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:io';
-
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
 import 'circle_button.dart';
 import 'view_styles.dart';
 
+/// A widget that provides an input field for chat messages with attachment
+/// support.
+///
+/// This widget allows users to enter text messages and add attachments. It also
+/// handles the submission of messages and provides a way to cancel the input.
 class ChatInput extends StatefulWidget {
+  /// Creates a ChatInput widget.
+  ///
+  /// The [submitting], [onSubmit], and [onCancel] parameters are required.
   const ChatInput({
     required this.submitting,
     required this.onSubmit,
@@ -25,10 +32,18 @@ class ChatInput extends StatefulWidget {
     super.key,
   });
 
+  /// Indicates whether a message is currently being submitted.
   final bool submitting;
 
+  /// The initial message to populate the input field, if any.
   final ChatMessage? initialMessage;
+
+  /// Callback function called when a message is submitted.
+  ///
+  /// It takes two parameters: the message text and a collection of attachments.
   final void Function(String, Iterable<Attachment>) onSubmit;
+
+  /// Callback function called when the input is cancelled.
   final void Function() onCancel;
 
   @override
@@ -41,7 +56,7 @@ class _ChatInputState extends State<ChatInput> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
   final _attachments = <Attachment>[];
-  final _isMobile = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  final _isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
 
   final _border = OutlineInputBorder(
     borderSide: const BorderSide(width: 1, color: outlineColor),
@@ -187,7 +202,8 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   void initState() {
     super.initState();
     _canCamera = ImagePicker().supportsImageSource(ImageSource.camera);
-    // work around for this bug:
+
+    // _canFile is a work around for this bug:
     // https://github.com/csells/flutter_ai_toolkit/issues/18
     _canFile = !kIsWeb;
   }
@@ -209,10 +225,11 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
             onPressed: _onGallery,
             icon: Icons.image,
           ),
-          if(_canFile) CircleButton(
-            onPressed: _onFile,
-            icon: Icons.attach_file,
-          ),
+          if (_canFile)
+            CircleButton(
+              onPressed: _onFile,
+              icon: Icons.attach_file,
+            ),
         ])
       : CircleButton(
           onPressed: _onToggleMenu,

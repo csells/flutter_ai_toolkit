@@ -1,5 +1,10 @@
-// forked from https://github.com/wal33d006/progress_indicators due to lack of
-// activity
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// this file forked from https://github.com/wal33d006/progress_indicators due to
+// lack of activity
+
 import 'package:flutter/material.dart';
 
 class _JumpingDot extends AnimatedWidget {
@@ -51,11 +56,13 @@ class JumpingDotsProgress extends StatefulWidget {
   /// Time of one complete cycle of animation, default 250 milliseconds.
   final int milliseconds;
 
-  /// Starting and ending values for animations.
+  /// The starting value for the animation tween.
   final double beginTweenValue = 0.0;
+
+  /// The ending value for the animation tween.
   final double endTweenValue = 8.0;
 
-  /// Creates a jumping do progress indicator.
+  /// Creates a jumping dot progress indicator.
   const JumpingDotsProgress({
     super.key,
     this.numberOfDots = 3,

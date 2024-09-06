@@ -12,12 +12,25 @@ import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 
+/// A widget that displays a chat interface for interacting with an LLM
+/// (Language Learning Model).
+///
+/// This widget creates a chat view where users can send messages to an LLM and
+/// receive responses. It handles the display of the chat transcript and the
+/// input mechanism for sending new messages.
+///
+/// The [provider] parameter is required and specifies the LLM provider to use
+/// for generating responses.
 class LlmChatView extends StatefulWidget {
+  /// Creates an LlmChatView.
+  ///
+  /// The [provider] parameter must not be null.
   const LlmChatView({
     required this.provider,
     super.key,
   });
 
+  /// The LLM provider used to generate responses in the chat.
   final LlmProvider provider;
 
   @override

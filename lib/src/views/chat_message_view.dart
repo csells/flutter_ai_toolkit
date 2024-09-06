@@ -15,7 +15,19 @@ import '../models/chat_message.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
 
+/// A widget that displays a single chat message with optional selection and
+/// editing functionality.
+///
+/// This widget is responsible for rendering a chat message, handling long press
+/// for selection, and providing options to edit or copy the message content.
 class ChatMessageView extends StatefulWidget {
+  /// Creates a ChatMessageView.
+  ///
+  /// The [message] parameter is required and represents the chat message to be
+  /// displayed. [onEdit] is an optional callback function triggered when the
+  /// edit action is selected. [onSelected] is an optional callback function
+  /// that is called when the message selection state changes. [selected]
+  /// indicates whether the message is currently selected.
   const ChatMessageView({
     required this.message,
     this.onEdit,
@@ -24,9 +36,16 @@ class ChatMessageView extends StatefulWidget {
     super.key,
   });
 
+  /// The chat message to be displayed.
   final ChatMessage message;
+
+  /// Callback function triggered when the edit action is selected.
   final void Function()? onEdit;
+
+  /// Callback function called when the message selection state changes.
   final void Function(bool)? onSelected;
+
+  /// Indicates whether the message is currently selected.
   final bool selected;
 
   @override

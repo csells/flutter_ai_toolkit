@@ -6,7 +6,18 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+/// A widget that displays an animated typing indicator.
+///
+/// This widget shows a series of animated bubbles that simulate a typing
+/// indicator, commonly used in chat interfaces to show that someone is
+/// composing a message.
 class TypingIndicator extends StatefulWidget {
+  /// Creates a TypingIndicator widget.
+  ///
+  /// [showIndicator] determines whether the indicator is visible.
+  /// [bubbleColor] sets the color of the main bubble.
+  /// [flashingCircleDarkColor] and [flashingCircleBrightColor] set the colors
+  /// for the flashing animation of the smaller circles.
   const TypingIndicator({
     super.key,
     this.showIndicator = false,
@@ -15,9 +26,16 @@ class TypingIndicator extends StatefulWidget {
     this.flashingCircleBrightColor = const Color(0xFFaec1dd),
   });
 
+  /// Whether to show the typing indicator.
   final bool showIndicator;
+
+  /// The color of the main bubble in the typing indicator.
   final Color bubbleColor;
+
+  /// The darker color used in the flashing animation of the circles.
   final Color flashingCircleDarkColor;
+
+  /// The brighter color used in the flashing animation of the circles.
   final Color flashingCircleBrightColor;
 
   @override

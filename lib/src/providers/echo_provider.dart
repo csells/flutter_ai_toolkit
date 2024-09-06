@@ -4,8 +4,21 @@
 
 import 'llm_provider_interface.dart';
 
+/// A simple LLM provider that echoes the input prompt and attachment
+/// information.
+///
+/// This provider is primarily used for testing and debugging purposes.
 class EchoProvider extends LlmProvider {
   @override
+
+  /// Generates a stream of strings that echo the input prompt and attachment
+  /// details.
+  ///
+  /// This method simulates a delay before responding, then yields the echo
+  /// response in parts to mimic the behavior of a real LLM provider.
+  ///
+  /// [prompt] The input prompt to be echoed. [attachments] An optional iterable
+  /// of attachments to be processed and included in the response.
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
