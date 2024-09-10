@@ -17,11 +17,14 @@ class FirebaseVertexProvider extends LlmProvider {
   /// optional [GenerationConfig] to customize the text generation.
   FirebaseVertexProvider({
     required String model,
+    String? systemInstruction,
     GenerationConfig? config,
   }) {
     final llm = FirebaseVertexAI.instance.generativeModel(
       model: model,
       generationConfig: config,
+      systemInstruction:
+          systemInstruction != null ? Content.system(systemInstruction) : null,
     );
 
     _chat = llm.startChat();

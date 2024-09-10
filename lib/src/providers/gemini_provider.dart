@@ -19,12 +19,15 @@ class GeminiProvider extends LlmProvider {
   GeminiProvider({
     required String model,
     required String apiKey,
+    String? systemInstruction,
     GenerationConfig? config,
   }) {
     final llm = GenerativeModel(
       model: model,
       apiKey: apiKey,
       generationConfig: config,
+      systemInstruction:
+          systemInstruction != null ? Content.system(systemInstruction) : null,
     );
 
     _chat = llm.startChat();
