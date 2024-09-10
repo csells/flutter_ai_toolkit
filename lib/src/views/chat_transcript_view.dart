@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import '../models/chat_message.dart';
 import 'chat_message_view.dart';
+import 'response_builder.dart';
 
 /// A widget that displays a transcript of chat messages.
 ///
@@ -27,6 +28,7 @@ class ChatTranscriptView extends StatefulWidget {
   const ChatTranscriptView({
     required this.transcript,
     this.onEditMessage,
+    this.responseBuilder,
     super.key,
   });
 
@@ -40,6 +42,16 @@ class ChatTranscriptView extends StatefulWidget {
   /// transcript). The function receives the [ChatMessage] to be edited as its
   /// parameter.
   final void Function(ChatMessage message)? onEditMessage;
+
+  /// Optional builder function for customizing the display of chat responses.
+  ///
+  /// If provided, this function will be used to build the widget that displays
+  /// the response from the LLM in each chat message. It takes a [BuildContext]
+  /// and a [String] containing the response text, and should return a [Widget]
+  /// that represents the formatted response.
+  ///
+  /// If not provided, a default representation will be used.
+  final ResponseBuilder? responseBuilder;
 
   @override
   State<ChatTranscriptView> createState() => _ChatTranscriptViewState();
@@ -72,6 +84,7 @@ class _ChatTranscriptViewState extends State<ChatTranscriptView> {
                   selected,
                 ),
                 selected: _selectedMessageIndex == messageIndex,
+                responseBuilder: widget.responseBuilder,
               ),
             );
           },

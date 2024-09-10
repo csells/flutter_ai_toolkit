@@ -14,6 +14,7 @@ import 'package:gap/gap.dart';
 import '../models/chat_message.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
+import 'response_builder.dart';
 
 /// A widget that displays a single chat message with optional selection and
 /// editing functionality.
@@ -33,6 +34,7 @@ class ChatMessageView extends StatefulWidget {
     this.onEdit,
     this.onSelected,
     this.selected = false,
+    this.responseBuilder,
     super.key,
   });
 
@@ -48,6 +50,9 @@ class ChatMessageView extends StatefulWidget {
   /// Indicates whether the message is currently selected.
   final bool selected;
 
+  /// A builder function that returns a widget for displaying the message.
+  final ResponseBuilder? responseBuilder;
+
   @override
   State<ChatMessageView> createState() => _ChatMessageViewState();
 }
@@ -62,7 +67,10 @@ class _ChatMessageViewState extends State<ChatMessageView> {
           children: [
             _isUser
                 ? _UserMessageView(widget.message)
-                : _LlmMessageView(widget.message),
+                : _LlmMessageView(
+                    widget.message,
+                    responseBuilder: widget.responseBuilder,
+                  ),
             const Gap(6),
             if (widget.selected)
               Align(
@@ -176,8 +184,12 @@ class _UserMessageView extends StatelessWidget {
 }
 
 class _LlmMessageView extends StatelessWidget {
-  const _LlmMessageView(this.message);
+  _LlmMessageView(this.message, {ResponseBuilder? responseBuilder}) {
+    this.responseBuilder = responseBuilder ?? _responseBuilder;
+  }
+
   final ChatMessage message;
+  late final ResponseBuilder responseBuilder;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -208,7 +220,7 @@ class _LlmMessageView extends StatelessWidget {
                               width: 24,
                               child: JumpingDotsProgress(fontSize: 24),
                             )
-                          : MarkdownBody(data: message.text),
+                          : responseBuilder(context, message.text),
                     ),
                   ],
                 ),
@@ -218,4 +230,7 @@ class _LlmMessageView extends StatelessWidget {
           const Flexible(flex: 2, child: SizedBox()),
         ],
       );
+
+  Widget _responseBuilder(BuildContext context, String response) =>
+      MarkdownBody(data: response);
 }
