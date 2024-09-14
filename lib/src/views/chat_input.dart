@@ -53,8 +53,32 @@ class ChatInput extends StatefulWidget {
 enum _InputState { disabled, enabled, submitting }
 
 class _ChatInputState extends State<ChatInput> {
-  final _controller = TextEditingController();
+  // Notes on the way focus works in this widget:
+  // - we use a focus node to request focus when the input is submitted or
+  //   cancelled
+  // - we leave the text field enabled so that it never artifically loses focus
+  //   (you can't have focus on a disabled widget)
+  // - this means we're not taking back focus after a submission or a
+  //   cancellation is complete from another widget in the app that might have
+  //   it, e.g. if we attempted to take back focus in didUpdateWidget
+  // - this also means that we don't need any complicated logic to request focus
+  //   in didUpdateWidget only the first time after a submission or cancellation
+  //   that would be required to keep from stealing focus from other widgets in
+  //   the app
+  // - also, if the user is submitting and they press Enter while inside the
+  //   text field, we want to put the focus back in the text field but otherwise
+  //   ignore the Enter key; it doesn't make sense for Enter to cancel - they
+  //   can use the Cancel button for that.
+  // - the reason we need to request focus in the onSubmitted function of the
+  //   TextField is because apparently it gives up focus as part of its
+  //   implementation somehow (just how is something to discover)
+  // - the research we need to request focus in the implementation of the
+  //   separate submit/cancel button is because apparently clicking on another
+  //   widget when the TextField is focused causes it to lose focus (which makes
+  //   sense)
   final _focusNode = FocusNode();
+
+  final _controller = TextEditingController();
   final _attachments = <Attachment>[];
   final _isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
 
@@ -70,7 +94,6 @@ class _ChatInputState extends State<ChatInput> {
       _controller.text = widget.initialMessage!.text;
       _attachments.addAll(widget.initialMessage!.attachments);
     }
-    _focusNode.requestFocus();
   }
 
   @override
@@ -112,18 +135,19 @@ class _ChatInputState extends State<ChatInput> {
                       vertical: 8,
                     ),
                     child: TextField(
-                      enabled: _inputState != _InputState.submitting,
                       minLines: 1,
                       maxLines: 1024,
                       controller: _controller,
-                      focusNode: _focusNode,
                       autofocus: true,
+                      focusNode: _focusNode,
                       // on mobile, pressing enter should add a new line
                       // on web+desktop, pressing enter should submit the prompt
                       textInputAction: _isMobile
                           ? TextInputAction.newline
                           : TextInputAction.done,
-                      onSubmitted: (value) => _onSubmit(value),
+                      onSubmitted: _inputState == _InputState.submitting
+                          ? (_) => _focusNode.requestFocus()
+                          : _onSubmit,
                       style: body2TextStyle,
                       decoration: InputDecoration(
                         // need to set all four xxxBorder args (but not
@@ -131,7 +155,9 @@ class _ChatInputState extends State<ChatInput> {
                         errorBorder: _border,
                         focusedBorder: _border,
                         enabledBorder: _border,
-                        disabledBorder: _border,
+                        disabledBorder: _border.copyWith(
+                          borderSide: const BorderSide(color: Colors.red),
+                        ),
                         hintText: "Ask me anything...",
                         hintStyle: body2TextStyle.copyWith(
                           color: placeholderTextColor,
@@ -173,15 +199,13 @@ class _ChatInputState extends State<ChatInput> {
   void _onCancel() {
     assert(_inputState == _InputState.submitting);
     widget.onCancel();
-    _controller.clear();
-    _attachments.clear();
     _focusNode.requestFocus();
   }
 
   void _onAttachment(Attachment attachment) =>
       setState(() => _attachments.add(attachment));
 
-  _onRemoveAttachment(Attachment attachment) =>
+  void _onRemoveAttachment(Attachment attachment) =>
       setState(() => _attachments.remove(attachment));
 }
 
@@ -316,16 +340,16 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (inputState) {
-        // disabled Send button
+        // disabled Submit button
         _InputState.disabled => const CircleButton(
             icon: Icons.subdirectory_arrow_right,
           ),
-        // enabled Send button
+        // enabled Submit button
         _InputState.enabled => CircleButton(
             onPressed: () => onSubmit(text),
             icon: Icons.subdirectory_arrow_right,
           ),
-        // enabled Stop button
+        // enabled Cancel button
         _InputState.submitting => CircleButton(
             onPressed: onCancel,
             icon: Icons.stop,

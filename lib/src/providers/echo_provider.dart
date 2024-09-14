@@ -25,7 +25,7 @@ class EchoProvider extends LlmProvider {
   }) async* {
     await Future.delayed(const Duration(milliseconds: 1000));
     yield 'echo: ';
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     yield prompt;
     final strings = attachments.map(_stringFrom);
     yield '\n\nattachments: $strings';
