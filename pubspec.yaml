@@ -21,6 +21,7 @@ dependencies:
   firebase_vertexai: ^0.2.3
   gap: ^3.0.1
   universal_platform: ^1.1.0
+  ollama_dart: ^0.2.1
   
 dev_dependencies:
   flutter_test:

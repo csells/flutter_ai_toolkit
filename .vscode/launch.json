@@ -16,6 +16,13 @@
       "program": "lib/vertex.dart",
     },
     {
+      "name": "gemma",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/gemma.dart",
+    },
+    {
       "name": "demo",
       "cwd": "example",
       "request": "launch",
