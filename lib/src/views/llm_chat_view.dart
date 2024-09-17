@@ -12,6 +12,7 @@ import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 import 'response_builder.dart';
+import '../providers/forwarding_provider.dart';
 
 /// A widget that displays a chat interface for interacting with an LLM
 /// (Language Learning Model).
@@ -26,17 +27,20 @@ class LlmChatView extends StatefulWidget {
   /// Creates an LlmChatView.
   ///
   /// The [provider] parameter must not be null.
-  const LlmChatView({
-    required this.provider,
+  LlmChatView({
+    required LlmProvider provider,
     this.responseBuilder,
+    LlmStreamGenerator? streamGenerator,
     super.key,
-  });
+  }) : provider = streamGenerator == null
+            ? provider
+            : ForwardingProvider(streamGenerator: streamGenerator);
 
   /// The LLM provider used to generate responses in the chat.
   final LlmProvider provider;
 
-  /// A builder function that takes the context and the response and returns a
-  /// widget.
+  /// An optional builder function that allows replacing the widget that
+  /// displays the response.
   final ResponseBuilder? responseBuilder;
 
   @override

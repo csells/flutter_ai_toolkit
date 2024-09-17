@@ -31,13 +31,6 @@ class OllamaProvider extends LlmProvider {
   final _messages = <Message>[];
 
   @override
-
-  /// Generates a stream of text responses from the Ollama model.
-  ///
-  /// [prompt] is the user's input text.
-  /// [attachments] is an optional list of attachments (currently not used by Ollama).
-  ///
-  /// Returns a [Stream] of [String] containing the generated text.
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],

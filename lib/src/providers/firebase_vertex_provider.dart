@@ -34,13 +34,6 @@ class FirebaseVertexProvider extends LlmProvider {
   late final ChatSession _chat;
 
   @override
-
-  /// Generates a stream of text based on the given prompt and attachments.
-  ///
-  /// [prompt] is the input text to generate a response for. [attachments] is an
-  /// optional iterable of [Attachment] objects to include with the prompt.
-  ///
-  /// Returns a [Stream] of [String] containing the generated text chunks.
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],

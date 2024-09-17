@@ -155,3 +155,10 @@ abstract class LlmProvider {
     Iterable<Attachment> attachments,
   });
 }
+
+/// A function that generates a stream of text based on a prompt and
+/// attachments.
+typedef LlmStreamGenerator = Stream<String> Function(
+  String prompt, {
+  Iterable<Attachment> attachments,
+});
