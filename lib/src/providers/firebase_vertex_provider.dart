@@ -19,7 +19,9 @@ class FirebaseVertexProvider extends LlmProvider {
     required String model,
     String? systemInstruction,
     GenerationConfig? config,
-  }) {
+  }) : _embeddingModel = FirebaseVertexAI.instance.generativeModel(
+          model: 'text-embedding-004',
+        ) {
     final llm = FirebaseVertexAI.instance.generativeModel(
       model: model,
       generationConfig: config,
@@ -32,6 +34,7 @@ class FirebaseVertexProvider extends LlmProvider {
 
   /// The chat session used for generating responses.
   late final ChatSession _chat;
+  final GenerativeModel _embeddingModel;
 
   @override
   Stream<String> generateStream(
@@ -47,6 +50,27 @@ class FirebaseVertexProvider extends LlmProvider {
       final text = chunk.text;
       if (text != null) yield text;
     }
+  }
+
+  @override
+  Future<List<double>> getDocumentEmbedding(String document) =>
+      _getEmbedding(document, TaskType.retrievalDocument);
+
+  @override
+  Future<List<double>> getQueryEmbedding(String query) =>
+      _getEmbedding(query, TaskType.retrievalQuery);
+
+  Future<List<double>> _getEmbedding(String s, TaskType embeddingTask) async {
+    assert(embeddingTask == TaskType.retrievalDocument ||
+        embeddingTask == TaskType.retrievalQuery);
+
+    final content = Content.text(s);
+    final result = await _embeddingModel.embedContent(
+      content,
+      taskType: embeddingTask,
+    );
+
+    return result.embedding.values;
   }
 
   Part _partFrom(Attachment attachment) => switch (attachment) {

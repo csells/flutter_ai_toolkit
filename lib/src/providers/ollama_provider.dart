@@ -60,4 +60,14 @@ class OllamaProvider extends LlmProvider {
 
     _messages.add(Message(role: MessageRole.assistant, content: content));
   }
+
+  @override
+  Future<List<double>> getDocumentEmbedding(String document) {
+    throw UnimplementedError('OllamaProvider.getDocumentEmbedding');
+  }
+
+  @override
+  Future<List<double>> getQueryEmbedding(String query) {
+    throw UnimplementedError('OllamaProvider.getQueryEmbedding');
+  }
 }

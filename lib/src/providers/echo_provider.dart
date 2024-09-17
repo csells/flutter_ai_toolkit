@@ -36,4 +36,14 @@ class EchoProvider extends LlmProvider {
         (ImageAttachment a) => 'image: ${a.mimeType}, ${a.bytes.length} bytes',
         (LinkAttachment a) => 'link: ${a.url}',
       };
+
+  @override
+  Future<List<double>> getDocumentEmbedding(String document) {
+    throw UnimplementedError('EchoProvider.getDocumentEmbedding');
+  }
+
+  @override
+  Future<List<double>> getQueryEmbedding(String query) {
+    throw UnimplementedError('EchoProvider.getQueryEmbedding');
+  }
 }

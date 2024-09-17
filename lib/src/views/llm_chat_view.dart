@@ -8,11 +8,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 
 import '../models/chat_message.dart';
+import '../providers/forwarding_provider.dart';
 import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 import 'response_builder.dart';
-import '../providers/forwarding_provider.dart';
 
 /// A widget that displays a chat interface for interacting with an LLM
 /// (Language Learning Model).
@@ -34,7 +34,10 @@ class LlmChatView extends StatefulWidget {
     super.key,
   }) : provider = streamGenerator == null
             ? provider
-            : ForwardingProvider(streamGenerator: streamGenerator);
+            : ForwardingProvider(
+                provider: provider,
+                streamGenerator: streamGenerator,
+              );
 
   /// The LLM provider used to generate responses in the chat.
   final LlmProvider provider;
