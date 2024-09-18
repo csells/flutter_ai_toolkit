@@ -17,43 +17,13 @@ class GeminiProvider extends LlmProvider {
   /// for authentication with the Gemini AI service. [config] is an optional
   /// [GenerationConfig] to customize the text generation.
   GeminiProvider({
-    required String model,
-    required String apiKey,
-    String? systemInstruction,
-    GenerationConfig? config,
-  }) : _embeddingModel = GenerativeModel(
-          model: 'text-embedding-004',
-          apiKey: apiKey,
-        ) {
-    final llm = GenerativeModel(
-      model: model,
-      apiKey: apiKey,
-      generationConfig: config,
-      systemInstruction:
-          systemInstruction != null ? Content.system(systemInstruction) : null,
-    );
+    GenerativeModel? chatModel,
+    GenerativeModel? embeddingModel,
+  })  : _embeddingModel = embeddingModel,
+        _chat = chatModel?.startChat();
 
-    _chat = llm.startChat();
-  }
-
-  late final ChatSession _chat;
-  final GenerativeModel _embeddingModel;
-
-  @override
-  Stream<String> generateStream(
-    String prompt, {
-    Iterable<Attachment> attachments = const [],
-  }) async* {
-    final content = Content('user', [
-      TextPart(prompt),
-      ...attachments.map(_partFrom),
-    ]);
-    final response = _chat.sendMessageStream(content);
-    await for (final chunk in response) {
-      final text = chunk.text;
-      if (text != null) yield text;
-    }
-  }
+  final GenerativeModel? _embeddingModel;
+  final ChatSession? _chat;
 
   @override
   Future<List<double>> getDocumentEmbedding(String document) =>
@@ -64,6 +34,10 @@ class GeminiProvider extends LlmProvider {
       _getEmbedding(query, TaskType.retrievalQuery);
 
   Future<List<double>> _getEmbedding(String s, TaskType embeddingTask) async {
+    if (_embeddingModel == null) {
+      throw Exception('embeddingModel is not initialized');
+    }
+
     assert(embeddingTask == TaskType.retrievalDocument ||
         embeddingTask == TaskType.retrievalQuery);
 
@@ -74,6 +48,25 @@ class GeminiProvider extends LlmProvider {
     );
 
     return result.embedding.values;
+  }
+
+  @override
+  Stream<String> sendMessageStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
+    if (_chat == null) throw Exception('chatModel is not initialized');
+
+    final content = Content('user', [
+      TextPart(prompt),
+      ...attachments.map(_partFrom),
+    ]);
+
+    final response = _chat.sendMessageStream(content);
+    await for (final chunk in response) {
+      final text = chunk.text;
+      if (text != null) yield text;
+    }
   }
 
   Part _partFrom(Attachment attachment) => switch (attachment) {

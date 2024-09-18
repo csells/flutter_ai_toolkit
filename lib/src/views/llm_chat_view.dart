@@ -120,7 +120,10 @@ class _LlmChatViewState extends State<LlmChatView> {
     _transcript.addAll([userMessage, llmMessage]);
 
     _current = _LlmResponse(
-      stream: widget.provider.generateStream(prompt, attachments: attachments),
+      stream: widget.provider.sendMessageStream(
+        prompt,
+        attachments: attachments,
+      ),
       message: llmMessage,
       onDone: _onDone,
     );

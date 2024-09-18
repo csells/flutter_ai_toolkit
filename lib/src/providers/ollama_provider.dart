@@ -31,7 +31,17 @@ class OllamaProvider extends LlmProvider {
   final _messages = <Message>[];
 
   @override
-  Stream<String> generateStream(
+  Future<List<double>> getDocumentEmbedding(String document) {
+    throw UnimplementedError('OllamaProvider.getDocumentEmbedding');
+  }
+
+  @override
+  Future<List<double>> getQueryEmbedding(String query) {
+    throw UnimplementedError('OllamaProvider.getQueryEmbedding');
+  }
+
+  @override
+  Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
@@ -59,15 +69,5 @@ class OllamaProvider extends LlmProvider {
     }
 
     _messages.add(Message(role: MessageRole.assistant, content: content));
-  }
-
-  @override
-  Future<List<double>> getDocumentEmbedding(String document) {
-    throw UnimplementedError('OllamaProvider.getDocumentEmbedding');
-  }
-
-  @override
-  Future<List<double>> getQueryEmbedding(String query) {
-    throw UnimplementedError('OllamaProvider.getQueryEmbedding');
   }
 }

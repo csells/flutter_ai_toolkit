@@ -28,17 +28,17 @@ class ForwardingProvider extends LlmProvider {
   final LlmStreamGenerator streamGenerator;
 
   @override
-  Stream<String> generateStream(
-    String prompt, {
-    Iterable<Attachment> attachments = const [],
-  }) =>
-      streamGenerator(prompt, attachments: attachments);
-
-  @override
   Future<List<double>> getDocumentEmbedding(String document) =>
       provider.getDocumentEmbedding(document);
 
   @override
   Future<List<double>> getQueryEmbedding(String query) =>
       provider.getQueryEmbedding(query);
+
+  @override
+  Stream<String> sendMessageStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) =>
+      streamGenerator(prompt, attachments: attachments);
 }

@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:gap/gap.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late final SharedPreferences prefs;
@@ -158,8 +159,10 @@ class ChatPage extends StatelessWidget {
         ),
         body: LlmChatView(
           provider: GeminiProvider(
-            model: 'gemini-1.5-flash',
-            apiKey: googleApiKey,
+            chatModel: GenerativeModel(
+              model: 'gemini-1.5-flash',
+              apiKey: googleApiKey,
+            ),
           ),
         ),
       );

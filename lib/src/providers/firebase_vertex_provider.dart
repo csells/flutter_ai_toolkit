@@ -37,22 +37,6 @@ class FirebaseVertexProvider extends LlmProvider {
   final GenerativeModel _embeddingModel;
 
   @override
-  Stream<String> generateStream(
-    String prompt, {
-    Iterable<Attachment> attachments = const [],
-  }) async* {
-    final content = Content('user', [
-      TextPart(prompt),
-      ...attachments.map(_partFrom),
-    ]);
-    final response = _chat.sendMessageStream(content);
-    await for (final chunk in response) {
-      final text = chunk.text;
-      if (text != null) yield text;
-    }
-  }
-
-  @override
   Future<List<double>> getDocumentEmbedding(String document) =>
       _getEmbedding(document, TaskType.retrievalDocument);
 
@@ -71,6 +55,22 @@ class FirebaseVertexProvider extends LlmProvider {
     );
 
     return result.embedding.values;
+  }
+
+  @override
+  Stream<String> sendMessageStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
+    final content = Content('user', [
+      TextPart(prompt),
+      ...attachments.map(_partFrom),
+    ]);
+    final response = _chat.sendMessageStream(content);
+    await for (final chunk in response) {
+      final text = chunk.text;
+      if (text != null) yield text;
+    }
   }
 
   Part _partFrom(Attachment attachment) => switch (attachment) {

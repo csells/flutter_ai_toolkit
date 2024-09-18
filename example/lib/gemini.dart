@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 const String googleApiKey = 'TODO: Set your Google API key';
 
@@ -29,8 +30,10 @@ class ChatPage extends StatelessWidget {
         appBar: AppBar(title: const Text(App.title)),
         body: LlmChatView(
           provider: GeminiProvider(
-            model: 'gemini-1.5-flash',
-            apiKey: googleApiKey,
+            chatModel: GenerativeModel(
+              model: 'gemini-1.5-flash',
+              apiKey: googleApiKey,
+            ),
           ),
         ),
       );
