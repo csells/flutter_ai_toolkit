@@ -9,15 +9,15 @@ import 'llm_provider_interface.dart';
 class ForwardingProvider extends LlmProvider {
   /// Creates a new instance of [ForwardingProvider].
   ///
-  /// [streamGenerator] is a function that takes a [String] prompt and an
+  /// [messageSender] is a function that takes a [String] prompt and an
   /// optional [Iterable<Attachment>] attachments and returns a [Stream<String>]
   /// containing the generated text.
-  ForwardingProvider({required this.provider, required this.streamGenerator});
+  ForwardingProvider({required this.provider, required this.messageSender});
 
   /// The underlying LLM provider that this [ForwardingProvider] wraps.
   ///
   /// This provider is used for operations that are not handled by the
-  /// [streamGenerator], such as generating embeddings.
+  /// [messageSender], such as generating embeddings.
   final LlmProvider provider;
 
   /// The function used to generate the stream of text.
@@ -25,7 +25,7 @@ class ForwardingProvider extends LlmProvider {
   /// This function takes a [String] prompt and an optional
   /// [Iterable<Attachment>] attachments, and returns a [Stream<String>]
   /// containing the generated text.
-  final LlmStreamGenerator streamGenerator;
+  final LlmStreamGenerator messageSender;
 
   @override
   Future<List<double>> getDocumentEmbedding(String document) =>
@@ -40,5 +40,5 @@ class ForwardingProvider extends LlmProvider {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) =>
-      streamGenerator(prompt, attachments: attachments);
+      messageSender(prompt, attachments: attachments);
 }

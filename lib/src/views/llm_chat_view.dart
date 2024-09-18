@@ -30,13 +30,13 @@ class LlmChatView extends StatefulWidget {
   LlmChatView({
     required LlmProvider provider,
     this.responseBuilder,
-    LlmStreamGenerator? streamGenerator,
+    LlmStreamGenerator? messageSender,
     super.key,
-  }) : provider = streamGenerator == null
+  }) : provider = messageSender == null
             ? provider
             : ForwardingProvider(
                 provider: provider,
-                streamGenerator: streamGenerator,
+                messageSender: messageSender,
               );
 
   /// The LLM provider used to generate responses in the chat.
