@@ -80,33 +80,40 @@ class _LlmResponse {
   }
 }
 
-class _LlmChatViewState extends State<LlmChatView> {
+class _LlmChatViewState extends State<LlmChatView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _transcript = List<ChatMessage>.empty(growable: true);
   _LlmResponse? _current;
   ChatMessage? _initialMessage;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: backgroundColor,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: ChatTranscriptView(
-                transcript: _transcript,
-                onEditMessage: _current == null ? _onEditMessage : null,
-                responseBuilder: widget.responseBuilder,
-              ),
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Expanded(
+            child: ChatTranscriptView(
+              transcript: _transcript,
+              onEditMessage: _current == null ? _onEditMessage : null,
+              responseBuilder: widget.responseBuilder,
             ),
-            ChatInput(
-              initialMessage: _initialMessage,
-              submitting: _current != null,
-              onSubmit: _onSubmit,
-              onCancel: _onCancel,
-            ),
-          ],
-        ),
-      );
+          ),
+          ChatInput(
+            initialMessage: _initialMessage,
+            submitting: _current != null,
+            onSubmit: _onSubmit,
+            onCancel: _onCancel,
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<void> _onSubmit(
     String prompt,
