@@ -32,8 +32,9 @@ class EchoProvider extends LlmProvider {
   }
 
   String _stringFrom(Attachment attachment) => switch (attachment) {
+        (ImageFileAttachment a) =>
+          'image: ${a.mimeType}, ${a.bytes.length} bytes',
         (FileAttachment a) => 'file: ${a.mimeType}, ${a.bytes.length} bytes',
-        (ImageAttachment a) => 'image: ${a.mimeType}, ${a.bytes.length} bytes',
         (LinkAttachment a) => 'link: ${a.url}',
       };
 

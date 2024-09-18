@@ -75,7 +75,6 @@ class FirebaseVertexProvider extends LlmProvider {
 
   Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => DataPart(a.mimeType, a.bytes),
-        (ImageAttachment a) => DataPart(a.mimeType, a.bytes),
         (_) => throw UnsupportedError(''
             'Unsupported attachment type: '
             '${attachment.runtimeType}'

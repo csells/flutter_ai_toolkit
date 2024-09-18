@@ -127,7 +127,7 @@ class _ChatInputState extends State<ChatInput> {
             valueListenable: _controller,
             builder: (context, value, child) => Row(
               children: [
-                _AttachmentActionBar(onAttachment: _onAttachment),
+                _AttachmentActionBar(onAttachments: _onAttachments),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -202,16 +202,16 @@ class _ChatInputState extends State<ChatInput> {
     _focusNode.requestFocus();
   }
 
-  void _onAttachment(Attachment attachment) =>
-      setState(() => _attachments.add(attachment));
+  void _onAttachments(Iterable<Attachment> attachments) =>
+      setState(() => _attachments.addAll(attachments));
 
   void _onRemoveAttachment(Attachment attachment) =>
       setState(() => _attachments.remove(attachment));
 }
 
 class _AttachmentActionBar extends StatefulWidget {
-  const _AttachmentActionBar({required this.onAttachment});
-  final Function(Attachment attachment) onAttachment;
+  const _AttachmentActionBar({required this.onAttachments});
+  final Function(Iterable<Attachment> attachments) onAttachments;
 
   @override
   State<_AttachmentActionBar> createState() => _AttachmentActionBarState();
@@ -269,9 +269,17 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
 
     final picker = ImagePicker();
     try {
-      final pic = await picker.pickImage(source: source);
-      if (pic == null) return;
-      widget.onAttachment(await ImageAttachment.fromFile(pic));
+      if (source == ImageSource.gallery) {
+        final pics = await picker.pickMultiImage();
+        final attachments = await Future.wait(pics.map(
+          ImageFileAttachment.fromFile,
+        ));
+        widget.onAttachments(attachments);
+      } else {
+        final pic = await picker.pickImage(source: source);
+        if (pic == null) return;
+        widget.onAttachments([await ImageFileAttachment.fromFile(pic)]);
+      }
     } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;
@@ -285,9 +293,9 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
     _onToggleMenu(); // close the menu
 
     try {
-      final file = await openFile();
-      if (file == null) return;
-      widget.onAttachment(await FileAttachment.fromFile(file));
+      final files = await openFiles();
+      final attachments = await Future.wait(files.map(FileAttachment.fromFile));
+      widget.onAttachments(attachments);
     } on Exception catch (ex) {
       final context = this.context;
       if (!context.mounted) return;

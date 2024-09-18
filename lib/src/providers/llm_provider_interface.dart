@@ -20,19 +20,11 @@ sealed class Attachment {
   /// The name of the attachment.
   final String name;
 
-  /// Determines the MIME type of a given file.
-  ///
-  /// This method attempts to determine the MIME type in the following order:
-  /// 1. Use the file's reported MIME type if available.
-  /// 2. Look up the MIME type based on the file path.
-  /// 3. Default to 'application/octet-stream' if the MIME type cannot be
-  ///    determined.
-  ///
-  /// [file] is the XFile object representing the file.
-  ///
-  /// Returns a String representing the MIME type of the file.
   static String _mimeType(XFile file) =>
       file.mimeType ?? lookupMimeType(file.path) ?? 'application/octet-stream';
+
+  static bool _isImage(String mimeType) =>
+      mimeType.toLowerCase().startsWith('image/');
 }
 
 /// Represents a file attachment in a chat message.
@@ -65,51 +57,50 @@ final class FileAttachment extends Attachment {
   /// [file] is the XFile object representing the file to be attached.
   ///
   /// Returns a Future that completes with a [FileAttachment] instance.
-  static Future<FileAttachment> fromFile(XFile file) async => FileAttachment(
-        name: file.name,
-        mimeType: Attachment._mimeType(file),
-        bytes: await file.readAsBytes(),
-      );
+  static Future<FileAttachment> fromFile(XFile file) async {
+    final mimeType = Attachment._mimeType(file);
+    return Attachment._isImage(mimeType)
+        ? ImageFileAttachment.fromFile(file)
+        : FileAttachment(
+            name: file.name,
+            mimeType: mimeType,
+            bytes: await file.readAsBytes(),
+          );
+  }
 }
 
 /// Represents an image attachment in a chat message.
 ///
 /// This class extends [Attachment] and provides specific properties and methods
 /// for handling image attachments.
-final class ImageAttachment extends Attachment {
-  /// The MIME type of the image attachment.
-  final String mimeType;
-
-  /// The binary content of the image attachment.
-  final Uint8List bytes;
-
-  /// Creates an [ImageAttachment] with the given name, MIME type, and bytes.
+final class ImageFileAttachment extends FileAttachment {
+  /// Creates an [ImageFileAttachment] with the given name, MIME type, and bytes.
   ///
   /// [name] is the name of the image attachment.
   /// [mimeType] is the MIME type of the image.
   /// [bytes] is the binary content of the image.
-  ImageAttachment({
+  ImageFileAttachment({
     required super.name,
-    required this.mimeType,
-    required this.bytes,
-  });
+    required super.mimeType,
+    required super.bytes,
+  }) : assert(Attachment._isImage(mimeType));
 
-  /// Creates an [ImageAttachment] from an [XFile].
+  /// Creates an [ImageFileAttachment] from an [XFile].
   ///
   /// This factory method asynchronously reads the file content and determines
   /// its MIME type. It throws an exception if the file is not an image.
   ///
   /// [file] is the XFile object representing the image file to be attached.
   ///
-  /// Returns a Future that completes with an [ImageAttachment] instance.
+  /// Returns a Future that completes with an [ImageFileAttachment] instance.
   /// Throws an Exception if the file is not an image.
-  static Future<ImageAttachment> fromFile(XFile file) async {
+  static Future<ImageFileAttachment> fromFile(XFile file) async {
     final mimeType = Attachment._mimeType(file);
-    if (!mimeType.toLowerCase().startsWith('image/')) {
+    if (!Attachment._isImage(mimeType)) {
       throw Exception('Not an image: $mimeType');
     }
 
-    return ImageAttachment(
+    return ImageFileAttachment(
       name: file.name,
       mimeType: mimeType,
       bytes: await file.readAsBytes(),

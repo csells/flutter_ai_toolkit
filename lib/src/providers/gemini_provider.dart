@@ -78,7 +78,6 @@ class GeminiProvider extends LlmProvider {
 
   Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => DataPart(a.mimeType, a.bytes),
-        (ImageAttachment a) => DataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FilePart(a.url),
       };
 }

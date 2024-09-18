@@ -24,13 +24,13 @@ class AttachmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (attachment) {
-        // For file attachments, use a custom file attachment view
-        (FileAttachment a) => _FileAttachmentView(a),
         // For image attachments, display the image aligned to the right
-        (ImageAttachment a) => Align(
+        (ImageFileAttachment a) => Align(
             alignment: Alignment.centerRight,
             child: Image.memory(a.bytes),
           ),
+        // For file attachments, use a custom file attachment view
+        (FileAttachment a) => _FileAttachmentView(a),
         // Link attachments are not supported in this implementation
         (LinkAttachment _) => throw Exception('Link attachments not supported'),
       };
