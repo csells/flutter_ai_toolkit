@@ -177,5 +177,5 @@ abstract class LlmProvider {
 /// attachments.
 typedef LlmStreamGenerator = Stream<String> Function(
   String prompt, {
-  Iterable<Attachment> attachments,
+  required Iterable<Attachment> attachments,
 });
