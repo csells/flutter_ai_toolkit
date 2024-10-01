@@ -2,7 +2,7 @@ Hello and welcome to the Flutter AI Toolkit!
 
 The AI Toolkit is a set of AI chat-related widgets to make it easy to add an AI chat window to your Flutter app. The AI Toolkit is organized around an abstract LLM provider API to make it easy to swap out the LLM provider that you'd like your chat provider to use. Out of the box, it comes with support for two LLM provider integrations: Google Gemini AI and Firebase Vertex AI.
 
-## Alpha Features
+## Current Alpha Features
 The AI Toolkit is currently under active development and at the alpha stage, with the following features currently available:
 
 - multi-turn chat (remembering context along the way)
@@ -13,12 +13,12 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 - rich text response display
 - copy any response (starting with long-press as the UI gesture)
 - multi-media attachments ([the web currently doesn't like file attachments](https://github.com/csells/flutter_ai_toolkit/issues/18), so they're disabled)
-- swappable support for LLM providers; oob support for Gemini and Vertex
-- support for all Flutter platforms, focusing initially on mobile and web
 - handling structured LLM responses
 - app-provided prompt suggestions
 - pre-processing prompts to add prompt engineering, etc.
 - pre-processing requests to enrich the output, e.g. host Flutter widgets
+- swappable support for LLM providers; oob support for Gemini and Vertex
+- support for all Flutter platforms, focusing initially on mobile and web
 
 Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini.dart) hosting the AI Tookit running on Android:
 
