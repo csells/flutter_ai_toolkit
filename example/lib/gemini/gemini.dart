@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-const String googleApiKey = 'TODO: Set your Google API key';
+const String googleApiKey = 'TODO: Set your Gemini API key';
 
 void main(List<String> args) async => runApp(const App());
 

@@ -7,6 +7,7 @@ import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:gap/gap.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 late final SharedPreferences prefs;
 
@@ -32,14 +33,14 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    _googleApiKey = widget.prefs.getString('google_api_key');
+    _googleApiKey = widget.prefs.getString('gemini_api_key');
   }
 
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: App.title,
         home: _googleApiKey == null
-            ? GoogleApiKeyPage(
+            ? GeminiApiKeyPage(
                 title: App.title,
                 onApiKey: _setApiKey,
               )
@@ -51,17 +52,17 @@ class _AppState extends State<App> {
 
   void _setApiKey(String apiKey) {
     setState(() => _googleApiKey = apiKey);
-    widget.prefs.setString('google_api_key', apiKey);
+    widget.prefs.setString('gemini_api_key', apiKey);
   }
 
   void _resetApiKey() {
     setState(() => _googleApiKey = null);
-    widget.prefs.remove('google_api_key');
+    widget.prefs.remove('gemini_api_key');
   }
 }
 
-class GoogleApiKeyPage extends StatefulWidget {
-  const GoogleApiKeyPage({
+class GeminiApiKeyPage extends StatefulWidget {
+  const GeminiApiKeyPage({
     required this.title,
     required this.onApiKey,
     super.key,
@@ -71,10 +72,10 @@ class GoogleApiKeyPage extends StatefulWidget {
   final void Function(String apiKey) onApiKey;
 
   @override
-  State<GoogleApiKeyPage> createState() => _GoogleApiKeyPageState();
+  State<GeminiApiKeyPage> createState() => _GeminiApiKeyPageState();
 }
 
-class _GoogleApiKeyPageState extends State<GoogleApiKeyPage> {
+class _GeminiApiKeyPageState extends State<GeminiApiKeyPage> {
   static final url = Uri.parse('https://aistudio.google.com/app/apikey');
   final _controller = TextEditingController();
 
@@ -92,11 +93,17 @@ class _GoogleApiKeyPageState extends State<GoogleApiKeyPage> {
             valueListenable: _controller,
             builder: (context, value, child) => Column(
               children: [
-                const Text('To run this sample, get a Google API Key from:'),
-                const Gap(16),
-                SelectableText(
-                  url.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                const Text('To run this sample, you need a Gemini API key.\n'
+                    'Get your Gemini API Key from the following URL:'),
+                GestureDetector(
+                  onTap: () => launchUrl(url, webOnlyWindowName: '_blank'),
+                  child: Text(
+                    url.toString(),
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
                 const Gap(16),
                 const Text('Paste your API key here:'),
@@ -105,7 +112,7 @@ class _GoogleApiKeyPageState extends State<GoogleApiKeyPage> {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      labelText: 'Google API Key',
+                      labelText: 'Gemini API Key',
                       errorText: _isValidApiKey()
                           ? null
                           : 'API key must be 39 characters',

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-const String googleApiKey = 'TODO: Set your Google API key';
+import '../gemini_api_key.dart';
 
 void main(List<String> args) async => runApp(const App());
 
@@ -32,7 +32,7 @@ class ChatPage extends StatelessWidget {
           provider: GeminiProvider(
             chatModel: GenerativeModel(
               model: 'gemini-1.5-flash',
-              apiKey: googleApiKey,
+              apiKey: geminiApiKey,
             ),
           ),
         ),
