@@ -42,8 +42,6 @@ import 'response_builder.dart';
 /// to the conversation. If provided, this function will be called for each
 /// message before it is sent to the LLM provider. It should return a
 /// Stream<String> containing the processed message.
-/// A widget that displays a chat interface for interacting with an LLM
-/// (Language Learning Model).
 ///
 /// The [welcomeMessage] parameter is an optional welcome message to display
 /// when the chat view is first shown. If null, no welcome message is displayed.
