@@ -1,8 +1,16 @@
+## 0.1.5
+
+* Reference docs update
+
+## 0.1.4
+
+* CHANGELOG fix
+
 ## 0.1.3
 
 * new real-world-ish sample: recipes
 
-# new custom LLM provider sample: gemma
+* new custom LLM provider sample: gemma
 
 * handling structured LLM responses via `responseBuilder` (see recipes sample)
 

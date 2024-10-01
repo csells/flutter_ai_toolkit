@@ -23,6 +23,25 @@ import 'response_builder.dart';
 ///
 /// The [provider] parameter is required and specifies the LLM provider to use
 /// for generating responses.
+/// A widget that displays a chat interface for interacting with an LLM
+/// (Language Learning Model).
+///
+/// This widget creates a chat view where users can send messages to an LLM and
+/// receive responses. It handles the display of the chat transcript and the
+/// input mechanism for sending new messages.
+///
+/// The [provider] parameter is required and specifies the LLM provider to use
+/// for generating responses.
+///
+/// The [responseBuilder] parameter is an optional function that allows
+/// customizing how responses are displayed in the chat interface.
+///
+/// The [messageSender] parameter is an optional function that allows
+/// preprocessing of messages before they are sent to the LLM provider.
+/// This can be used for tasks such as prompt engineering or adding context
+/// to the conversation. If provided, this function will be called for each
+/// message before it is sent to the LLM provider. It should return a
+/// Stream<String> containing the processed message.
 class LlmChatView extends StatefulWidget {
   /// Creates an LlmChatView.
   ///
