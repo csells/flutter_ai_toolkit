@@ -79,11 +79,11 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 child: CircleButtonBar(
                   _isUser
                       ? [
-                        if(widget.onEdit != null)
-                          CircleButton(
-                            onPressed: _onEdit,
-                            icon: Icons.edit,
-                          ),
+                          if (widget.onEdit != null)
+                            CircleButton(
+                              onPressed: _onEdit,
+                              icon: Icons.edit,
+                            ),
                           CircleButton(
                             onPressed: () => _onCopy(context),
                             icon: Icons.copy,

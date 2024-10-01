@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'flutter-ai-toolkit-examp-60bad.appspot.com',
     measurementId: 'G-VR3YZ5WLG3',
   );
-
 }

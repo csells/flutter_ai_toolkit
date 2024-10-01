@@ -12,7 +12,7 @@
 /// Key components:
 /// - LLM providers: Interfaces and implementations for different AI services.
 /// - Chat UI: Ready-to-use widgets for displaying chat interfaces.
-library flutter_ai_toolkit;
+library;
 
 export 'src/providers/providers.dart';
 export 'src/views/llm_chat_view.dart';
