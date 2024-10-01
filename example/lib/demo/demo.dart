@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:gap/gap.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -28,35 +29,35 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  String? _googleApiKey;
+  String? _geminiApiKey;
 
   @override
   void initState() {
     super.initState();
-    _googleApiKey = widget.prefs.getString('gemini_api_key');
+    _geminiApiKey = widget.prefs.getString('gemini_api_key');
   }
 
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: App.title,
-        home: _googleApiKey == null
+        home: _geminiApiKey == null
             ? GeminiApiKeyPage(
                 title: App.title,
                 onApiKey: _setApiKey,
               )
             : ChatPage(
-                googleApiKey: _googleApiKey!,
+                geminiApiKey: _geminiApiKey!,
                 onResetApiKey: _resetApiKey,
               ),
       );
 
   void _setApiKey(String apiKey) {
-    setState(() => _googleApiKey = apiKey);
+    setState(() => _geminiApiKey = apiKey);
     widget.prefs.setString('gemini_api_key', apiKey);
   }
 
   void _resetApiKey() {
-    setState(() => _googleApiKey = null);
+    setState(() => _geminiApiKey = null);
     widget.prefs.remove('gemini_api_key');
   }
 }
@@ -97,12 +98,22 @@ class _GeminiApiKeyPageState extends State<GeminiApiKeyPage> {
                     'Get your Gemini API Key from the following URL:'),
                 GestureDetector(
                   onTap: () => launchUrl(url, webOnlyWindowName: '_blank'),
-                  child: Text(
-                    url.toString(),
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Text(
+                      url.toString(),
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _copyUrl,
+                  child: const MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Text('(or copy the URL above by tapping HERE)'),
                   ),
                 ),
                 const Gap(16),
@@ -136,16 +147,23 @@ class _GeminiApiKeyPageState extends State<GeminiApiKeyPage> {
       );
 
   bool _isValidApiKey() => _controller.text.length == 39;
+
+  void _copyUrl() {
+    Clipboard.setData(ClipboardData(text: url.toString()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied URL to clipboard')),
+    );
+  }
 }
 
 class ChatPage extends StatelessWidget {
   const ChatPage({
-    required this.googleApiKey,
+    required this.geminiApiKey,
     required this.onResetApiKey,
     super.key,
   });
 
-  final String googleApiKey;
+  final String geminiApiKey;
   final void Function() onResetApiKey;
 
   @override
@@ -168,7 +186,7 @@ class ChatPage extends StatelessWidget {
           provider: GeminiProvider(
             chatModel: GenerativeModel(
               model: 'gemini-1.5-flash',
-              apiKey: googleApiKey,
+              apiKey: geminiApiKey,
             ),
           ),
         ),

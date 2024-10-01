@@ -6,28 +6,35 @@
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/gemini.dart",
+      "program": "lib/gemini/gemini.dart",
     },
     {
       "name": "vertex",
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/vertex.dart",
+      "program": "lib/vertex/vertex.dart",
     },
     {
       "name": "gemma",
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/gemma.dart",
+      "program": "lib/gemma/gemma.dart",
     },
     {
       "name": "demo",
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/demo.dart",
+      "program": "lib/demo/demo.dart",
     },
- ]
+    {
+      "name": "recipes",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/recipes/recipes.dart",
+    },
+  ]
 }
