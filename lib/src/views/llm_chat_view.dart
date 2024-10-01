@@ -50,6 +50,7 @@ class LlmChatView extends StatefulWidget {
     required LlmProvider provider,
     this.responseBuilder,
     LlmStreamGenerator? messageSender,
+    this.welcomeMessage,
     super.key,
   }) : provider = messageSender == null
             ? provider
@@ -64,6 +65,10 @@ class LlmChatView extends StatefulWidget {
   /// An optional builder function that allows replacing the widget that
   /// displays the response.
   final ResponseBuilder? responseBuilder;
+
+  /// An optional welcome message to display when the chat view is first shown.
+  /// If null, no welcome message is displayed.
+  final String? welcomeMessage;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
@@ -105,8 +110,17 @@ class _LlmChatViewState extends State<LlmChatView>
   bool get wantKeepAlive => true;
 
   final _transcript = List<ChatMessage>.empty(growable: true);
+
   _LlmResponse? _current;
   ChatMessage? _initialMessage;
+
+  @override
+  void initState() {
+    if (widget.welcomeMessage != null) {
+      _transcript.add(ChatMessage.llmGreet(widget.welcomeMessage));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
