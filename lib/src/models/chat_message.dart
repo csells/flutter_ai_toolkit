@@ -24,11 +24,7 @@ class ChatMessage {
     required String text,
     required this.attachments,
   })  : _text = text,
-        assert(
-          origin.isUser && text.isNotEmpty ||
-              origin.isLlm && text.isEmpty ||
-              origin.isLlmGreet,
-        );
+        assert(origin.isUser && text.isNotEmpty || origin.isLlm);
 
   /// Factory constructor for creating an LLM-originated message.
   ///
@@ -43,10 +39,10 @@ class ChatMessage {
   /// Factory constructor for creating an LLM-originated greeting message.
   ///
   /// [welcomeMessage] is the content of the greeting message.
-  factory ChatMessage.llmGreet(String? welcomeMessage) => ChatMessage._(
+  factory ChatMessage.llmWelcome(String welcomeMessage) => ChatMessage._(
         id: const Uuid().v4(),
-        origin: MessageOrigin.llmGreet,
-        text: welcomeMessage ?? '',
+        origin: MessageOrigin.llm,
+        text: welcomeMessage,
         attachments: [],
       );
 
@@ -88,9 +84,6 @@ enum MessageOrigin {
   /// Indicates that the message originated from the user.
   user,
 
-  /// Indicates that the message originated from the LLM as a greeting.
-  llmGreet,
-
   /// Indicates that the message originated from the LLM.
   llm;
 
@@ -100,7 +93,6 @@ enum MessageOrigin {
   bool get isUser => switch (this) {
         MessageOrigin.user => true,
         MessageOrigin.llm => false,
-        MessageOrigin.llmGreet => false,
       };
 
   /// Checks if the message origin is from the LLM.
@@ -109,15 +101,5 @@ enum MessageOrigin {
   bool get isLlm => switch (this) {
         MessageOrigin.user => false,
         MessageOrigin.llm => true,
-        MessageOrigin.llmGreet => false,
-      };
-
-  /// Checks if the message origin is from the LLM as a greeting.
-  ///
-  /// Returns `true` if the origin is [MessageOrigin.llmGreet], `false` otherwise.
-  bool get isLlmGreet => switch (this) {
-        MessageOrigin.user => false,
-        MessageOrigin.llm => false,
-        MessageOrigin.llmGreet => true,
       };
 }

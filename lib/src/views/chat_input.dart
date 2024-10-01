@@ -180,17 +180,19 @@ class _ChatInputState extends State<ChatInput> {
 
   _InputState get _inputState {
     if (widget.submitting) return _InputState.submitting;
-    if (_controller.text.trim().isNotEmpty) return _InputState.enabled;
-    assert(!widget.submitting && _controller.text.trim().isEmpty);
+    final text = _controller.text.trim();
+    if (text.isNotEmpty) return _InputState.enabled;
+    assert(!widget.submitting && text.isEmpty);
     return _InputState.disabled;
   }
 
   void _onSubmit(String prompt) {
     // the mobile vkb can still cause a submission even if there is no text
-    if (prompt.trim().isEmpty) return;
+    final text = prompt.trim();
+    if (text.isEmpty) return;
 
     assert(_inputState == _InputState.enabled);
-    widget.onSubmit(prompt.trim(), List.from(_attachments));
+    widget.onSubmit(text, List.from(_attachments));
     _attachments.clear();
     _controller.clear();
     _focusNode.requestFocus();
