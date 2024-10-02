@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../providers/llm_provider_interface.dart';
+import 'image_preview_dialog.dart';
 import 'view_styles.dart';
 
 /// A widget that displays an attachment based on its type.
@@ -27,7 +28,10 @@ class AttachmentView extends StatelessWidget {
         // For image attachments, display the image aligned to the right
         (ImageFileAttachment a) => Align(
             alignment: Alignment.centerRight,
-            child: Image.memory(a.bytes),
+            child: GestureDetector(
+                onTap: ()=> showImagePreviewDialog(context, attachment),
+                child: Image.memory(a.bytes)
+            ),
           ),
         // For file attachments, use a custom file attachment view
         (FileAttachment a) => _FileAttachmentView(a),

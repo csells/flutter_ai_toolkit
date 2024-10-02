@@ -13,6 +13,7 @@ import 'package:universal_platform/universal_platform.dart';
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
 import 'circle_button.dart';
+import 'image_preview_dialog.dart';
 import 'view_styles.dart';
 
 /// A widget that provides an input field for chat messages with attachment
@@ -114,7 +115,7 @@ class _ChatInputState extends State<ChatInput> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       for (final a in _attachments)
-                        _RemoveableAttachment(
+                        _RemovableAttachment(
                           attachment: a,
                           onRemove: _onRemoveAttachment,
                         ),
@@ -308,8 +309,8 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   }
 }
 
-class _RemoveableAttachment extends StatelessWidget {
-  const _RemoveableAttachment({
+class _RemovableAttachment extends StatelessWidget {
+  const _RemovableAttachment({
     required this.attachment,
     required this.onRemove,
   });
@@ -320,10 +321,13 @@ class _RemoveableAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          Container(
-            padding: const EdgeInsets.only(right: 12),
-            height: 80,
-            child: AttachmentView(attachment),
+          GestureDetector(
+            onTap: () => showImagePreviewDialog(context, attachment),
+            child: Container(
+              padding: const EdgeInsets.only(right: 12),
+              height: 80,
+              child: AttachmentView(attachment),
+            ),
           ),
           CircleButton(
             icon: Icons.close,
