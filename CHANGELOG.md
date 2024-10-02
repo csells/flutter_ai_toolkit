@@ -1,6 +1,8 @@
 ## TODO
 
-* added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, berkaykurkcu! 
+* added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, @berkaykurkcu!
+
+* fixed #51 : Click on an image to get a preview. thanks,  @Shashwat-111!
  
 ## 0.1.5
 
