@@ -25,19 +25,23 @@ class AttachmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (attachment) {
-        // For image attachments, display the image aligned to the right
-        (ImageFileAttachment a) => Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-                onTap: ()=> showImagePreviewDialog(context, attachment),
-                child: Image.memory(a.bytes)
-            ),
-          ),
-        // For file attachments, use a custom file attachment view
+        (ImageFileAttachment a) => _ImageAttachmentView(a),
         (FileAttachment a) => _FileAttachmentView(a),
-        // Link attachments are not supported in this implementation
         (LinkAttachment _) => throw Exception('Link attachments not supported'),
       };
+}
+
+class _ImageAttachmentView extends StatelessWidget {
+  const _ImageAttachmentView(this.attachment);
+  final ImageFileAttachment attachment;
+
+  @override
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.centerRight,
+        child: GestureDetector(
+            onTap: () => ImagePreviewDialog(attachment).show(context),
+            child: Image.memory(attachment.bytes)),
+      );
 }
 
 class _FileAttachmentView extends StatelessWidget {

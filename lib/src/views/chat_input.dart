@@ -322,7 +322,12 @@ class _RemovableAttachment extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
         children: [
           GestureDetector(
-            onTap: () => showImagePreviewDialog(context, attachment),
+            onTap: attachment is ImageFileAttachment
+                ? () =>
+                    ImagePreviewDialog(attachment as ImageFileAttachment).show(
+                      context,
+                    )
+                : null,
             child: Container(
               padding: const EdgeInsets.only(right: 12),
               height: 80,
