@@ -10,31 +10,20 @@ import 'llm_provider_interface.dart';
 ///
 /// This class extends [LlmProvider] and implements the necessary methods to
 /// generate text using Firebase Vertex AI's generative model.
-class FirebaseVertexProvider extends LlmProvider {
-  /// Creates a new instance of [FirebaseVertexProvider].
+class VertexProvider extends LlmProvider {
+  /// Creates a new instance of [VertexProvider].
   ///
-  /// [model] is the name of the Firebase Vertex AI model to use. [config] is an
-  /// optional [GenerationConfig] to customize the text generation.
-  FirebaseVertexProvider({
-    required String model,
-    String? systemInstruction,
-    GenerationConfig? config,
-  }) : _embeddingModel = FirebaseVertexAI.instance.generativeModel(
-          model: 'text-embedding-004',
-        ) {
-    final llm = FirebaseVertexAI.instance.generativeModel(
-      model: model,
-      generationConfig: config,
-      systemInstruction:
-          systemInstruction != null ? Content.system(systemInstruction) : null,
-    );
+  /// [model] is the name of the Gemini AI model to use. [apiKey] is the API key
+  /// for authentication with the Gemini AI service. [config] is an optional
+  /// [GenerationConfig] to customize the text generation.
+  VertexProvider({
+    GenerativeModel? chatModel,
+    GenerativeModel? embeddingModel,
+  })  : _embeddingModel = embeddingModel,
+        _chat = chatModel?.startChat();
 
-    _chat = llm.startChat();
-  }
-
-  /// The chat session used for generating responses.
-  late final ChatSession _chat;
-  final GenerativeModel _embeddingModel;
+  final GenerativeModel? _embeddingModel;
+  final ChatSession? _chat;
 
   @override
   Future<List<double>> getDocumentEmbedding(String document) =>
@@ -45,6 +34,10 @@ class FirebaseVertexProvider extends LlmProvider {
       _getEmbedding(query, TaskType.retrievalQuery);
 
   Future<List<double>> _getEmbedding(String s, TaskType embeddingTask) async {
+    if (_embeddingModel == null) {
+      throw Exception('embeddingModel is not initialized');
+    }
+
     assert(embeddingTask == TaskType.retrievalDocument ||
         embeddingTask == TaskType.retrievalQuery);
 
@@ -62,10 +55,13 @@ class FirebaseVertexProvider extends LlmProvider {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
+    if (_chat == null) throw Exception('chatModel is not initialized');
+
     final content = Content('user', [
       TextPart(prompt),
       ...attachments.map(_partFrom),
     ]);
+
     final response = _chat.sendMessageStream(content);
     await for (final chunk in response) {
       final text = chunk.text;

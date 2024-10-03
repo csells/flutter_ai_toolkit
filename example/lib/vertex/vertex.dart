@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
@@ -33,8 +34,10 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text(App.title)),
         body: LlmChatView(
-          provider: FirebaseVertexProvider(
-            model: 'gemini-1.5-flash',
+          provider: VertexProvider(
+            chatModel: FirebaseVertexAI.instance.generativeModel(
+              model: 'gemini-1.5-flash',
+            ),
           ),
         ),
       );

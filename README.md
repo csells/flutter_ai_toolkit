@@ -102,7 +102,7 @@ class ChatPage extends StatelessWidget {
         appBar: AppBar(title: const Text(App.title)),
         // create the chat view, passing in the Vertex provider
         body: LlmChatView(
-          provider: FirebaseVertexProvider(
+          provider: VertexProvider(
             model: 'gemini-1.5-flash',
           ),
         ),

@@ -3,6 +3,8 @@
 * added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, @berkaykurkcu!
 
 * fixed #51 : Click on an image to get a preview. thanks,  @Shashwat-111!
+
+* updated VertexProvider to take a separate chat and embedding model ala the GeminiProvider
  
 ## 0.1.5
 
