@@ -67,7 +67,7 @@ Note: Be careful not to check your API key into a git repo or share it with anyo
 ## Vertex LLM Usage
 While Gemini AI is useful for quick prototyping, the recommended solution for production apps is Firebase Vertext AI. And the reason for that is that there's no good way to keep your Gemini API key safe -- if you ship your Flutter app with the API key in there, someone can figure out how to dig it out.
 
-To solve this problem as well as many others that you're going to have in a real-world production app, the model for initializing an instance of the Vertex AI LLM provider doesn't have an API key. Instead, it relies on a Firebase project, which requires that you initialize a Firebase project in your app. You can do that with the steps described in [the Get started with the Gemini API using the Vertex AI in Firebase SDKs docs](https://firebase.google.com/docs/vertex-ai/get-started?platform=flutter).
+To solve this problem as well as many others that you're going to have in a real-world production app, the model for initializing an instance of the Vertex AI LLM provider doesn't have an API key. Instead, it relies on a Firebase project, which you then initialize in your app. You can do that with the steps described in [the Get started with the Gemini API using the Vertex AI in Firebase SDKs docs](https://firebase.google.com/docs/vertex-ai/get-started?platform=flutter).
 
 After following those instructions, you're ready to use Firebase Vertex AI in your project. Start by initializing Firebase:
 
@@ -103,7 +103,9 @@ class ChatPage extends StatelessWidget {
         // create the chat view, passing in the Vertex provider
         body: LlmChatView(
           provider: VertexProvider(
-            model: 'gemini-1.5-flash',
+            chatModel: FirebaseVertexAI.instance.generativeModel(
+              model: 'gemini-1.5-flash',
+            ),
           ),
         ),
       );
