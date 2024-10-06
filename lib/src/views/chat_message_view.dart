@@ -208,8 +208,11 @@ class _LlmMessageView extends StatelessWidget {
                         color: Color(0xFFE5E5E5),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.star,
+                      child: const ImageIcon(
+                        AssetImage(
+                          'assets/spark-icon-100x100.png',
+                          package: 'flutter_ai_toolkit',
+                        ),
                         color: iconColor,
                         size: 12,
                       ),

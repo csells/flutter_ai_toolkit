@@ -5,6 +5,10 @@
 * fixed #51 : Click on an image to get a preview. thanks,  @Shashwat-111!
 
 * updated VertexProvider to take a separate chat and embedding model ala the GeminiProvider
+
+* updated README for clarity
+
+* fixed #6: get a spark icon to designate the LLM
  
 ## 0.1.5
 
