@@ -10,6 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
 import 'circle_button.dart';
@@ -361,12 +362,12 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) => switch (inputState) {
         // disabled Submit button
         _InputState.disabled => const CircleButton(
-            icon: Icons.subdirectory_arrow_right,
+            icon: FatIcons.submitIcon,
           ),
         // enabled Submit button
         _InputState.enabled => CircleButton(
             onPressed: () => onSubmit(text),
-            icon: Icons.subdirectory_arrow_right,
+            icon: FatIcons.submitIcon,
           ),
         // enabled Cancel button
         _InputState.submitting => CircleButton(

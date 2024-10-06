@@ -11,6 +11,7 @@ import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
+import '../fat_icons.dart';
 import '../models/chat_message.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
@@ -208,11 +209,8 @@ class _LlmMessageView extends StatelessWidget {
                         color: Color(0xFFE5E5E5),
                         shape: BoxShape.circle,
                       ),
-                      child: const ImageIcon(
-                        AssetImage(
-                          'assets/spark-icon-100x100.png',
-                          package: 'flutter_ai_toolkit',
-                        ),
+                      child: const Icon(
+                        FatIcons.sparkIcon,
                         color: iconColor,
                         size: 12,
                       ),

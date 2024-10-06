@@ -30,5 +30,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/spark-icon-100x100.png
+  fonts:
+   - family: FatIcons
+     fonts:
+      - asset: lib/fonts/FatIcons.ttf
