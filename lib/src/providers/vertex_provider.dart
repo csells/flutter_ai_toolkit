@@ -71,9 +71,6 @@ class VertexProvider extends LlmProvider {
 
   Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => DataPart(a.mimeType, a.bytes),
-        (_) => throw UnsupportedError(''
-            'Unsupported attachment type: '
-            '${attachment.runtimeType}'
-            ''),
+        (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
 }

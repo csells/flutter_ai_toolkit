@@ -116,11 +116,18 @@ final class LinkAttachment extends Attachment {
   /// The URL of the link attachment.
   final Uri url;
 
+  /// The MIME type of the linked content.
+  ///
+  /// This property specifies the media type of the resource pointed to by the
+  /// [url].
+  final String mimeType;
+
   /// Creates a [LinkAttachment] with the given name and URL.
   ///
   /// [name] is the name of the link attachment.
   /// [url] is the URI of the link.
-  LinkAttachment({required super.name, required this.url});
+  LinkAttachment({required super.name, required this.url})
+      : mimeType = lookupMimeType(url.path) ?? 'application/octet-stream';
 }
 
 /// An abstract class representing a Language Model (LLM) provider.
