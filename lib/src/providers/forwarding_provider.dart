@@ -36,6 +36,13 @@ class ForwardingProvider extends LlmProvider {
       provider.getQueryEmbedding(query);
 
   @override
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) =>
+      provider.generateStream(prompt, attachments: attachments);
+
+  @override
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],

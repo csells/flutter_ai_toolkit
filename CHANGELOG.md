@@ -1,15 +1,19 @@
-## TODO
+## 0.2.0
+
+* feature: chat microphone only prompt input (issue #33)
+
+## 0.1.5
 
 * added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, @berkaykurkcu!
 
+* updated VertexProvider to take a separate chat and embedding model like GeminiProvider
+
 * fixed #51 : Click on an image to get a preview. thanks,  @Shashwat-111!
-
-* updated VertexProvider to take a separate chat and embedding model ala the GeminiProvider
-
-* updated README for clarity
 
 * fixed #6: get a spark icon to designate the LLM
  
+* updated README for clarity
+
 ## 0.1.5
 
 * Reference docs update

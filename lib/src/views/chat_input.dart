@@ -9,6 +9,7 @@ import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
@@ -17,42 +18,59 @@ import 'circle_button.dart';
 import 'image_preview_dialog.dart';
 import 'view_styles.dart';
 
-/// A widget that provides an input field for chat messages with attachment
-/// support.
-///
-/// This widget allows users to enter text messages and add attachments. It also
-/// handles the submission of messages and provides a way to cancel the input.
+/// A widget that provides a chat input interface with support for text input,
+/// speech-to-text, and attachments.
 class ChatInput extends StatefulWidget {
-  /// Creates a ChatInput widget.
+  /// Creates a [ChatInput] widget.
   ///
-  /// The [submitting], [onSubmit], and [onCancel] parameters are required.
+  /// The [onSendMessage] and [onTranslateStt] parameters are required.
+  ///
+  /// [initialMessage] can be provided to pre-populate the input field.
+  ///
+  /// [onCancelMessage] and [onCancelStt] are optional callbacks for cancelling
+  /// message submission or speech-to-text translation respectively.
   const ChatInput({
-    required this.submitting,
-    required this.onSubmit,
-    required this.onCancel,
     this.initialMessage,
+    required this.onSendMessage,
+    required this.onTranslateStt,
+    this.onCancelMessage,
+    this.onCancelStt,
     super.key,
-  });
+  }) : assert(
+          !(onCancelMessage != null && onCancelStt != null),
+          'Cannot be submitting a prompt and doing stt at the same time',
+        );
 
-  /// Indicates whether a message is currently being submitted.
-  final bool submitting;
+  /// Callback function triggered when a message is sent.
+  ///
+  /// Takes a [String] for the message text and an [Iterable<Attachment>] for any attachments.
+  final void Function(String, Iterable<Attachment>) onSendMessage;
+
+  /// Callback function triggered when speech-to-text translation is requested.
+  ///
+  /// Takes an [XFile] representing the audio file to be translated.
+  final void Function(XFile file) onTranslateStt;
+
+  /// Optional callback function to cancel an ongoing message submission.
+  final void Function()? onCancelMessage;
+
+  /// Optional callback function to cancel an ongoing speech-to-text translation.
+  final void Function()? onCancelStt;
 
   /// The initial message to populate the input field, if any.
   final ChatMessage? initialMessage;
-
-  /// Callback function called when a message is submitted.
-  ///
-  /// It takes two parameters: the message text and a collection of attachments.
-  final void Function(String, Iterable<Attachment>) onSubmit;
-
-  /// Callback function called when the input is cancelled.
-  final void Function() onCancel;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
 }
 
-enum _InputState { disabled, enabled, submitting }
+enum _InputState {
+  canSubmitPrompt, // has text, submit button enabled
+  canCancelPrompt, // submitting text, cancel button enabled
+  canStt, // no text, microphone button enabled
+  isRecording, // recording speech, stop button enabled
+  canCancelStt, // translating speech to text, progress indicator spinning
+}
 
 class _ChatInputState extends State<ChatInput> {
   // Notes on the way focus works in this widget:
@@ -74,33 +92,30 @@ class _ChatInputState extends State<ChatInput> {
   // - the reason we need to request focus in the onSubmitted function of the
   //   TextField is because apparently it gives up focus as part of its
   //   implementation somehow (just how is something to discover)
-  // - the research we need to request focus in the implementation of the
+  // - the reason we need to request focus in the implementation of the
   //   separate submit/cancel button is because apparently clicking on another
   //   widget when the TextField is focused causes it to lose focus (which makes
   //   sense)
   final _focusNode = FocusNode();
 
-  final _controller = TextEditingController();
+  final _textController = TextEditingController();
+  final _waveController = WaveformRecorderController();
   final _attachments = <Attachment>[];
   final _isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
-
-  final _border = OutlineInputBorder(
-    borderSide: const BorderSide(width: 1, color: outlineColor),
-    borderRadius: BorderRadius.circular(24),
-  );
 
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialMessage != null) {
-      _controller.text = widget.initialMessage!.text;
+      _textController.text = widget.initialMessage!.text;
       _attachments.addAll(widget.initialMessage!.attachments);
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _textController.dispose();
+    _waveController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -126,84 +141,134 @@ class _ChatInputState extends State<ChatInput> {
           ),
           const Gap(6),
           ValueListenableBuilder(
-            valueListenable: _controller,
-            builder: (context, value, child) => Row(
-              children: [
-                _AttachmentActionBar(onAttachments: _onAttachments),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: TextField(
-                      minLines: 1,
-                      maxLines: 1024,
-                      controller: _controller,
-                      autofocus: true,
-                      focusNode: _focusNode,
-                      // on mobile, pressing enter should add a new line
-                      // on web+desktop, pressing enter should submit the prompt
-                      textInputAction: _isMobile
-                          ? TextInputAction.newline
-                          : TextInputAction.done,
-                      onSubmitted: _inputState == _InputState.submitting
-                          ? (_) => _focusNode.requestFocus()
-                          : _onSubmit,
-                      style: body2TextStyle,
-                      decoration: InputDecoration(
-                        // need to set all four xxxBorder args (but not
-                        // border itself) to override Material styles
-                        errorBorder: _border,
-                        focusedBorder: _border,
-                        enabledBorder: _border,
-                        disabledBorder: _border.copyWith(
-                          borderSide: const BorderSide(color: Colors.red),
+            valueListenable: _textController,
+            builder: (context, value, child) => ListenableBuilder(
+              listenable: _waveController,
+              builder: (context, child) => Row(
+                children: [
+                  _AttachmentActionBar(onAttachments: _onAttachments),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: outlineColor),
+                          borderRadius: BorderRadius.circular(24),
                         ),
-                        hintText: "Ask me anything...",
-                        hintStyle: body2TextStyle.copyWith(
-                          color: placeholderTextColor,
-                        ),
+                        child: _waveController.isRecording
+                            ? WaveformRecorder(
+                                controller: _waveController,
+                                height: 48,
+                                onRecordingStopped: _onRecordingStopped,
+                              )
+                            : TextField(
+                                minLines: 1,
+                                maxLines: 1024,
+                                controller: _textController,
+                                autofocus: true,
+                                focusNode: _focusNode,
+                                // on mobile, pressing enter should add a new
+                                // line. on web+desktop, pressing enter should
+                                // submit the prompt.
+                                textInputAction: _isMobile
+                                    ? TextInputAction.newline
+                                    : TextInputAction.done,
+                                // ignore the user submitting if they can't right
+                                // now; leave the text as is and the field focused
+                                onSubmitted:
+                                    _inputState == _InputState.canSubmitPrompt
+                                        ? (_) => _onSubmitPrompt()
+                                        : (_) => _focusNode.requestFocus(),
+                                style: body2TextStyle,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Ask me anything...",
+                                  hintStyle: body2TextStyle.copyWith(
+                                    color: placeholderTextColor,
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                   ),
-                ),
-                _SubmitButton(
-                  text: _controller.text,
-                  inputState: _inputState,
-                  onSubmit: _onSubmit,
-                  onCancel: _onCancel,
-                ),
-              ],
+                  _InputButton(
+                    inputState: _inputState,
+                    onSubmitPrompt: _onSubmitPrompt,
+                    onCancelPrompt: _onCancelPrompt,
+                    onStartRecording: _onStartRecording,
+                    onStopRecording: _onStopRecording,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       );
 
   _InputState get _inputState {
-    if (widget.submitting) return _InputState.submitting;
-    final text = _controller.text.trim();
-    if (text.isNotEmpty) return _InputState.enabled;
-    assert(!widget.submitting && text.isEmpty);
-    return _InputState.disabled;
+    _InputState getInputState() {
+      if (_waveController.isRecording) return _InputState.isRecording;
+      if (widget.onCancelMessage != null) return _InputState.canCancelPrompt;
+      if (widget.onCancelStt != null) return _InputState.canCancelStt;
+      if (_textController.text.trim().isEmpty) {
+        return _InputState.canStt;
+      }
+      return _InputState.canSubmitPrompt;
+    }
+
+    final inputState = getInputState();
+    debugPrint('inputState: $inputState');
+    return inputState;
   }
 
-  void _onSubmit(String prompt) {
+  void _onSubmitPrompt() {
+    assert(_inputState == _InputState.canSubmitPrompt);
+
     // the mobile vkb can still cause a submission even if there is no text
-    final text = prompt.trim();
+    final text = _textController.text.trim();
     if (text.isEmpty) return;
 
-    assert(_inputState == _InputState.enabled);
-    widget.onSubmit(text, List.from(_attachments));
+    widget.onSendMessage(text, List.from(_attachments));
     _attachments.clear();
-    _controller.clear();
+    _textController.clear();
     _focusNode.requestFocus();
   }
 
-  void _onCancel() {
-    assert(_inputState == _InputState.submitting);
-    widget.onCancel();
+  void _onCancelPrompt() {
+    assert(_inputState == _InputState.canCancelPrompt);
+    widget.onCancelMessage!();
     _focusNode.requestFocus();
+  }
+
+  Future<void> _onStartRecording() async {
+    await _waveController.startRecording();
+  }
+
+  Future<void> _onStopRecording() async {
+    await _waveController.stopRecording();
+  }
+
+  Future<void> _onRecordingStopped() async {
+    final file = _waveController.file;
+
+    if (file == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unable to record audio')),
+        );
+      }
+      return;
+    }
+
+    // will come back as initialMessage
+    widget.onTranslateStt(file);
   }
 
   void _onAttachments(Iterable<Attachment> attachments) =>
@@ -211,6 +276,44 @@ class _ChatInputState extends State<ChatInput> {
 
   void _onRemoveAttachment(Attachment attachment) =>
       setState(() => _attachments.remove(attachment));
+}
+
+class _InputButton extends StatelessWidget {
+  const _InputButton({
+    required this.inputState,
+    required this.onSubmitPrompt,
+    required this.onCancelPrompt,
+    required this.onStartRecording,
+    required this.onStopRecording,
+  });
+
+  final _InputState inputState;
+  final void Function() onSubmitPrompt;
+  final void Function()? onCancelPrompt;
+  final void Function() onStartRecording;
+  final void Function()? onStopRecording;
+
+  @override
+  Widget build(BuildContext context) => switch (inputState) {
+        _InputState.canSubmitPrompt => CircleButton(
+            icon: FatIcons.submitIcon,
+            onPressed: onSubmitPrompt,
+          ),
+        _InputState.canCancelPrompt => CircleButton(
+            icon: Icons.stop,
+            onPressed: onCancelPrompt,
+          ),
+        // TODO: fix color: should be `backgroundColor` w/ `outlineColor` border
+        _InputState.canStt => CircleButton(
+            icon: Icons.mic,
+            onPressed: onStartRecording,
+          ),
+        _InputState.isRecording => CircleButton(
+            icon: Icons.stop,
+            onPressed: onStopRecording,
+          ),
+        _InputState.canCancelStt => const CircularProgressIndicator(),
+      };
 }
 
 class _AttachmentActionBar extends StatefulWidget {
@@ -231,7 +334,7 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
     super.initState();
     _canCamera = ImagePicker().supportsImageSource(ImageSource.camera);
 
-    // _canFile is a work around for this bug:
+    // _canFile is a temporary work around for this bug:
     // https://github.com/csells/flutter_ai_toolkit/issues/18
     _canFile = !kIsWeb;
   }
@@ -343,36 +446,4 @@ class _RemovableAttachment extends StatelessWidget {
           ),
         ],
       );
-}
-
-class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({
-    required this.text,
-    required this.inputState,
-    required this.onSubmit,
-    required this.onCancel,
-  });
-
-  final String text;
-  final _InputState inputState;
-  final void Function(String) onSubmit;
-  final void Function() onCancel;
-
-  @override
-  Widget build(BuildContext context) => switch (inputState) {
-        // disabled Submit button
-        _InputState.disabled => const CircleButton(
-            icon: FatIcons.submitIcon,
-          ),
-        // enabled Submit button
-        _InputState.enabled => CircleButton(
-            onPressed: () => onSubmit(text),
-            icon: FatIcons.submitIcon,
-          ),
-        // enabled Cancel button
-        _InputState.submitting => CircleButton(
-            onPressed: onCancel,
-            icon: Icons.stop,
-          ),
-      };
 }

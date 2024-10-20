@@ -71,7 +71,7 @@ class ChatMessage {
   final Iterable<Attachment> attachments;
 
   /// Getter for the text content of the message.
-  String get text => _text;
+  String get text => _text.trim();
 
   /// Appends additional text to the existing message content.
   ///

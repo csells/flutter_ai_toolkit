@@ -184,7 +184,7 @@ class ChatPage extends StatelessWidget {
         ),
         body: LlmChatView(
           provider: GeminiProvider(
-            chatModel: GenerativeModel(
+            generativeModel: GenerativeModel(
               model: 'gemini-1.5-flash',
               apiKey: geminiApiKey,
             ),

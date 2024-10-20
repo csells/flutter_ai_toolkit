@@ -25,7 +25,7 @@ class _ResponsiveHomePageState extends State<ResponsiveHomePage>
       model: 'text-embedding-004',
       apiKey: geminiApiKey,
     ),
-    chatModel: GenerativeModel(
+    generativeModel: GenerativeModel(
       model: "gemini-1.5-flash",
       apiKey: geminiApiKey,
       systemInstruction: Content.system(

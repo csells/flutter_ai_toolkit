@@ -20,7 +20,20 @@ class EchoProvider extends LlmProvider {
   }
 
   @override
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) =>
+      _generateStream(prompt, attachments: attachments);
+
+  @override
   Stream<String> sendMessageStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) =>
+      _generateStream(prompt, attachments: attachments);
+
+  Stream<String> _generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {

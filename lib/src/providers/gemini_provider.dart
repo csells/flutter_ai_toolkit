@@ -13,15 +13,21 @@ import 'llm_provider_interface.dart';
 class GeminiProvider extends LlmProvider {
   /// Creates a new instance of [GeminiProvider].
   ///
-  /// [model] is the name of the Gemini AI model to use. [apiKey] is the API key
-  /// for authentication with the Gemini AI service. [config] is an optional
-  /// [GenerationConfig] to customize the text generation.
+  /// [generativeModel] is an optional [GenerativeModel] instance for text
+  /// generation. If provided, it will be used for chat-based interactions and
+  /// text generation.
+  ///
+  /// [embeddingModel] is an optional [GenerativeModel] instance for creating
+  /// embeddings. If provided, it will be used for document and query embedding
+  /// operations.
   GeminiProvider({
-    GenerativeModel? chatModel,
+    GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,
-  })  : _embeddingModel = embeddingModel,
-        _chat = chatModel?.startChat();
+  })  : _generativeModel = generativeModel,
+        _embeddingModel = embeddingModel,
+        _chat = generativeModel?.startChat();
 
+  final GenerativeModel? _generativeModel;
   final GenerativeModel? _embeddingModel;
   final ChatSession? _chat;
 
@@ -51,18 +57,52 @@ class GeminiProvider extends LlmProvider {
   }
 
   @override
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) {
+    if (_generativeModel == null) {
+      throw Exception('generativeModel is not initialized');
+    }
+
+    return _generateStream(
+      prompt: prompt,
+      attachments: attachments,
+      contentStreamGenerator: (c) =>
+          _generativeModel.generateContentStream([c]),
+    );
+  }
+
+  @override
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
-  }) async* {
-    if (_chat == null) throw Exception('chatModel is not initialized');
+  }) {
+    if (_generativeModel == null) {
+      throw Exception('generativeModel is not initialized');
+    }
 
+    assert(_chat != null);
+
+    return _generateStream(
+      prompt: prompt,
+      attachments: attachments,
+      contentStreamGenerator: _chat!.sendMessageStream,
+    );
+  }
+
+  Stream<String> _generateStream({
+    required String prompt,
+    required Iterable<Attachment> attachments,
+    required Stream<GenerateContentResponse> Function(Content)
+        contentStreamGenerator,
+  }) async* {
     final content = Content('user', [
       TextPart(prompt),
       ...attachments.map(_partFrom),
     ]);
 
-    final response = _chat.sendMessageStream(content);
+    final response = contentStreamGenerator(content);
     await for (final chunk in response) {
       final text = chunk.text;
       if (text != null) yield text;

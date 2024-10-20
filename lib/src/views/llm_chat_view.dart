@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 
@@ -114,8 +115,9 @@ class _LlmChatViewState extends State<LlmChatView>
 
   final _transcript = List<ChatMessage>.empty(growable: true);
 
-  _LlmResponse? _current;
+  _LlmResponse? _pendingPromptResponse;
   ChatMessage? _initialMessage;
+  _LlmResponse? _pendingSttResponse;
 
   @override
   void initState() {
@@ -136,22 +138,25 @@ class _LlmChatViewState extends State<LlmChatView>
           Expanded(
             child: ChatTranscriptView(
               transcript: _transcript,
-              onEditMessage: _current == null ? _onEditMessage : null,
+              onEditMessage:
+                  _pendingPromptResponse == null ? _onEditMessage : null,
               responseBuilder: widget.responseBuilder,
             ),
           ),
           ChatInput(
             initialMessage: _initialMessage,
-            submitting: _current != null,
-            onSubmit: _onSubmit,
-            onCancel: _onCancel,
+            onSendMessage: _onSendMessage,
+            onCancelMessage:
+                _pendingPromptResponse == null ? null : _onCancelMessage,
+            onTranslateStt: _onTranslateStt,
+            onCancelStt: _pendingSttResponse == null ? null : _onCancelStt,
           ),
         ],
       ),
     );
   }
 
-  Future<void> _onSubmit(
+  Future<void> _onSendMessage(
     String prompt,
     Iterable<Attachment> attachments,
   ) async {
@@ -162,23 +167,23 @@ class _LlmChatViewState extends State<LlmChatView>
 
     _transcript.addAll([userMessage, llmMessage]);
 
-    _current = _LlmResponse(
-      stream: widget.provider.sendMessageStream(
+    _pendingPromptResponse = _LlmResponse(
+      stream: widget.provider.generateStream(
         prompt,
         attachments: attachments,
       ),
       message: llmMessage,
-      onDone: _onDone,
+      onDone: _onPromptDone,
     );
 
     setState(() {});
   }
 
-  void _onDone() => setState(() => _current = null);
-  void _onCancel() => _current?.cancel();
+  void _onPromptDone() => setState(() => _pendingPromptResponse = null);
+  void _onCancelMessage() => _pendingPromptResponse?.cancel();
 
   void _onEditMessage(ChatMessage message) {
-    assert(_current == null);
+    assert(_pendingPromptResponse == null);
 
     // remove the last llm message
     assert(_transcript.last.origin.isLlm);
@@ -191,4 +196,32 @@ class _LlmChatViewState extends State<LlmChatView>
     // set the text of the controller to the last userMessage
     setState(() => _initialMessage = userMessage);
   }
+
+  Future<void> _onTranslateStt(XFile file) async {
+    _initialMessage = null;
+
+    final prompt = 'translate the attached audio to text';
+    final attachments = [await FileAttachment.fromFile(file)];
+
+    _pendingSttResponse = _LlmResponse(
+      stream: widget.provider.sendMessageStream(
+        prompt,
+        attachments: attachments,
+      ),
+      message: ChatMessage.llm(),
+      onDone: _onSttDone,
+    );
+
+    setState(() {});
+  }
+
+  void _onSttDone() {
+    assert(_pendingSttResponse != null);
+    setState(() {
+      _initialMessage = _pendingSttResponse!.message;
+      _pendingSttResponse = null;
+    });
+  }
+
+  void _onCancelStt() => _pendingSttResponse?.cancel();
 }

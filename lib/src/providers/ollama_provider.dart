@@ -41,6 +41,29 @@ class OllamaProvider extends LlmProvider {
   }
 
   @override
+  Stream<String> generateStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
+    // need to add support for attachments
+    if (attachments.isNotEmpty) {
+      throw UnimplementedError('No support for attachments yet');
+    }
+
+    final stream = _client.generateCompletionStream(
+      request: GenerateCompletionRequest(
+        model: model,
+        prompt: prompt,
+      ),
+    );
+
+    await for (final response in stream) {
+      final text = response.response;
+      if (text != null && text.isNotEmpty) yield text;
+    }
+  }
+
+  @override
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
