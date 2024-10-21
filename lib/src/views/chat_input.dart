@@ -13,6 +13,7 @@ import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
+import 'adaptive_text_field.dart';
 import 'attachment_view.dart';
 import 'circle_button.dart';
 import 'image_preview_dialog.dart';
@@ -167,7 +168,7 @@ class _ChatInputState extends State<ChatInput> {
                                 height: 48,
                                 onRecordingStopped: _onRecordingStopped,
                               )
-                            : TextField(
+                            : AdaptiveTextField(
                                 minLines: 1,
                                 maxLines: 1024,
                                 controller: _textController,
@@ -179,23 +180,21 @@ class _ChatInputState extends State<ChatInput> {
                                 textInputAction: _isMobile
                                     ? TextInputAction.newline
                                     : TextInputAction.done,
-                                // ignore the user submitting if they can't right
-                                // now; leave the text as is and the field focused
+                                // ignore the user submitting if they can't
+                                // right now; leave the text as is and the field
+                                // focused
                                 onSubmitted:
                                     _inputState == _InputState.canSubmitPrompt
                                         ? (_) => _onSubmitPrompt()
                                         : (_) => _focusNode.requestFocus(),
                                 style: FatStyles.body2,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Ask me anything...",
-                                  hintStyle: FatStyles.body2.copyWith(
-                                    color: FatColors.hintText,
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
-                                  ),
+                                hintText: "Ask me anything...",
+                                hintStyle: FatStyles.body2.copyWith(
+                                  color: FatColors.hintText,
+                                ),
+                                hintPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
                                 ),
                               ),
                       ),
