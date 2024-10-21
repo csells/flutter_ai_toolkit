@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ai_toolkit/src/views/circle_button.dart';
 import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
-// using flutter_markdown_selectionarea until the following bug is fixed:
-// https://github.com/flutter/flutter/issues/107073
-import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
 import '../fat_icons.dart';

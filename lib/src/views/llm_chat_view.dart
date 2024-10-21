@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 
 import '../models/chat_message.dart';
+import '../platform_helper/platform_helper.dart';
 import '../providers/forwarding_provider.dart';
 import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
@@ -200,7 +201,12 @@ class _LlmChatViewState extends State<LlmChatView>
   Future<void> _onTranslateStt(XFile file) async {
     _initialMessage = null;
 
-    final prompt = 'translate the attached audio to text';
+    // use the LLM to translate the attached audio to text
+    final prompt =
+        'translate the attached audio to text; provide the result of that '
+        'translation without as just the text of the translation itself. be '
+        'careful to separate the background audio from the foreground audio '
+        'and only provide the result of translating the foreground audio.';
     final attachments = [await FileAttachment.fromFile(file)];
 
     _pendingSttResponse = _LlmResponse(
@@ -211,6 +217,9 @@ class _LlmChatViewState extends State<LlmChatView>
       message: ChatMessage.llm(),
       onDone: _onSttDone,
     );
+
+    // delete the file when we're done
+    await PlatformHelper.deleteFile(file);
 
     setState(() {});
   }

@@ -213,19 +213,11 @@ class _ChatInputState extends State<ChatInput> {
       );
 
   _InputState get _inputState {
-    _InputState getInputState() {
-      if (_waveController.isRecording) return _InputState.isRecording;
-      if (widget.onCancelMessage != null) return _InputState.canCancelPrompt;
-      if (widget.onCancelStt != null) return _InputState.canCancelStt;
-      if (_textController.text.trim().isEmpty) {
-        return _InputState.canStt;
-      }
-      return _InputState.canSubmitPrompt;
-    }
-
-    final inputState = getInputState();
-    debugPrint('inputState: $inputState');
-    return inputState;
+    if (_waveController.isRecording) return _InputState.isRecording;
+    if (widget.onCancelMessage != null) return _InputState.canCancelPrompt;
+    if (widget.onCancelStt != null) return _InputState.canCancelStt;
+    if (_textController.text.trim().isEmpty) return _InputState.canStt;
+    return _InputState.canSubmitPrompt;
   }
 
   void _onSubmitPrompt() {
