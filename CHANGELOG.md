@@ -1,8 +1,11 @@
 ## 0.2.0
 
-* feature: chat microphone only prompt input (issue #33)
+* feature: chat microphone only prompt input, [issue #33](https://github.com/csells/flutter_ai_toolkit/issues/33)
+* added a `generateStream` method to `LlmProvider` to support talking to the underlying generative model w/o adding to the chat history; moved `chatModel` properties in the Gemini and Vertex providers to use a more generic `generativeModel` to make it clear which model is being used for both `sendMessageStream` and `generateStream`.
+* moved from [flutter_markdown_selectionarea](https://pub.dev/packages/flutter_markdown_selectionarea) to plain ol' [flutter_markdown](https://pub.dev/packages/flutter_markdown) which does now support selection if you ask it nicely. I still have some work to do on selection, however, as described in [issue #12](https://github.com/csells/flutter_ai_toolkit/issues/12).
+* styling support, including a sample
 
-## 0.1.5
+## 0.1.6
 
 * added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, @berkaykurkcu!
 

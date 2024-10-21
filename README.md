@@ -11,6 +11,7 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 - cancel in-progress request
 - edit the last prompt (starting with long-press as the UI gesture)
 - rich text response display
+- chat microphone speech-to-tech prompt input
 - copy any response (starting with long-press as the UI gesture)
 - multi-media attachments ([the web currently doesn't like file attachments](https://github.com/csells/flutter_ai_toolkit/issues/18), so they're disabled)
 - handling structured LLM responses
@@ -120,11 +121,10 @@ Note: There's no API key; Firebase manages all of that for you in the Firebase p
 ## More Features Coming Soon!
 As I mentioned, the AI Toolkit is just in the alpha phase of it's lifetime and it's under active development. Coming soon, you should expect the following features:
 - updated UX based on Google design guidelines
-- theming and styling support
+- custom styling support
 - stand-alone chatbot app sample with multi-session support
 - chat session serialization/deserialization
 - dev-configured chatbot label + icon
-- chat microphone speech-to-tech prompt input
 - thoroughly tested multi-platform support, including Windows and Linux
 - support for Cupertino as well as Material
 

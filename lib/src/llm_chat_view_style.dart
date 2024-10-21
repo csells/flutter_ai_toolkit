@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-/// Theme data for the entire chat widget.
-class LlmChatViewThemeData {
+/// Style for the entire chat widget.
+class LlmChatViewStyle {
   /// Background color of the entire chat widget.
   final Color? backgroundColor;
 
-  /// Theme data for user messages.
-  final UserMessageThemeData? userMessageTheme;
+  /// Style for user messages.
+  final UserMessageStyle? userMessageStyle;
 
-  /// Theme data for LLM messages.
-  final LlmMessageThemeData? llmMessageTheme;
+  /// Style for LLM messages.
+  final LlmMessageStyle? llmMessageStyle;
 
-  /// Theme data for the input text box.
-  final InputTextBoxThemeData? inputTextBoxTheme;
+  /// Style for the input text box.
+  final InputTextBoxStyle? inputTextBoxStyle;
 
-  /// Theme data for icon buttons in the chat widget.
-  final IconButtonThemeData? iconButtonTheme;
+  /// Style for icon buttons in the chat widget.
+  final IconButtonStyle? iconButtonStyle;
 
   /// Icon for the plus button (e.g., attachment button).
   final IconData? plusButtonIcon;
@@ -24,59 +24,35 @@ class LlmChatViewThemeData {
   /// Icon for the send button.
   final IconData? sendButtonIcon;
 
-  /// Creates a theme data object for the chat widget.
-  const LlmChatViewThemeData({
+  /// Creates a style object for the chat widget.
+  const LlmChatViewStyle({
     this.backgroundColor,
-    this.userMessageTheme,
-    this.llmMessageTheme,
-    this.inputTextBoxTheme,
-    this.iconButtonTheme,
+    this.userMessageStyle,
+    this.llmMessageStyle,
+    this.inputTextBoxStyle,
+    this.iconButtonStyle,
     this.plusButtonIcon,
     this.sendButtonIcon,
   });
 
-  /// Provides default theme data if none is specified.
-  factory LlmChatViewThemeData.defaultTheme(BuildContext context) {
+  /// Provides default style if none is specified.
+  factory LlmChatViewStyle.defaultStyle(BuildContext context) {
+    // TODO: merge this with view_styles.dart
     final ThemeData theme = Theme.of(context);
-    return LlmChatViewThemeData(
+    return LlmChatViewStyle(
       backgroundColor: theme.scaffoldBackgroundColor,
-      userMessageTheme: UserMessageThemeData.defaultTheme(context),
-      llmMessageTheme: LlmMessageThemeData.defaultTheme(context),
-      inputTextBoxTheme: InputTextBoxThemeData.defaultTheme(context),
-      iconButtonTheme: IconButtonThemeData.defaultTheme(context),
+      userMessageStyle: UserMessageStyle.defaultStyle(context),
+      llmMessageStyle: LlmMessageStyle.defaultStyle(context),
+      inputTextBoxStyle: InputTextBoxStyle.defaultStyle(context),
+      iconButtonStyle: IconButtonStyle.defaultStyle(context),
       plusButtonIcon: Icons.add, // Default icon for plus button
       sendButtonIcon: Icons.send, // Default icon for send button
     );
   }
 }
 
-/// An inherited widget that provides the `ChatWidgetThemeData` to its descendants.
-class ChatWidgetTheme extends InheritedWidget {
-  /// The theme data to be provided to descendants.
-  final LlmChatViewThemeData data;
-
-  /// Creates a ChatWidgetTheme.
-  ///
-  /// The [data] and [child] arguments must not be null.
-  const ChatWidgetTheme({
-    super.key,
-    required this.data,
-    required super.child,
-  });
-
-  /// Retrieves the closest instance of `ChatWidgetThemeData`.
-  static LlmChatViewThemeData of(BuildContext context) {
-    final ChatWidgetTheme? theme =
-        context.dependOnInheritedWidgetOfExactType<ChatWidgetTheme>();
-    return theme?.data ?? LlmChatViewThemeData.defaultTheme(context);
-  }
-
-  @override
-  bool updateShouldNotify(ChatWidgetTheme oldWidget) => data != oldWidget.data;
-}
-
-/// Theme data for user messages.
-class UserMessageThemeData {
+/// Style for user messages.
+class UserMessageStyle {
   /// The text style for user messages.
   final TextStyle? textStyle;
 
@@ -89,18 +65,18 @@ class UserMessageThemeData {
   /// The shape of user message bubbles.
   final ShapeBorder? shape;
 
-  /// Creates a UserMessageThemeData.
-  const UserMessageThemeData({
+  /// Creates a UserMessageStyle.
+  const UserMessageStyle({
     this.textStyle,
     this.backgroundColor,
     this.outlineColor,
     this.shape,
   });
 
-  /// Provides default theme data for user messages.
-  factory UserMessageThemeData.defaultTheme(BuildContext context) {
+  /// Provides default style data for user messages.
+  factory UserMessageStyle.defaultStyle(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return UserMessageThemeData(
+    return UserMessageStyle(
       textStyle: theme.textTheme.bodyLarge?.copyWith(
         color: Colors.black,
         fontWeight: FontWeight.normal,
@@ -114,8 +90,8 @@ class UserMessageThemeData {
   }
 }
 
-/// Theme data for LLM messages.
-class LlmMessageThemeData {
+/// Style for LLM messages.
+class LlmMessageStyle {
   /// The markdown style sheet for LLM messages.
   final MarkdownStyleSheet? markdownStyleSheet;
 
@@ -128,18 +104,18 @@ class LlmMessageThemeData {
   /// The shape of LLM message bubbles.
   final ShapeBorder? shape;
 
-  /// Creates an LlmMessageThemeData.
-  const LlmMessageThemeData({
+  /// Creates an LlmMessageStyle.
+  const LlmMessageStyle({
     this.markdownStyleSheet,
     this.backgroundColor,
     this.outlineColor,
     this.shape,
   });
 
-  /// Provides default theme data for LLM messages.
-  factory LlmMessageThemeData.defaultTheme(BuildContext context) {
+  /// Provides default style for LLM messages.
+  factory LlmMessageStyle.defaultStyle(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return LlmMessageThemeData(
+    return LlmMessageStyle(
       markdownStyleSheet: MarkdownStyleSheet.fromTheme(theme),
       backgroundColor: Colors.grey[200],
       outlineColor: Colors.transparent,
@@ -150,8 +126,8 @@ class LlmMessageThemeData {
   }
 }
 
-/// Theme data for the input text box.
-class InputTextBoxThemeData {
+/// Style for the input text box.
+class InputTextBoxStyle {
   /// The text style for the input text box.
   final TextStyle? textStyle;
 
@@ -164,18 +140,18 @@ class InputTextBoxThemeData {
   /// The shape of the input text box.
   final ShapeBorder? shape;
 
-  /// Creates an InputTextBoxThemeData.
-  const InputTextBoxThemeData({
+  /// Creates an InputTextBoxStyle.
+  const InputTextBoxStyle({
     this.textStyle,
     this.backgroundColor,
     this.outlineColor,
     this.shape,
   });
 
-  /// Provides default theme data for the input text box.
-  factory InputTextBoxThemeData.defaultTheme(BuildContext context) {
+  /// Provides default style for the input text box.
+  factory InputTextBoxStyle.defaultStyle(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return InputTextBoxThemeData(
+    return InputTextBoxStyle(
       textStyle: theme.textTheme.bodyLarge?.copyWith(
         color: Colors.black87,
       ),
@@ -188,8 +164,8 @@ class InputTextBoxThemeData {
   }
 }
 
-/// Theme data for icon buttons.
-class IconButtonThemeData {
+/// Style for icon buttons.
+class IconButtonStyle {
   /// The color of the icon.
   final Color? iconColor;
 
@@ -205,8 +181,8 @@ class IconButtonThemeData {
   /// The size of the icon button.
   final double? size;
 
-  /// Creates an IconButtonThemeData.
-  const IconButtonThemeData({
+  /// Creates an IconButtonStyle.
+  const IconButtonStyle({
     this.iconColor,
     this.backgroundColor,
     this.outlineColor,
@@ -214,9 +190,9 @@ class IconButtonThemeData {
     this.size,
   });
 
-  /// Provides default theme data for icon buttons.
-  factory IconButtonThemeData.defaultTheme(BuildContext context) {
-    return IconButtonThemeData(
+  /// Provides default style for icon buttons.
+  factory IconButtonStyle.defaultStyle(BuildContext context) {
+    return IconButtonStyle(
       iconColor: Colors.grey[700],
       backgroundColor: Colors.transparent,
       outlineColor: Colors.transparent,
