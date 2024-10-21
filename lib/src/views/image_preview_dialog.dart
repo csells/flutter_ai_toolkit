@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../flutter_ai_toolkit.dart';
 import 'circle_button.dart';
+import 'view_styles.dart';
 
 /// Displays a dialog to preview the image when the user taps on an attached
 /// image.
@@ -25,7 +26,7 @@ class ImagePreviewDialog {
         context: context,
         builder: (context) => Dialog(
           insetPadding: const EdgeInsets.all(12),
-          backgroundColor: Colors.transparent,
+          backgroundColor: FatColors.transparent,
           child: Stack(
             alignment: Alignment.topRight,
             children: [

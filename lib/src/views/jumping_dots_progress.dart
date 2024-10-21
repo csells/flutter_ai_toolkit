@@ -5,7 +5,8 @@
 // this file forked from https://github.com/wal33d006/progress_indicators due to
 // lack of activity
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
 
 class _JumpingDot extends AnimatedWidget {
   final Color color;
@@ -67,7 +68,7 @@ class JumpingDotsProgress extends StatefulWidget {
     super.key,
     this.numberOfDots = 3,
     this.fontSize = 10.0,
-    this.color = Colors.black,
+    this.color = FatColors.black,
     this.dotSpacing = 0.0,
     this.milliseconds = 250,
   });

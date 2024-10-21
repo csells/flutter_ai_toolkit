@@ -23,7 +23,7 @@ class CircleButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
-    this.color = iconColor,
+    this.color = FatColors.darkIcon,
     this.size = 40,
   });
 
@@ -48,11 +48,11 @@ class CircleButton extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: _enabled ? color : disabledButtonColor,
+            color: _enabled ? color : FatColors.disabledButton,
           ),
           child: Icon(
             icon,
-            color: _enabled ? backgroundColor : iconColor,
+            color: _enabled ? FatColors.darkButtonIcon : FatColors.darkIcon,
             size: size * 0.6,
           ),
         ),
@@ -80,7 +80,7 @@ class CircleButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: buttonBackground1Color,
+          color: FatColors.darkButtonBackground,
           borderRadius: BorderRadius.circular(20),
         ),
         child: OverflowBar(

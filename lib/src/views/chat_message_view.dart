@@ -90,14 +90,14 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                           CircleButton(
                             onPressed: _onSelect,
                             icon: Icons.close,
-                            color: buttonBackground2Color,
+                            color: FatColors.greyBackground,
                           ),
                         ]
                       : [
                           CircleButton(
                             onPressed: _onSelect,
                             icon: Icons.close,
-                            color: buttonBackground2Color,
+                            color: FatColors.greyBackground,
                           ),
                           CircleButton(
                             onPressed: () => _onCopy(context),
@@ -162,7 +162,7 @@ class _UserMessageView extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: userMessageColor,
+                      color: FatColors.userMessageBackground,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.zero,
@@ -209,7 +209,7 @@ class _LlmMessageView extends StatelessWidget {
                       ),
                       child: const Icon(
                         FatIcons.sparkIcon,
-                        color: iconColor,
+                        color: FatColors.darkIcon,
                         size: 12,
                       ),
                     ),

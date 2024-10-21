@@ -36,9 +36,6 @@ class App extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-        routerConfig: _router,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorSchemeSeed: Colors.blue),
-      );
+  Widget build(BuildContext context) =>
+      MaterialApp.router(routerConfig: _router);
 }

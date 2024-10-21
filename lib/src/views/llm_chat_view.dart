@@ -132,7 +132,7 @@ class _LlmChatViewState extends State<LlmChatView>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      color: backgroundColor,
+      color: FatColors.containerBackground,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [

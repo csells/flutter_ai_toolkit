@@ -155,7 +155,10 @@ class _ChatInputState extends State<ChatInput> {
                       ),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: outlineColor),
+                          border: Border.all(
+                            width: 1,
+                            color: FatColors.outline,
+                          ),
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: _waveController.isRecording
@@ -182,12 +185,12 @@ class _ChatInputState extends State<ChatInput> {
                                     _inputState == _InputState.canSubmitPrompt
                                         ? (_) => _onSubmitPrompt()
                                         : (_) => _focusNode.requestFocus(),
-                                style: body2TextStyle,
+                                style: FatStyles.body2,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Ask me anything...",
-                                  hintStyle: body2TextStyle.copyWith(
-                                    color: placeholderTextColor,
+                                  hintStyle: FatStyles.body2.copyWith(
+                                    color: FatColors.hintText,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 12,
@@ -337,7 +340,7 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
           CircleButton(
             onPressed: _onToggleMenu,
             icon: Icons.close,
-            color: buttonBackground2Color,
+            color: FatColors.greyBackground,
           ),
           if (_canCamera)
             CircleButton(
@@ -432,7 +435,6 @@ class _RemovableAttachment extends StatelessWidget {
           ),
           CircleButton(
             icon: Icons.close,
-            // color: placeholderTextColor,
             size: 20,
             onPressed: () => onRemove(attachment),
           ),

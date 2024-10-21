@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 /// Style for the entire chat widget.
@@ -38,15 +38,15 @@ class LlmChatViewStyle {
   /// Provides default style if none is specified.
   factory LlmChatViewStyle.defaultStyle(BuildContext context) {
     // TODO: merge this with view_styles.dart
-    final ThemeData theme = Theme.of(context);
+    // final ThemeData theme = Theme.of(context);
     return LlmChatViewStyle(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      // backgroundColor: theme.scaffoldBackgroundColor,
       userMessageStyle: UserMessageStyle.defaultStyle(context),
       llmMessageStyle: LlmMessageStyle.defaultStyle(context),
       inputTextBoxStyle: InputTextBoxStyle.defaultStyle(context),
       iconButtonStyle: IconButtonStyle.defaultStyle(context),
-      plusButtonIcon: Icons.add, // Default icon for plus button
-      sendButtonIcon: Icons.send, // Default icon for send button
+      // plusButtonIcon: Icons.add, // Default icon for plus button
+      // sendButtonIcon: Icons.send, // Default icon for send button
     );
   }
 }
@@ -75,14 +75,14 @@ class UserMessageStyle {
 
   /// Provides default style data for user messages.
   factory UserMessageStyle.defaultStyle(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    // final ThemeData theme = Theme.of(context);
     return UserMessageStyle(
-      textStyle: theme.textTheme.bodyLarge?.copyWith(
-        color: Colors.black,
-        fontWeight: FontWeight.normal,
-      ),
-      backgroundColor: Colors.blue[100],
-      outlineColor: Colors.transparent,
+      // textStyle: theme.textTheme.bodyLarge?.copyWith(
+      //   color: FatColors.black,
+      //   fontWeight: FontWeight.normal,
+      // ),
+      // backgroundColor: Colors.blue[100],
+      // outlineColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
@@ -114,11 +114,11 @@ class LlmMessageStyle {
 
   /// Provides default style for LLM messages.
   factory LlmMessageStyle.defaultStyle(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    // final ThemeData theme = Theme.of(context);
     return LlmMessageStyle(
-      markdownStyleSheet: MarkdownStyleSheet.fromTheme(theme),
-      backgroundColor: Colors.grey[200],
-      outlineColor: Colors.transparent,
+      // markdownStyleSheet: MarkdownStyleSheet.fromTheme(theme),
+      // backgroundColor: Colors.grey[200],
+      // outlineColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
@@ -150,13 +150,13 @@ class InputTextBoxStyle {
 
   /// Provides default style for the input text box.
   factory InputTextBoxStyle.defaultStyle(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    // final ThemeData theme = Theme.of(context);
     return InputTextBoxStyle(
-      textStyle: theme.textTheme.bodyLarge?.copyWith(
-        color: Colors.black87,
-      ),
-      backgroundColor: Colors.grey[100],
-      outlineColor: Colors.transparent,
+      // textStyle: theme.textTheme.bodyLarge?.copyWith(
+      //   color: Colors.black87,
+      // ),
+      // backgroundColor: Colors.grey[100],
+      // outlineColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0),
       ),
@@ -193,9 +193,9 @@ class IconButtonStyle {
   /// Provides default style for icon buttons.
   factory IconButtonStyle.defaultStyle(BuildContext context) {
     return IconButtonStyle(
-      iconColor: Colors.grey[700],
-      backgroundColor: Colors.transparent,
-      outlineColor: Colors.transparent,
+      // iconColor: Colors.grey[700],
+      // backgroundColor: Colors.transparent,
+      // outlineColor: Colors.transparent,
       shape: null,
       size: 24.0,
     );

@@ -53,7 +53,7 @@ class _FileAttachmentView extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.all(8),
         decoration: ShapeDecoration(
-          color: userMessageColor,
+          color: FatColors.userMessageBackground,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -65,14 +65,14 @@ class _FileAttachmentView extends StatelessWidget {
               height: 64,
               padding: const EdgeInsets.all(10),
               decoration: ShapeDecoration(
-                color: placeholderTextColor,
+                color: FatColors.hintText,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: const Icon(
                 Icons.attach_file,
-                color: iconColor,
+                color: FatColors.darkIcon,
                 size: 24,
               ),
             ),
@@ -84,13 +84,13 @@ class _FileAttachmentView extends StatelessWidget {
                 children: [
                   Text(
                     attachment.name,
-                    style: body2TextStyle,
+                    style: FatStyles.body2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     attachment.mimeType,
-                    style: body2TextStyle.copyWith(
-                      color: placeholderTextColor,
+                    style: FatStyles.body2.copyWith(
+                      color: FatColors.hintText,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
