@@ -1,4 +1,4 @@
-## 0.2.0 (pending)
+## 0.2.0
 
 * implemented [#33](https://github.com/csells/flutter_ai_toolkit/issues/33): feature: chat microphone only prompt input
 

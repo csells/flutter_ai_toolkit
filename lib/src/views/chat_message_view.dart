@@ -9,7 +9,7 @@ import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
-import '../cupertino_snack_bar.dart';
+import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
 import '../models/chat_message.dart';
 import 'attachment_view.dart';

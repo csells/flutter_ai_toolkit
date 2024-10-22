@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
-import '../cupertino_snack_bar.dart';
+import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
