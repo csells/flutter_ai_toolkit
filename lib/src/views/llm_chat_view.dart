@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
+import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 import '../models/chat_message.dart';
 import '../platform_helper/platform_helper.dart';

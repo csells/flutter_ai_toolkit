@@ -16,8 +16,8 @@ import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
 import 'chat_text_field.dart';
 import 'circle_button.dart';
+import 'fat_colors_styles.dart';
 import 'image_preview_dialog.dart';
-import 'view_styles.dart';
 
 /// A widget that provides a chat input interface with support for text input,
 /// speech-to-text, and attachments.
@@ -301,7 +301,8 @@ class _InputButton extends StatelessWidget {
             icon: Icons.stop,
             onPressed: onCancelPrompt,
           ),
-        // TODO: fix color: should be `backgroundColor` w/ `outlineColor` border
+        // TODO: fix color: should be `FatColors.containerBackground` with
+        // `FatColors.outline` border
         _InputState.canStt => CircleButton(
             icon: Icons.mic,
             onPressed: onStartRecording,

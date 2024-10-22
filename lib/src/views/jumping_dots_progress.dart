@@ -6,7 +6,7 @@
 // lack of activity
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
+import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 class _JumpingDot extends AnimatedWidget {
   final Color color;

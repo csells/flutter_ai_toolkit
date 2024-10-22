@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 
 import '../providers/llm_provider_interface.dart';
 import 'image_preview_dialog.dart';
-import 'view_styles.dart';
+import 'fat_colors_styles.dart';
 
 /// A widget that displays an attachment based on its type.
 ///

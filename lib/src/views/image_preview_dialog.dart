@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../flutter_ai_toolkit.dart';
 import 'circle_button.dart';
-import 'view_styles.dart';
+import 'fat_colors_styles.dart';
 
 /// Displays a dialog to preview the image when the user taps on an attached
 /// image.

@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ai_toolkit/src/views/circle_button.dart';
-import 'package:flutter_ai_toolkit/src/views/view_styles.dart';
+import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
@@ -252,7 +252,7 @@ class _LlmMessageView extends StatelessWidget {
             selectable: false,
             styleSheet: MarkdownStyleSheet(
               a: FatStyles.body1,
-              blockquote: FatStyles.body1, // TODO: seems to be ignored
+              blockquote: FatStyles.body1,
               checkbox: FatStyles.body1,
               code: FatStyles.code,
               del: FatStyles.body1,

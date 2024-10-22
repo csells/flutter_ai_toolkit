@@ -4,7 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'view_styles.dart';
+import 'fat_colors_styles.dart';
 
 /// A circular button widget with an icon.
 ///
