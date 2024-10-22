@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../utility.dart';
+
 /// A text field that adapts to the current app style (Material or Cupertino).
 ///
 /// This widget will render either a [CupertinoTextField] or a [TextField]
@@ -59,7 +61,7 @@ class ChatTextField extends StatelessWidget {
   final void Function(String text) onSubmitted;
 
   @override
-  Widget build(BuildContext context) => _isCupertinoApp(context)
+  Widget build(BuildContext context) => isCupertinoApp(context)
       ? CupertinoTextField(
           minLines: minLines,
           maxLines: maxLines,
@@ -92,8 +94,4 @@ class ChatTextField extends StatelessWidget {
             contentPadding: hintPadding,
           ),
         );
-
-  /// Determines if the current app is using Cupertino style.
-  bool _isCupertinoApp(BuildContext context) =>
-      context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
 }

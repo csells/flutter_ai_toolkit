@@ -11,7 +11,8 @@
 * fixed [#3](https://github.com/csells/flutter_ai_toolkit/issues/3): ensure Google Font Roboto is being resolved
 
 * implemented [#2](https://github.com/csells/flutter_ai_toolkit/issues/2): feature: enable full functionality inside a Cupertino app
-  
+
+* fixed [#45]: bug: X icon button is also pushing up against the top and left edges without any padding
 
 ## 0.1.6
 

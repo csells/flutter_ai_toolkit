@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
+import '../cupertino_snack_bar.dart';
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
 import 'attachment_view.dart';
@@ -257,11 +258,7 @@ class _ChatInputState extends State<ChatInput> {
     final file = _waveController.file;
 
     if (file == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Unable to record audio')),
-        );
-      }
+      AdaptiveSnackBar.show(context, 'Unable to record audio');
       return;
     }
 
@@ -387,11 +384,10 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
         widget.onAttachments([await ImageFileAttachment.fromFile(pic)]);
       }
     } on Exception catch (ex) {
-      final context = this.context;
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to pick an image: $ex')),
-      );
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        AdaptiveSnackBar.show(context, 'Unable to pick an image: $ex');
+      }
     }
   }
 
@@ -403,11 +399,10 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       final attachments = await Future.wait(files.map(FileAttachment.fromFile));
       widget.onAttachments(attachments);
     } on Exception catch (ex) {
-      final context = this.context;
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to pick a file: $ex')),
-      );
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        AdaptiveSnackBar.show(context, 'Unable to pick a file: $ex');
+      }
     }
   }
 }
@@ -426,9 +421,9 @@ class _RemovableAttachment extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: attachment is ImageFileAttachment
-                ? () =>
-                    ImagePreviewDialog(attachment as ImageFileAttachment).show(
+                ? () => ImagePreviewDialog.show(
                       context,
+                      attachment as ImageFileAttachment,
                     )
                 : null,
             child: Container(
@@ -437,10 +432,13 @@ class _RemovableAttachment extends StatelessWidget {
               child: AttachmentView(attachment),
             ),
           ),
-          CircleButton(
-            icon: Icons.close,
-            size: 20,
-            onPressed: () => onRemove(attachment),
+          Padding(
+            padding: const EdgeInsets.all(2),
+            child: CircleButton(
+              icon: Icons.close,
+              size: 20,
+              onPressed: () => onRemove(attachment),
+            ),
           ),
         ],
       );

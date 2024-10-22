@@ -9,6 +9,7 @@ import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
+import '../cupertino_snack_bar.dart';
 import '../fat_icons.dart';
 import '../models/chat_message.dart';
 import 'attachment_view.dart';
@@ -84,7 +85,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                               icon: Icons.edit,
                             ),
                           CircleButton(
-                            onPressed: () => _onCopy(context),
+                            onPressed: _onCopy,
                             icon: Icons.copy,
                           ),
                           CircleButton(
@@ -100,7 +101,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                             color: FatColors.greyBackground,
                           ),
                           CircleButton(
-                            onPressed: () => _onCopy(context),
+                            onPressed: _onCopy,
                             icon: Icons.copy,
                           ),
                         ],
@@ -117,17 +118,14 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     widget.onEdit?.call();
   }
 
-  Future<void> _onCopy(BuildContext context) async {
+  Future<void> _onCopy() async {
     widget.onSelected?.call(false);
     await Clipboard.setData(ClipboardData(text: widget.message.text));
 
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Message copied to clipboard'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    if (context.mounted) {
+      // ignore: use_build_context_synchronously
+      AdaptiveSnackBar.show(context, 'Message copied to clipboard');
+    }
   }
 }
 

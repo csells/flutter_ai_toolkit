@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../providers/llm_provider_interface.dart';
-import 'image_preview_dialog.dart';
 import 'fat_colors_styles.dart';
+import 'image_preview_dialog.dart';
 
 /// A widget that displays an attachment based on its type.
 ///
@@ -39,7 +39,7 @@ class _ImageAttachmentView extends StatelessWidget {
   Widget build(BuildContext context) => Align(
         alignment: Alignment.centerRight,
         child: GestureDetector(
-            onTap: () => ImagePreviewDialog(attachment).show(context),
+            onTap: () => ImagePreviewDialog.show(context, attachment),
             child: Image.memory(attachment.bytes)),
       );
 }
