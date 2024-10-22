@@ -13,8 +13,8 @@ import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
-import 'adaptive_text_field.dart';
 import 'attachment_view.dart';
+import 'chat_text_field.dart';
 import 'circle_button.dart';
 import 'image_preview_dialog.dart';
 import 'view_styles.dart';
@@ -103,6 +103,7 @@ class _ChatInputState extends State<ChatInput> {
   final _waveController = WaveformRecorderController();
   final _attachments = <Attachment>[];
   final _isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
+  static const _minInputHeight = 48.0;
 
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
@@ -162,41 +163,44 @@ class _ChatInputState extends State<ChatInput> {
                           ),
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        child: _waveController.isRecording
-                            ? WaveformRecorder(
-                                controller: _waveController,
-                                height: 48,
-                                onRecordingStopped: _onRecordingStopped,
-                              )
-                            : AdaptiveTextField(
-                                minLines: 1,
-                                maxLines: 1024,
-                                controller: _textController,
-                                autofocus: true,
-                                focusNode: _focusNode,
-                                // on mobile, pressing enter should add a new
-                                // line. on web+desktop, pressing enter should
-                                // submit the prompt.
-                                textInputAction: _isMobile
-                                    ? TextInputAction.newline
-                                    : TextInputAction.done,
-                                // ignore the user submitting if they can't
-                                // right now; leave the text as is and the field
-                                // focused
-                                onSubmitted:
-                                    _inputState == _InputState.canSubmitPrompt
-                                        ? (_) => _onSubmitPrompt()
-                                        : (_) => _focusNode.requestFocus(),
-                                style: FatStyles.body2,
-                                hintText: "Ask me anything...",
-                                hintStyle: FatStyles.body2.copyWith(
-                                  color: FatColors.hintText,
+                        child: SizedBox(
+                          height: _minInputHeight,
+                          child: _waveController.isRecording
+                              ? WaveformRecorder(
+                                  controller: _waveController,
+                                  height: _minInputHeight,
+                                  onRecordingStopped: _onRecordingStopped,
+                                )
+                              : ChatTextField(
+                                  minLines: 1,
+                                  maxLines: 1024,
+                                  controller: _textController,
+                                  autofocus: true,
+                                  focusNode: _focusNode,
+                                  // on mobile, pressing enter should add a new
+                                  // line. on web+desktop, pressing enter should
+                                  // submit the prompt.
+                                  textInputAction: _isMobile
+                                      ? TextInputAction.newline
+                                      : TextInputAction.done,
+                                  // ignore the user submitting if they can't
+                                  // right now; leave the text as is and the field
+                                  // focused
+                                  onSubmitted:
+                                      _inputState == _InputState.canSubmitPrompt
+                                          ? (_) => _onSubmitPrompt()
+                                          : (_) => _focusNode.requestFocus(),
+                                  style: FatStyles.body2,
+                                  hintText: "Ask me anything...",
+                                  hintStyle: FatStyles.body2.copyWith(
+                                    color: FatColors.hintText,
+                                  ),
+                                  hintPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
                                 ),
-                                hintPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                              ),
+                        ),
                       ),
                     ),
                   ),

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 ///
 /// This widget will render either a [CupertinoTextField] or a [TextField]
 /// depending on whether the app is using Cupertino or Material design.
-class AdaptiveTextField extends StatelessWidget {
+class ChatTextField extends StatelessWidget {
   /// Creates an adaptive text field.
   ///
   /// Many of the parameters are required to ensure consistent behavior
   /// across both Cupertino and Material designs.
-  const AdaptiveTextField({
+  const ChatTextField({
     super.key,
     required this.minLines,
     required this.maxLines,
@@ -68,7 +68,13 @@ class AdaptiveTextField extends StatelessWidget {
           focusNode: focusNode,
           onSubmitted: onSubmitted,
           style: style,
-          decoration: null, // TODO: hint text
+          placeholder: hintText,
+          placeholderStyle: hintStyle,
+          padding: hintPadding ?? EdgeInsets.zero,
+          decoration: BoxDecoration(
+            border: Border.all(width: 0, color: Colors.transparent),
+          ),
+          textInputAction: textInputAction,
         )
       : TextField(
           minLines: minLines,

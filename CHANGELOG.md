@@ -9,6 +9,8 @@
 * implemented [#27](https://github.com/csells/flutter_ai_toolkit/issues/27): styling support, including a sample
 
 * fixed [#3](https://github.com/csells/flutter_ai_toolkit/issues/3): ensure Google Font Roboto is being resolved
+
+* implemented [#2](https://github.com/csells/flutter_ai_toolkit/issues/2): feature: enable full functionality inside a Cupertino app
   
 
 ## 0.1.6
