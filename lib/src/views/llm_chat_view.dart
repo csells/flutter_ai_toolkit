@@ -169,7 +169,7 @@ class _LlmChatViewState extends State<LlmChatView>
     _transcript.addAll([userMessage, llmMessage]);
 
     _pendingPromptResponse = _LlmResponse(
-      stream: widget.provider.generateStream(
+      stream: widget.provider.sendMessageStream(
         prompt,
         attachments: attachments,
       ),
@@ -204,13 +204,13 @@ class _LlmChatViewState extends State<LlmChatView>
     // use the LLM to translate the attached audio to text
     final prompt =
         'translate the attached audio to text; provide the result of that '
-        'translation without as just the text of the translation itself. be '
-        'careful to separate the background audio from the foreground audio '
-        'and only provide the result of translating the foreground audio.';
+        'translation as just the text of the translation itself. be careful to '
+        'separate the background audio from the foreground audio and only '
+        'provide the result of translating the foreground audio.';
     final attachments = [await FileAttachment.fromFile(file)];
 
     _pendingSttResponse = _LlmResponse(
-      stream: widget.provider.sendMessageStream(
+      stream: widget.provider.generateStream(
         prompt,
         attachments: attachments,
       ),

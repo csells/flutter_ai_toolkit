@@ -71,6 +71,12 @@ abstract final class FatStyles {
     fontWeight: FontWeight.w400,
   );
 
+  static final TextStyle code = GoogleFonts.robotoMono(
+    color: FatColors.enabledText,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+
   static final TextStyle body2 = GoogleFonts.roboto(
     color: FatColors.enabledText,
     fontSize: 14,
