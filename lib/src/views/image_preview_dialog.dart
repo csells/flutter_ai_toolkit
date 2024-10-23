@@ -30,8 +30,13 @@ class ImagePreviewDialog extends StatelessWidget {
           ? showCupertinoDialog(
               context: context,
               barrierDismissible: true,
-              builder: (context) => CupertinoAlertDialog(
-                content: ImagePreviewDialog(attachment),
+              builder: (context) => Container(
+                margin: const EdgeInsets.all(96),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(36),
+                ),
+                child: ImagePreviewDialog(attachment),
               ),
             )
           : showDialog(
@@ -39,15 +44,15 @@ class ImagePreviewDialog extends StatelessWidget {
               barrierDismissible: true,
               builder: (context) => Dialog(
                 insetPadding: const EdgeInsets.all(48),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ImagePreviewDialog(attachment),
-                ),
+                child: ImagePreviewDialog(attachment),
               ),
             );
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Image.memory(attachment.bytes, fit: BoxFit.contain),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8),
+        child: Center(
+          child: Image.memory(attachment.bytes, fit: BoxFit.contain),
+        ),
       );
 }
