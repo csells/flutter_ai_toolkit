@@ -82,27 +82,27 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                           if (widget.onEdit != null)
                             CircleButton(
                               onPressed: _onEdit,
-                              icon: Icons.edit,
+                              icon: FatIcons.edit,
                             ),
                           CircleButton(
                             onPressed: _onCopy,
-                            icon: Icons.copy,
+                            icon: FatIcons.content_copy,
                           ),
                           CircleButton(
                             onPressed: _onSelect,
-                            icon: Icons.close,
+                            icon: FatIcons.close,
                             color: FatColors.greyBackground,
                           ),
                         ]
                       : [
                           CircleButton(
                             onPressed: _onSelect,
-                            icon: Icons.close,
+                            icon: FatIcons.close,
                             color: FatColors.greyBackground,
                           ),
                           CircleButton(
                             onPressed: _onCopy,
-                            icon: Icons.copy,
+                            icon: FatIcons.content_copy,
                           ),
                         ],
                 ),
@@ -214,7 +214,7 @@ class _LlmMessageView extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        FatIcons.sparkIcon,
+                        FatIcons.spark_icon,
                         color: FatColors.darkIcon,
                         size: 12,
                       ),

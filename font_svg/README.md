@@ -9,5 +9,17 @@ SVG sources:
 
 - `font_svg/spark-icon.svg` was purchased at [the Noun Project](https://thenounproject.com/icon/spark-6645136/)
 
+Material icons:
+The following icons will pulled in from Material and packaged into the FatIcons.ttf so that Material itself wasn't required for a Cupertino app:
+- Icons.add
+- Icons.attach_file
+- Icons.stop
+- Icons.mic
+- Icons.close
+- Icons.camera_alt
+- Icons.image
+- Icons.edit
+- Icons.copy
+
 more info:
 https://stackoverflow.com/a/75657218

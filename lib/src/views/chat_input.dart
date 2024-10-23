@@ -291,21 +291,21 @@ class _InputButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => switch (inputState) {
         _InputState.canSubmitPrompt => CircleButton(
-            icon: FatIcons.submitIcon,
+            icon: FatIcons.submit_icon,
             onPressed: onSubmitPrompt,
           ),
         _InputState.canCancelPrompt => CircleButton(
-            icon: Icons.stop,
+            icon: FatIcons.stop,
             onPressed: onCancelPrompt,
           ),
         // TODO: fix color: should be `FatColors.containerBackground` with
         // `FatColors.outline` border
         _InputState.canStt => CircleButton(
-            icon: Icons.mic,
+            icon: FatIcons.mic,
             onPressed: onStartRecording,
           ),
         _InputState.isRecording => CircleButton(
-            icon: Icons.stop,
+            icon: FatIcons.stop,
             onPressed: onStopRecording,
           ),
         _InputState.canCancelStt => const CircularProgressIndicator(),
@@ -340,27 +340,27 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
       ? CircleButtonBar([
           CircleButton(
             onPressed: _onToggleMenu,
-            icon: Icons.close,
+            icon: FatIcons.close,
             color: FatColors.greyBackground,
           ),
           if (_canCamera)
             CircleButton(
               onPressed: _onCamera,
-              icon: Icons.camera_alt,
+              icon: FatIcons.camera_alt,
             ),
           CircleButton(
             onPressed: _onGallery,
-            icon: Icons.image,
+            icon: FatIcons.image,
           ),
           if (_canFile)
             CircleButton(
               onPressed: _onFile,
-              icon: Icons.attach_file,
+              icon: FatIcons.attach_file,
             ),
         ])
       : CircleButton(
           onPressed: _onToggleMenu,
-          icon: Icons.add,
+          icon: FatIcons.add,
         );
 
   void _onToggleMenu() => setState(() => _expanded = !_expanded);
@@ -435,7 +435,7 @@ class _RemovableAttachment extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(2),
             child: CircleButton(
-              icon: Icons.close,
+              icon: FatIcons.close,
               size: 20,
               onPressed: () => onRemove(attachment),
             ),

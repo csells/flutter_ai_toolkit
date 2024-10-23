@@ -2,9 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
+import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
 import 'fat_colors_styles.dart';
 import 'image_preview_dialog.dart';
@@ -71,7 +72,7 @@ class _FileAttachmentView extends StatelessWidget {
                 ),
               ),
               child: const Icon(
-                Icons.attach_file,
+                FatIcons.attach_file,
                 color: FatColors.darkIcon,
                 size: 24,
               ),
