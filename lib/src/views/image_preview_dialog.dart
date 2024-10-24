@@ -30,13 +30,8 @@ class ImagePreviewDialog extends StatelessWidget {
           ? showCupertinoDialog(
               context: context,
               barrierDismissible: true,
-              builder: (context) => Container(
-                margin: const EdgeInsets.all(96),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(36),
-                ),
-                child: ImagePreviewDialog(attachment),
+              builder: (context) => CupertinoAlertDialog(
+                content: ImagePreviewDialog(attachment),
               ),
             )
           : showDialog(

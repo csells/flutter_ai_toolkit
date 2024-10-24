@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:universal_platform/universal_platform.dart';
+
+bool? _isCupertinoApp;
 
 /// Determines if the current application is a Cupertino-style app.
 ///
@@ -11,5 +14,19 @@ import 'package:flutter/cupertino.dart';
 /// Returns:
 ///   A [bool] value. `true` if a [CupertinoApp] is found in the widget tree,
 ///   `false` otherwise.
-bool isCupertinoApp(BuildContext context) =>
-    context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
+bool isCupertinoApp(BuildContext context) {
+  // caching the result to avoid recomputing it on every call; it's not likely
+  // to change during the lifetime of the app
+  _isCupertinoApp ??=
+      context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
+  return _isCupertinoApp!;
+}
+
+/// Determines if the current platform is a mobile device (Android or iOS).
+///
+/// This constant uses the [UniversalPlatform] package to check the platform.
+///
+/// Returns:
+///   A [bool] value. `true` if the platform is either Android or iOS,
+///   `false` otherwise.
+final isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;

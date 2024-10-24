@@ -4,16 +4,18 @@
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
+import '../adaptive_progress_indicator.dart';
 import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
 import '../providers/llm_provider_interface.dart';
+import '../utility.dart';
 import 'attachment_view.dart';
 import 'chat_text_field.dart';
 import 'circle_button.dart';
@@ -103,7 +105,6 @@ class _ChatInputState extends State<ChatInput> {
   final _textController = TextEditingController();
   final _waveController = WaveformRecorderController();
   final _attachments = <Attachment>[];
-  final _isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
   static const _minInputHeight = 48.0;
 
   @override
@@ -181,7 +182,7 @@ class _ChatInputState extends State<ChatInput> {
                                   // on mobile, pressing enter should add a new
                                   // line. on web+desktop, pressing enter should
                                   // submit the prompt.
-                                  textInputAction: _isMobile
+                                  textInputAction: isMobile
                                       ? TextInputAction.newline
                                       : TextInputAction.done,
                                   // ignore the user submitting if they can't
@@ -308,7 +309,7 @@ class _InputButton extends StatelessWidget {
             icon: FatIcons.stop,
             onPressed: onStopRecording,
           ),
-        _InputState.canCancelStt => const CircularProgressIndicator(),
+        _InputState.canCancelStt => const AdaptiveCircularProgressIndicator(),
       };
 }
 

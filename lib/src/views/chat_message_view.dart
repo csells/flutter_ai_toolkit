@@ -12,6 +12,7 @@ import 'package:gap/gap.dart';
 import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
 import '../models/chat_message.dart';
+import '../utility.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
 import 'response_builder.dart';
@@ -237,38 +238,50 @@ class _LlmMessageView extends StatelessWidget {
         ],
       );
 
-  Widget _responseBuilder(BuildContext context, String response) =>
-      Localizations(
-        locale: Localizations.localeOf(context),
-        delegates: const [
-          DefaultWidgetsLocalizations.delegate,
-          DefaultMaterialLocalizations.delegate,
-        ],
-        child: SelectionArea(
-          child: MarkdownBody(
-            data: response,
-            selectable: false,
-            styleSheet: MarkdownStyleSheet(
-              a: FatStyles.body1,
-              blockquote: FatStyles.body1,
-              checkbox: FatStyles.body1,
-              code: FatStyles.code,
-              del: FatStyles.body1,
-              em: FatStyles.body1,
-              h1: FatStyles.heading1,
-              h2: FatStyles.heading2,
-              h3: FatStyles.body1,
-              h4: FatStyles.body1,
-              h5: FatStyles.body1,
-              h6: FatStyles.body1,
-              listBullet: FatStyles.body1,
-              img: FatStyles.body1,
-              strong: FatStyles.body1,
-              p: FatStyles.body1,
-              tableBody: FatStyles.body1,
-              tableHead: FatStyles.body1,
-            ),
+  // using SelectionArea so that it works with Cupertino as well as Material,
+  // even though SelectionArea is defined as a Material widget. since it doesn't
+  // require running inside a MaterialApp, we're good.
+  Widget _responseBuilder(BuildContext context, String response) => isMobile
+      ? _Markdown(response)
+      : Localizations(
+          locale: Localizations.localeOf(context),
+          delegates: const [
+            DefaultWidgetsLocalizations.delegate,
+            DefaultMaterialLocalizations.delegate,
+          ],
+          child: SelectionArea(
+            child: _Markdown(response),
           ),
+        );
+}
+
+class _Markdown extends StatelessWidget {
+  const _Markdown(this.response);
+  final String response;
+
+  @override
+  Widget build(BuildContext context) => MarkdownBody(
+        data: response,
+        selectable: false,
+        styleSheet: MarkdownStyleSheet(
+          a: FatStyles.body1,
+          blockquote: FatStyles.body1,
+          checkbox: FatStyles.body1,
+          code: FatStyles.code,
+          del: FatStyles.body1,
+          em: FatStyles.body1,
+          h1: FatStyles.heading1,
+          h2: FatStyles.heading2,
+          h3: FatStyles.body1,
+          h4: FatStyles.body1,
+          h5: FatStyles.body1,
+          h6: FatStyles.body1,
+          listBullet: FatStyles.body1,
+          img: FatStyles.body1,
+          strong: FatStyles.body1,
+          p: FatStyles.body1,
+          tableBody: FatStyles.body1,
+          tableHead: FatStyles.body1,
         ),
       );
 }

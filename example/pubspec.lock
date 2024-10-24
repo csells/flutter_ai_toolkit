@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_android
-      sha256: "00aafa9ae05a8663d0b4f17abd2a02316911ca0f46f9b9dacb9578b324d99590"
+      sha256: ec439df07c4999faad319ce8ad9e971795c2f1d7132ad5a793b9370a863c6128
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1+9"
+    version: "0.5.1+10"
   file_selector_ios:
     dependency: transitive
     description:
@@ -189,10 +189,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_app_check
-      sha256: "251998b649c16cb58b4f6f1badcb1f047c45e7816335dfdd65c2a0e0cff102d7"
+      sha256: b5b3c1df2698d6b6bd183f27fb10fbf61f9a0a564d8ccba3d87d0e0760a9ffea
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1+3"
+    version: "0.3.1+4"
   firebase_app_check_platform_interface:
     dependency: transitive
     description:
@@ -205,10 +205,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_app_check_web
-      sha256: "0d889be9adf525fea6791ab8b137ee3c152c28d126115408768bd83ab5e7e46d"
+      sha256: d9cf8d7e7eb904399784ecdc21ac66119ff2a93181bd7a3f8ab43e8220ad0be8
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3+2"
+    version: "0.2.0"
   firebase_auth:
     dependency: transitive
     description:
@@ -297,18 +297,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: bd9c475d9aae256369edacafc29d1e74c81f78a10cdcdacbbbc9e3c43d009e4a
+      sha256: f0e599ba89c9946c8e051780f0ec99aba4ba15895e0380a7ab68f420046fc44e
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.4"
-  flutter_markdown_selectionarea:
-    dependency: transitive
-    description:
-      name: flutter_markdown_selectionarea
-      sha256: d4bc27e70a5c40ebdab23a4b81f75d53696a214d4d1f13c12045b38a0ddc58a2
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.17+1"
+    version: "0.7.4+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -395,10 +387,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: d34e0d9e024e81321b2aeed7b202ec6181cc282e6a1c0c0b4e6ad07ef1065d82
+      sha256: "8faba09ba361d4b246dc0a17cb4289b3324c2b9f6db7b3d457ee69106a86bd32"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+16"
+    version: "0.8.12+17"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -816,10 +808,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "8fc3bae0b68c02c47c5c86fa8bfa74471d42687b0eded01b78de87872db745e2"
+      sha256: "0dea215895a4d254401730ca0ba8204b29109a34a99fb06ae559a2b60988d2de"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.12"
+    version: "6.3.13"
   url_launcher_ios:
     dependency: transitive
     description:
