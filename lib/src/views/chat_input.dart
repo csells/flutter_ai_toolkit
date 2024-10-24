@@ -285,22 +285,22 @@ class _InputButton extends StatelessWidget {
 
   final _InputState inputState;
   final void Function() onSubmitPrompt;
-  final void Function()? onCancelPrompt;
+  final void Function() onCancelPrompt;
   final void Function() onStartRecording;
-  final void Function()? onStopRecording;
+  final void Function() onStopRecording;
 
   @override
   Widget build(BuildContext context) => switch (inputState) {
         _InputState.canSubmitPrompt => CircleButton(
             icon: FatIcons.submit_icon,
             onPressed: onSubmitPrompt,
+            iconColor: FatColors.whiteIcon,
+            backgroundColor: FatColors.darkButtonBackground,
           ),
         _InputState.canCancelPrompt => CircleButton(
             icon: FatIcons.stop,
             onPressed: onCancelPrompt,
           ),
-        // TODO: fix color: should be `FatColors.containerBackground` with
-        // `FatColors.outline` border
         _InputState.canStt => CircleButton(
             icon: FatIcons.mic,
             onPressed: onStartRecording,
@@ -342,21 +342,28 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
           CircleButton(
             onPressed: _onToggleMenu,
             icon: FatIcons.close,
-            color: FatColors.greyBackground,
+            iconColor: FatColors.whiteIcon,
+            backgroundColor: FatColors.greyBackground,
           ),
           if (_canCamera)
             CircleButton(
               onPressed: _onCamera,
               icon: FatIcons.camera_alt,
+              iconColor: FatColors.whiteIcon,
+              backgroundColor: FatColors.darkButtonBackground,
             ),
           CircleButton(
             onPressed: _onGallery,
             icon: FatIcons.image,
+            iconColor: FatColors.whiteIcon,
+            backgroundColor: FatColors.darkButtonBackground,
           ),
           if (_canFile)
             CircleButton(
               onPressed: _onFile,
               icon: FatIcons.attach_file,
+              iconColor: FatColors.whiteIcon,
+              backgroundColor: FatColors.darkButtonBackground,
             ),
         ])
       : CircleButton(

@@ -16,14 +16,15 @@ class CircleButton extends StatelessWidget {
   ///
   /// The [icon] parameter is required and specifies the icon to be displayed.
   /// The [onPressed] callback is optional and determines if the button is
-  /// enabled. The [color] parameter sets the background color of the button
+  /// enabled. The [backgroundColor] parameter sets the background color of the button
   /// when enabled. The [size] parameter determines the diameter of the circular
   /// button.
   const CircleButton({
     super.key,
     required this.icon,
-    this.onPressed,
-    this.color = FatColors.darkIcon,
+    required this.onPressed,
+    this.iconColor = FatColors.darkIcon,
+    this.backgroundColor = FatColors.lightButtonBackground,
     this.size = 40,
   });
 
@@ -32,10 +33,13 @@ class CircleButton extends StatelessWidget {
 
   /// The callback that is called when the button is tapped.
   /// If null, the button will be disabled.
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
+
+  /// The color of the icon when enabled.
+  final Color iconColor;
 
   /// The background color of the button when enabled.
-  final Color color;
+  final Color backgroundColor;
 
   /// The diameter of the circular button.
   final double size;
@@ -48,18 +52,15 @@ class CircleButton extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: _enabled ? color : FatColors.disabledButton,
+            color: backgroundColor,
           ),
           child: Icon(
             icon,
-            color: _enabled ? FatColors.darkButtonIcon : FatColors.darkIcon,
+            color: iconColor,
             size: size * 0.6,
           ),
         ),
       );
-
-  /// Whether the button is enabled.
-  bool get _enabled => onPressed != null;
 }
 
 /// A widget that displays a horizontal bar of [CircleButton]s.

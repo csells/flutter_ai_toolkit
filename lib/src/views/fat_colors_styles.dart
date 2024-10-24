@@ -16,6 +16,7 @@ abstract final class FatColors {
   static const Color whiteButtonBackground = Color(0xFFFFFFFF);
   static const Color containerBackground = Color(0xFFFFFFFF);
   static const Color llmMessageBackground = Color(0xFFFFFFFF);
+  static const Color whiteIcon = Color(0xFFFFFFFF);
 
   // Color 100 (#F5F5F5)
   static const Color userMessageBackground = Color(0xFFF5F5F5);

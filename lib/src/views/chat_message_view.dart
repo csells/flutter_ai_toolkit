@@ -92,14 +92,14 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                           CircleButton(
                             onPressed: _onSelect,
                             icon: FatIcons.close,
-                            color: FatColors.greyBackground,
+                            backgroundColor: FatColors.greyBackground,
                           ),
                         ]
                       : [
                           CircleButton(
                             onPressed: _onSelect,
                             icon: FatIcons.close,
-                            color: FatColors.greyBackground,
+                            backgroundColor: FatColors.greyBackground,
                           ),
                           CircleButton(
                             onPressed: _onCopy,
