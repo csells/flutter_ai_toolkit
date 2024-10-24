@@ -261,10 +261,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_vertexai
-      sha256: e7e8fa44dd94d805e3427add9d23c24982410edd461094ead3c32a7f9ba73ae8
+      sha256: c7d7a67a0d3b84e0d2e1b5c68a58df7378a2fab5b6b0481fc4b5344b1ef5454d
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.3+4"
+    version: "1.0.1"
   fixnum:
     dependency: transitive
     description:

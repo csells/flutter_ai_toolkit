@@ -14,6 +14,7 @@
 
 * fixed [#45]: bug: X icon button is also pushing up against the top and left edges without any padding
 
+
 ## 0.1.6
 
 * added optional `welcomeMessage` to `LlmChatView` and a welcome sample. thanks, @berkaykurkcu!

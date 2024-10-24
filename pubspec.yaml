@@ -18,7 +18,7 @@ dependencies:
   google_fonts: ^6.2.1
   file_selector: ^1.0.3
   cross_file: ^0.3.4+2
-  firebase_vertexai: ^0.2.3
+  firebase_vertexai: ^1.0.1
   gap: ^3.0.1
   universal_platform: ^1.1.0
   ollama_dart: ^0.2.1

@@ -47,13 +47,8 @@ class VertexProvider extends LlmProvider {
     assert(embeddingTask == TaskType.retrievalDocument ||
         embeddingTask == TaskType.retrievalQuery);
 
-    final content = Content.text(s);
-    final result = await _embeddingModel.embedContent(
-      content,
-      taskType: embeddingTask,
-    );
-
-    return result.embedding.values;
+    // waiting for: https://github.com/firebase/flutterfire/issues/13269
+    throw UnimplementedError();
   }
 
   @override
@@ -110,7 +105,7 @@ class VertexProvider extends LlmProvider {
   }
 
   Part _partFrom(Attachment attachment) => switch (attachment) {
-        (FileAttachment a) => DataPart(a.mimeType, a.bytes),
+        (FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
 }
