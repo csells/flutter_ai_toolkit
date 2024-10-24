@@ -12,7 +12,9 @@
 
 * implemented [#2](https://github.com/csells/flutter_ai_toolkit/issues/2): feature: enable full functionality inside a Cupertino app
 
-* fixed [#45]: bug: X icon button is also pushing up against the top and left edges without any padding
+* fixed [#45](https://github.com/csells/flutter_ai_toolkit/issues/45): bug: X icon button is also pushing up against the top and left edges without any padding
+
+* fixed [#59](https://github.com/csells/flutter_ai_toolkit/issues/59): bug: Android Studio LadyBug Upgrade Issues
 
 
 ## 0.1.6

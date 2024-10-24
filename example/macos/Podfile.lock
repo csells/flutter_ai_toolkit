@@ -13,7 +13,7 @@ PODS:
     - FirebaseAuth (~> 11.2.0)
   - Firebase/CoreOnly (11.2.0):
     - FirebaseCore (= 11.2.0)
-  - firebase_app_check (0.3.1-3):
+  - firebase_app_check (0.3.1-4):
     - Firebase/AppCheck (~> 11.2.0)
     - Firebase/CoreOnly (~> 11.2.0)
     - firebase_core
@@ -140,7 +140,7 @@ SPEC CHECKSUMS:
   AppCheckCore: e25aaaac234b333320b0bebb8fc21ed3576819ba
   file_selector_macos: cc3858c981fe6889f364731200d6232dac1d812d
   Firebase: 98e6bf5278170668a7983e12971a66b2cd57fc8c
-  firebase_app_check: 6a36131b68f873dd7e03b761606301b3acf185e1
+  firebase_app_check: 63d5807d5c8c091eaee743919ddf1f450a42b596
   firebase_auth: 877e19571bf76f0351087020b280e3cefc667b20
   firebase_core: e88f946a4601cb1854178cb07da241bba5a6508e
   FirebaseAppCheck: a6a1c1ca169d795212b9e70b5cfb880083a28e7c
