@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import '../llm_exception.dart';
 import 'llm_provider_interface.dart';
 
 /// A simple LLM provider that echoes the input prompt and attachment
@@ -39,6 +40,14 @@ class EchoProvider extends LlmProvider {
   }) async* {
     await Future.delayed(const Duration(milliseconds: 1000));
     yield 'echo: ';
+
+    switch (prompt) {
+      case 'CANCEL':
+        throw const LlmCancelException();
+      case 'FAIL':
+        throw const LlmFailureException('User requested failure');
+    }
+
     await Future.delayed(const Duration(milliseconds: 1000));
     yield prompt;
     final strings = attachments.map(_stringFrom);

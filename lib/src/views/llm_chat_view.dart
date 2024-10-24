@@ -8,6 +8,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
+import '../adaptive_snack_bar.dart';
+import '../llm_exception.dart';
 import '../models/chat_message.dart';
 import '../platform_helper/platform_helper.dart';
 import '../providers/forwarding_provider.dart';
@@ -81,7 +83,7 @@ class LlmChatView extends StatefulWidget {
 
 class _LlmResponse {
   final ChatMessage message;
-  final void Function()? onDone;
+  final void Function(LlmException? error)? onDone;
   StreamSubscription<String>? _subscription;
 
   _LlmResponse({
@@ -91,21 +93,26 @@ class _LlmResponse {
   }) {
     _subscription = stream.listen(
       (text) => message.append(text),
-      onDone: onDone,
+      onDone: () => onDone?.call(null),
       cancelOnError: true,
       onError: _error,
     );
   }
 
-  void cancel() => _close('CANCELED');
-  void _error(dynamic err) => _close('ERROR: $err');
+  void cancel() => _close(const LlmCancelException());
+  void _error(dynamic err) => _close(_exception(err));
 
-  void _close(String s) {
+  LlmException _exception(dynamic err) => switch (err) {
+        (LlmCancelException _) => const LlmCancelException(),
+        (LlmFailureException ex) => ex,
+        _ => LlmFailureException(err.toString()),
+      };
+
+  void _close(LlmException error) {
     assert(_subscription != null);
     _subscription!.cancel();
     _subscription = null;
-    message.append(s);
-    onDone?.call();
+    onDone?.call(error);
   }
 }
 
@@ -180,7 +187,11 @@ class _LlmChatViewState extends State<LlmChatView>
     setState(() {});
   }
 
-  void _onPromptDone() => setState(() => _pendingPromptResponse = null);
+  void _onPromptDone(LlmException? error) {
+    setState(() => _pendingPromptResponse = null);
+    _showLlmException(error);
+  }
+
   void _onCancelMessage() => _pendingPromptResponse?.cancel();
 
   void _onEditMessage(ChatMessage message) {
@@ -224,13 +235,28 @@ class _LlmChatViewState extends State<LlmChatView>
     setState(() {});
   }
 
-  void _onSttDone() {
+  void _onSttDone(LlmException? error) {
     assert(_pendingSttResponse != null);
     setState(() {
       _initialMessage = _pendingSttResponse!.message;
       _pendingSttResponse = null;
     });
+
+    _showLlmException(error);
   }
 
   void _onCancelStt() => _pendingSttResponse?.cancel();
+
+  void _showLlmException(LlmException? error) {
+    if (error == null) return;
+
+    final message = switch (error) {
+      LlmCancelException() => 'LLM operation canceled by user',
+      LlmFailureException() ||
+      LlmException() =>
+        'LLM operation failed: ${error.message}',
+    };
+
+    AdaptiveSnackBar.show(context, message);
+  }
 }

@@ -1,3 +1,9 @@
+## 0.2.1
+
+* fixing the user message edit menu
+
+* show errors and cancelations as separate from message output; this is necessary so that you can tell the difference between an LLM message response with a successful result that, for example, can be parsed as JSON, or an error
+
 ## 0.2.0
 
 * implemented [#33](https://github.com/csells/flutter_ai_toolkit/issues/33): feature: chat microphone only prompt input
@@ -16,6 +22,7 @@
 
 * fixed [#59](https://github.com/csells/flutter_ai_toolkit/issues/59): bug: Android Studio LadyBug Upgrade Issues
 
+* upgraded to the GA version of firebase_vertexai
 
 ## 0.1.6
 

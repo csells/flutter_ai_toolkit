@@ -84,14 +84,19 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                             CircleButton(
                               onPressed: _onEdit,
                               icon: FatIcons.edit,
+                              iconColor: FatColors.whiteIcon,
+                              backgroundColor: FatColors.darkButtonBackground,
                             ),
                           CircleButton(
                             onPressed: _onCopy,
                             icon: FatIcons.content_copy,
+                            iconColor: FatColors.whiteIcon,
+                            backgroundColor: FatColors.darkButtonBackground,
                           ),
                           CircleButton(
                             onPressed: _onSelect,
                             icon: FatIcons.close,
+                            iconColor: FatColors.whiteIcon,
                             backgroundColor: FatColors.greyBackground,
                           ),
                         ]

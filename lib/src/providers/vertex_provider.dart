@@ -48,7 +48,11 @@ class VertexProvider extends LlmProvider {
         embeddingTask == TaskType.retrievalQuery);
 
     // waiting for: https://github.com/firebase/flutterfire/issues/13269
-    throw UnimplementedError();
+    throw UnimplementedError('VertexProvider${switch (embeddingTask) {
+      TaskType.retrievalDocument => 'getDocumentEmbedding',
+      TaskType.retrievalQuery => 'getQueryEmbedding',
+      _ => 'getEmbedding',
+    }}');
   }
 
   @override
