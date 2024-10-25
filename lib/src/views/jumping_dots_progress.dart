@@ -6,7 +6,6 @@
 // lack of activity
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 class _JumpingDot extends AnimatedWidget {
   final Color color;
@@ -68,7 +67,7 @@ class JumpingDotsProgress extends StatefulWidget {
     super.key,
     this.numberOfDots = 3,
     this.fontSize = 10.0,
-    this.color = FatColors.black,
+    required this.color,
     this.dotSpacing = 0.0,
     this.milliseconds = 250,
   });

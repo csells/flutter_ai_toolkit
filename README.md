@@ -18,6 +18,10 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 - app-provided prompt suggestions
 - pre-processing prompts to add prompt engineering, etc.
 - pre-processing requests to enrich the output, e.g. host Flutter widgets
+- updated UX based on Google design guidelines
+- custom styling support
+- dev-configured chatbot label + icon
+- support for Cupertino as well as Material
 - swappable support for LLM providers; oob support for Gemini and Vertex
 - support for all Flutter platforms, focusing initially on mobile and web
 
@@ -120,13 +124,9 @@ Note: There's no API key; Firebase manages all of that for you in the Firebase p
 
 ## More Features Coming Soon!
 As I mentioned, the AI Toolkit is just in the alpha phase of it's lifetime and it's under active development. Coming soon, you should expect the following features:
-- updated UX based on Google design guidelines
-- custom styling support
 - stand-alone chatbot app sample with multi-session support
 - chat session serialization/deserialization
-- dev-configured chatbot label + icon
 - thoroughly tested multi-platform support, including Windows and Linux
-- support for Cupertino as well as Material
 
 ## Feedback!
 Along the way, as you use this package, please [log issues and feature requests](https://github.com/csells/flutter_ai_toolkit/issues) as well as any [code you'd like to contribute](https://github.com/csells/flutter_ai_toolkit/pulls). I want your feedback and your contributions to ensure that the AI Toolkit is just as robust and useful as it can be for your real apps.

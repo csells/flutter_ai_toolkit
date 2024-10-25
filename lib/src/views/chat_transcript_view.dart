@@ -4,7 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../models/chat_message.dart';
+import '../models/llm_chat_message.dart';
 import '../models/chat_view_model.dart';
 import 'chat_message_view.dart';
 
@@ -28,9 +28,9 @@ class ChatTranscriptView extends StatefulWidget {
   ///
   /// If provided, this function will be called when a user initiates an edit
   /// action on an editable message (typically the last user message in the
-  /// transcript). The function receives the [ChatMessage] to be edited as its
+  /// transcript). The function receives the [LlmChatMessage] to be edited as its
   /// parameter.
-  final void Function(ChatMessage message)? onEditMessage;
+  final void Function(LlmChatMessage message)? onEditMessage;
 
   @override
   State<ChatTranscriptView> createState() => _ChatTranscriptViewState();

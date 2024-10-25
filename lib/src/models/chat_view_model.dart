@@ -2,9 +2,8 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../providers/llm_provider_interface.dart';
+import '../../flutter_ai_toolkit.dart';
 import '../views/response_builder.dart';
-import 'chat_message.dart';
 
 class ChatViewModel {
   ChatViewModel({
@@ -12,14 +11,14 @@ class ChatViewModel {
     required this.transcript,
     required this.responseBuilder,
     required this.welcomeMessage,
-    required this.llmIcon,
+    required this.style,
   });
 
   /// The LLM provider used to generate responses in the chat.
   final LlmProvider provider;
 
   /// The list of chat messages to display.
-  final List<ChatMessage> transcript;
+  final List<LlmChatMessage> transcript;
 
   /// An optional builder function that allows replacing the widget that
   /// displays the response.
@@ -29,8 +28,8 @@ class ChatViewModel {
   /// If null, no welcome message is displayed.
   final String? welcomeMessage;
 
-  /// An optional icon to display for the LLM.
-  final IconData? llmIcon;
+  /// The style of the chat view.
+  final LlmChatViewStyle? style;
 
   @override
   bool operator ==(Object other) =>
@@ -39,14 +38,14 @@ class ChatViewModel {
           other.provider == provider &&
           other.responseBuilder == responseBuilder &&
           other.welcomeMessage == welcomeMessage &&
-          other.llmIcon == llmIcon);
+          other.style == style);
 
   @override
   int get hashCode => Object.hash(
         provider,
         responseBuilder,
         welcomeMessage,
-        llmIcon,
+        style,
       );
 }
 
@@ -70,8 +69,15 @@ class ChatViewModelProvider extends InheritedWidget {
       ?.viewModel;
 
   @override
-  bool updateShouldNotify(ChatViewModelProvider oldWidget) =>
-      viewModel != oldWidget.viewModel;
+  bool updateShouldNotify(ChatViewModelProvider oldWidget) {
+    final shouldNotify = viewModel != oldWidget.viewModel;
+    if (shouldNotify) {
+      debugPrint('ChatViewModelProvider: updateShouldNotify => true');
+    } else {
+      debugPrint('ChatViewModelProvider: updateShouldNotify => false');
+    }
+    return shouldNotify;
+  }
 }
 
 class ChatViewModelClient extends StatelessWidget {

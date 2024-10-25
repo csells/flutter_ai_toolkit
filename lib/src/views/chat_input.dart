@@ -6,7 +6,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/models/chat_message.dart';
+import 'package:flutter_ai_toolkit/src/models/llm_chat_message.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
@@ -14,6 +14,7 @@ import 'package:waveform_recorder/waveform_recorder.dart';
 import '../adaptive_progress_indicator.dart';
 import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
+import '../models/chat_view_model.dart';
 import '../providers/llm_provider_interface.dart';
 import '../utility.dart';
 import 'attachment_view.dart';
@@ -21,6 +22,7 @@ import 'chat_text_field.dart';
 import 'circle_button.dart';
 import 'fat_colors_styles.dart';
 import 'image_preview_dialog.dart';
+import 'llm_chat_view_style.dart';
 
 /// A widget that provides a chat input interface with support for text input,
 /// speech-to-text, and attachments.
@@ -62,7 +64,7 @@ class ChatInput extends StatefulWidget {
   final void Function()? onCancelStt;
 
   /// The initial message to populate the input field, if any.
-  final ChatMessage? initialMessage;
+  final LlmChatMessage? initialMessage;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
@@ -128,21 +130,9 @@ class _ChatInputState extends State<ChatInput> {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Container(
-            height: _attachments.isNotEmpty ? 104 : 0,
-            padding: const EdgeInsets.only(top: 12, bottom: 12, left: 12),
-            child: _attachments.isNotEmpty
-                ? ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (final a in _attachments)
-                        _RemovableAttachment(
-                          attachment: a,
-                          onRemove: _onRemoveAttachment,
-                        ),
-                    ],
-                  )
-                : const SizedBox(),
+          _AttachmentsView(
+            attachments: _attachments,
+            onRemove: _onRemoveAttachment,
           ),
           const Gap(6),
           ValueListenableBuilder(
@@ -158,52 +148,46 @@ class _ChatInputState extends State<ChatInput> {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: FatColors.outline,
-                          ),
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: SizedBox(
-                          height: _minInputHeight,
-                          child: _waveController.isRecording
-                              ? WaveformRecorder(
-                                  controller: _waveController,
-                                  height: _minInputHeight,
-                                  onRecordingStopped: _onRecordingStopped,
-                                )
-                              : ChatTextField(
-                                  minLines: 1,
-                                  maxLines: 1024,
-                                  controller: _textController,
-                                  autofocus: true,
-                                  focusNode: _focusNode,
-                                  // on mobile, pressing enter should add a new
-                                  // line. on web+desktop, pressing enter should
-                                  // submit the prompt.
-                                  textInputAction: isMobile
-                                      ? TextInputAction.newline
-                                      : TextInputAction.done,
-                                  // ignore the user submitting if they can't
-                                  // right now; leave the text as is and the field
-                                  // focused
-                                  onSubmitted:
-                                      _inputState == _InputState.canSubmitPrompt
+                      child: ChatViewModelClient(
+                        builder: (context, viewModel, child) {
+                          final style = InputBoxStyle.resolve(
+                            viewModel.style?.inputBoxStyle,
+                          );
+
+                          return DecoratedBox(
+                            decoration: style.decoration!,
+                            child: SizedBox(
+                              height: _minInputHeight,
+                              child: _waveController.isRecording
+                                  ? WaveformRecorder(
+                                      controller: _waveController,
+                                      height: _minInputHeight,
+                                      onRecordingStopped: _onRecordingStopped,
+                                    )
+                                  : ChatTextField(
+                                      minLines: 1,
+                                      maxLines: 1024,
+                                      controller: _textController,
+                                      autofocus: true,
+                                      focusNode: _focusNode,
+                                      textInputAction: isMobile
+                                          ? TextInputAction.newline
+                                          : TextInputAction.done,
+                                      onSubmitted: _inputState ==
+                                              _InputState.canSubmitPrompt
                                           ? (_) => _onSubmitPrompt()
                                           : (_) => _focusNode.requestFocus(),
-                                  style: FatStyles.body2,
-                                  hintText: "Ask me anything...",
-                                  hintStyle: FatStyles.body2.copyWith(
-                                    color: FatColors.hintText,
-                                  ),
-                                  hintPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
-                                  ),
-                                ),
-                        ),
+                                      style: style.textStyle!,
+                                      hintText: style.hintText!,
+                                      hintStyle: style.hintStyle!,
+                                      hintPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 8,
+                                      ),
+                                    ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -312,6 +296,30 @@ class _InputButton extends StatelessWidget {
           ),
         _InputState.canCancelStt => const AdaptiveCircularProgressIndicator(),
       };
+}
+
+class _AttachmentsView extends StatelessWidget {
+  const _AttachmentsView({required this.attachments, required this.onRemove});
+  final Iterable<Attachment> attachments;
+  final Function(Attachment) onRemove;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        height: attachments.isNotEmpty ? 104 : 0,
+        padding: const EdgeInsets.only(top: 12, bottom: 12, left: 12),
+        child: attachments.isNotEmpty
+            ? ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (final a in attachments)
+                    _RemovableAttachment(
+                      attachment: a,
+                      onRemove: onRemove,
+                    ),
+                ],
+              )
+            : const SizedBox(),
+      );
 }
 
 class _AttachmentActionBar extends StatefulWidget {

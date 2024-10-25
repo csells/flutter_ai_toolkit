@@ -85,12 +85,12 @@ class _FileAttachmentView extends StatelessWidget {
                 children: [
                   Text(
                     attachment.name,
-                    style: FatStyles.body2,
+                    style: FatTextStyles.body2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     attachment.mimeType,
-                    style: FatStyles.body2.copyWith(
+                    style: FatTextStyles.body2.copyWith(
                       color: FatColors.hintText,
                     ),
                     overflow: TextOverflow.ellipsis,

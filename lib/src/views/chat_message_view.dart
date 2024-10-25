@@ -11,11 +11,12 @@ import 'package:gap/gap.dart';
 
 import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
-import '../models/chat_message.dart';
 import '../models/chat_view_model.dart';
+import '../models/llm_chat_message.dart';
 import '../utility.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
+import 'llm_chat_view_style.dart';
 
 /// A widget that displays a single chat message with optional selection and
 /// editing functionality.
@@ -39,7 +40,7 @@ class ChatMessageView extends StatefulWidget {
   });
 
   /// The chat message to be displayed.
-  final ChatMessage message;
+  final LlmChatMessage message;
 
   /// Callback function triggered when the edit action is selected.
   final void Function()? onEdit;
@@ -130,7 +131,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
 
 class _UserMessageView extends StatelessWidget {
   const _UserMessageView(this.message);
-  final ChatMessage message;
+  final LlmChatMessage message;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -176,7 +177,7 @@ class _UserMessageView extends StatelessWidget {
                       ),
                       child: Text(
                         message.text,
-                        style: FatStyles.body1,
+                        style: FatTextStyles.body1,
                       ),
                     ),
                   ),
@@ -190,7 +191,7 @@ class _UserMessageView extends StatelessWidget {
 
 class _LlmMessageView extends StatelessWidget {
   const _LlmMessageView(this.message);
-  final ChatMessage message;
+  final LlmChatMessage message;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -200,35 +201,47 @@ class _LlmMessageView extends StatelessWidget {
             child: Column(
               children: [
                 ChatViewModelClient(
-                  builder: (context, viewModel, child) => Stack(
-                    children: [
-                      Container(
-                        height: 20,
-                        width: 20,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFE5E5E5),
-                          shape: BoxShape.circle,
+                  builder: (context, viewModel, child) {
+                    final style = LlmMessageStyle.resolve(
+                      viewModel.style?.llmMessageStyle,
+                    );
+
+                    final responseBuilder = viewModel.responseBuilder ??
+                        (c, r) => _responseBuilder(
+                              context: c,
+                              response: r,
+                              styleSheet: style.markdownStyle!,
+                            );
+
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 20,
+                          width: 20,
+                          decoration: style.iconDecoration,
+                          child: Icon(
+                            style.icon,
+                            color: style.iconColor,
+                            size: 12,
+                          ),
                         ),
-                        child: Icon(
-                          viewModel.llmIcon,
-                          color: FatColors.darkIcon,
-                          size: 12,
+                        Container(
+                          decoration: style.decoration,
+                          margin: const EdgeInsets.only(left: 28),
+                          padding: const EdgeInsets.all(8),
+                          child: message.text.isEmpty
+                              ? SizedBox(
+                                  width: 24,
+                                  child: JumpingDotsProgress(
+                                    fontSize: 24,
+                                    color: style.progressIndicatorColor!,
+                                  ),
+                                )
+                              : responseBuilder(context, message.text),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 28),
-                        child: message.text.isEmpty
-                            ? const SizedBox(
-                                width: 24,
-                                child: JumpingDotsProgress(fontSize: 24),
-                              )
-                            : (viewModel.responseBuilder ?? _responseBuilder)(
-                                context,
-                                message.text,
-                              ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
@@ -241,47 +254,34 @@ class _LlmMessageView extends StatelessWidget {
   // even though SelectionArea is defined as a Material widget. since it doesn't
   // require running inside a MaterialApp, we're good. But only when not on
   // mobile; the click-and-drag selection model doesn't work on mobile.
-  Widget _responseBuilder(BuildContext context, String response) => isMobile
-      ? _Markdown(response)
-      : Localizations(
-          locale: Localizations.localeOf(context),
-          delegates: const [
-            DefaultWidgetsLocalizations.delegate,
-            DefaultMaterialLocalizations.delegate,
-          ],
-          child: SelectionArea(
-            child: _Markdown(response),
-          ),
-        );
+  Widget _responseBuilder({
+    required BuildContext context,
+    required String response,
+    required MarkdownStyleSheet styleSheet,
+  }) =>
+      isMobile
+          ? _Markdown(response: response, styleSheet: styleSheet)
+          : Localizations(
+              locale: Localizations.localeOf(context),
+              delegates: const [
+                DefaultWidgetsLocalizations.delegate,
+                DefaultMaterialLocalizations.delegate,
+              ],
+              child: SelectionArea(
+                child: _Markdown(response: response, styleSheet: styleSheet),
+              ),
+            );
 }
 
 class _Markdown extends StatelessWidget {
-  const _Markdown(this.response);
+  const _Markdown({required this.response, required this.styleSheet});
   final String response;
+  final MarkdownStyleSheet styleSheet;
 
   @override
   Widget build(BuildContext context) => MarkdownBody(
         data: response,
         selectable: false,
-        styleSheet: MarkdownStyleSheet(
-          a: FatStyles.body1,
-          blockquote: FatStyles.body1,
-          checkbox: FatStyles.body1,
-          code: FatStyles.code,
-          del: FatStyles.body1,
-          em: FatStyles.body1,
-          h1: FatStyles.heading1,
-          h2: FatStyles.heading2,
-          h3: FatStyles.body1,
-          h4: FatStyles.body1,
-          h5: FatStyles.body1,
-          h6: FatStyles.body1,
-          listBullet: FatStyles.body1,
-          img: FatStyles.body1,
-          strong: FatStyles.body1,
-          p: FatStyles.body1,
-          tableBody: FatStyles.body1,
-          tableHead: FatStyles.body1,
-        ),
+        styleSheet: styleSheet,
       );
 }

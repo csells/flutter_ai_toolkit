@@ -35,7 +35,9 @@ class ChatPage extends StatelessWidget {
               apiKey: geminiApiKey,
             ),
           ),
-          llmIcon: Icons.face,
+          style: LlmChatViewStyle(
+            llmMessageStyle: LlmMessageStyle(icon: Icons.face),
+          ),
         ),
       );
 }

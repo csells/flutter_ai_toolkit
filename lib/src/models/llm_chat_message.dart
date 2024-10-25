@@ -11,14 +11,14 @@ import '../providers/llm_provider_interface.dart';
 /// This class encapsulates the properties and behavior of a chat message,
 /// including its unique identifier, origin (user or LLM), text content,
 /// and any attachments.
-class ChatMessage {
+class LlmChatMessage {
   /// Private constructor for creating a ChatMessage instance.
   ///
   /// [id] is a unique identifier for the message.
   /// [origin] specifies whether the message is from a user or an LLM.
   /// [text] is the content of the message.
   /// [attachments] are any files or media associated with the message.
-  ChatMessage._({
+  LlmChatMessage._({
     required this.id,
     required this.origin,
     required String text,
@@ -29,7 +29,7 @@ class ChatMessage {
   /// Factory constructor for creating an LLM-originated message.
   ///
   /// Creates a message with an empty text content and no attachments.
-  factory ChatMessage.llm() => ChatMessage._(
+  factory LlmChatMessage.llm() => LlmChatMessage._(
         id: const Uuid().v4(),
         origin: MessageOrigin.llm,
         text: '',
@@ -39,7 +39,7 @@ class ChatMessage {
   /// Factory constructor for creating an LLM-originated greeting message.
   ///
   /// [welcomeMessage] is the content of the greeting message.
-  factory ChatMessage.llmWelcome(String welcomeMessage) => ChatMessage._(
+  factory LlmChatMessage.llmWelcome(String welcomeMessage) => LlmChatMessage._(
         id: const Uuid().v4(),
         origin: MessageOrigin.llm,
         text: welcomeMessage,
@@ -50,8 +50,8 @@ class ChatMessage {
   ///
   /// [text] is the content of the user's message.
   /// [attachments] are any files or media the user has attached to the message.
-  factory ChatMessage.user(String text, Iterable<Attachment> attachments) =>
-      ChatMessage._(
+  factory LlmChatMessage.user(String text, Iterable<Attachment> attachments) =>
+      LlmChatMessage._(
         id: const Uuid().v4(),
         origin: MessageOrigin.user,
         text: text,

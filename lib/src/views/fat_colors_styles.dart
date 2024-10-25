@@ -16,6 +16,7 @@ abstract final class FatColors {
   static const Color whiteButtonBackground = Color(0xFFFFFFFF);
   static const Color containerBackground = Color(0xFFFFFFFF);
   static const Color llmMessageBackground = Color(0xFFFFFFFF);
+  static const Color llmMessageOutline = Color(0xFFFFFFFF);
   static const Color whiteIcon = Color(0xFFFFFFFF);
 
   // Color 100 (#F5F5F5)
@@ -26,7 +27,7 @@ abstract final class FatColors {
 
   // Color 200 (#E5E5E5)
   static const Color outline = Color(0xFFE5E5E5);
-  static const Color llmIcon = Color(0xFFE5E5E5);
+  static const Color llmIconBackground = Color(0xFFE5E5E5);
   static const Color disabledButton = Color(0xFFE5E5E5);
 
   // Color 300 (#CACACA)
@@ -47,7 +48,7 @@ abstract final class FatColors {
   static const Color enabledText = Color(0xFF2F2F2F);
 }
 
-abstract final class FatStyles {
+abstract final class FatTextStyles {
   static final TextStyle display = GoogleFonts.roboto(
     color: FatColors.enabledText,
     fontSize: 32,

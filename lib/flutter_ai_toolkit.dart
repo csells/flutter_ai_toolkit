@@ -14,9 +14,10 @@
 /// - Chat UI: Ready-to-use widgets for displaying chat interfaces.
 library;
 
-export 'src/views/llm_chat_view_style.dart';
+export 'src/models/llm_chat_message.dart';
 export 'src/providers/providers.dart';
 export 'src/views/llm_chat_view.dart';
+export 'src/views/llm_chat_view_style.dart';
 
 /// Computes the dot product of two embedding vectors represented as lists of
 /// doubles.

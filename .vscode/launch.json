@@ -44,6 +44,13 @@
       "program": "lib/llm_icon/llm_icon.dart",
     },
     {
+      "name": "custom styles",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/styles/styles.dart",
+    },
+    {
       "name": "recipes",
       "cwd": "example",
       "request": "launch",

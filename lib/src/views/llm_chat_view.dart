@@ -8,13 +8,12 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
+import '../../flutter_ai_toolkit.dart';
 import '../adaptive_snack_bar.dart';
 import '../llm_exception.dart';
-import '../models/chat_message.dart';
 import '../models/chat_view_model.dart';
 import '../platform_helper/platform_helper.dart';
 import '../providers/forwarding_provider.dart';
-import '../providers/llm_provider_interface.dart';
 import 'chat_input.dart';
 import 'chat_transcript_view.dart';
 import 'response_builder.dart';
@@ -50,8 +49,6 @@ import 'response_builder.dart';
 ///
 /// The [welcomeMessage] parameter is an optional welcome message to display
 /// when the chat view is first shown. If null, no welcome message is displayed.
-/// The [llmIcon] parameter is an optional icon to display for the LLM messages.
-/// If null, the default icon will be used.
 class LlmChatView extends StatefulWidget {
   /// Creates an LlmChatView.
   ///
@@ -61,7 +58,8 @@ class LlmChatView extends StatefulWidget {
     ResponseBuilder? responseBuilder,
     LlmStreamGenerator? messageSender,
     String? welcomeMessage,
-    IconData? llmIcon,
+    LlmChatViewStyle? style,
+    List<LlmChatMessage>? transcript,
     super.key,
   }) : viewModel = ChatViewModel(
           provider: messageSender == null
@@ -70,10 +68,10 @@ class LlmChatView extends StatefulWidget {
                   provider: provider,
                   messageSender: messageSender,
                 ),
-          transcript: List<ChatMessage>.empty(growable: true),
+          transcript: transcript ?? List<LlmChatMessage>.empty(growable: true),
           responseBuilder: responseBuilder,
           welcomeMessage: welcomeMessage,
-          llmIcon: llmIcon,
+          style: style,
         );
 
   /// The view model containing the chat state and configuration.
@@ -88,7 +86,7 @@ class LlmChatView extends StatefulWidget {
 }
 
 class _LlmResponse {
-  final ChatMessage message;
+  final LlmChatMessage message;
   final void Function(LlmException? error)? onDone;
   StreamSubscription<String>? _subscription;
 
@@ -128,7 +126,7 @@ class _LlmChatViewState extends State<LlmChatView>
   bool get wantKeepAlive => true;
 
   _LlmResponse? _pendingPromptResponse;
-  ChatMessage? _initialMessage;
+  LlmChatMessage? _initialMessage;
   _LlmResponse? _pendingSttResponse;
 
   @override
@@ -136,7 +134,7 @@ class _LlmChatViewState extends State<LlmChatView>
     super.initState();
     if (widget.viewModel.welcomeMessage != null) {
       widget.viewModel.transcript.add(
-        ChatMessage.llmWelcome(widget.viewModel.welcomeMessage!),
+        LlmChatMessage.llmWelcome(widget.viewModel.welcomeMessage!),
       );
     }
   }
@@ -147,7 +145,8 @@ class _LlmChatViewState extends State<LlmChatView>
     return ChatViewModelProvider(
       viewModel: widget.viewModel,
       child: Container(
-        color: FatColors.containerBackground,
+        color: widget.viewModel.style?.backgroundColor ??
+            FatColors.containerBackground,
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -177,8 +176,8 @@ class _LlmChatViewState extends State<LlmChatView>
   ) async {
     _initialMessage = null;
 
-    final userMessage = ChatMessage.user(prompt, attachments);
-    final llmMessage = ChatMessage.llm();
+    final userMessage = LlmChatMessage.user(prompt, attachments);
+    final llmMessage = LlmChatMessage.llm();
 
     widget.viewModel.transcript.addAll([userMessage, llmMessage]);
 
@@ -201,7 +200,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
   void _onCancelMessage() => _pendingPromptResponse?.cancel();
 
-  void _onEditMessage(ChatMessage message) {
+  void _onEditMessage(LlmChatMessage message) {
     assert(_pendingPromptResponse == null);
 
     // remove the last llm message
@@ -232,7 +231,7 @@ class _LlmChatViewState extends State<LlmChatView>
         prompt,
         attachments: attachments,
       ),
-      message: ChatMessage.llm(),
+      message: LlmChatMessage.llm(),
       onDone: _onSttDone,
     );
 
