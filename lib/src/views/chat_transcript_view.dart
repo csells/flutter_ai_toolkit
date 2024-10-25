@@ -27,6 +27,7 @@ class ChatTranscriptView extends StatefulWidget {
   /// on an editable message (typically the last user message in the transcript).
   const ChatTranscriptView({
     required this.transcript,
+    required this.llmIcon,
     this.onEditMessage,
     this.responseBuilder,
     super.key,
@@ -52,6 +53,9 @@ class ChatTranscriptView extends StatefulWidget {
   ///
   /// If not provided, a default representation will be used.
   final ResponseBuilder? responseBuilder;
+
+  /// An optional icon to display for the LLM.
+  final IconData llmIcon;
 
   @override
   State<ChatTranscriptView> createState() => _ChatTranscriptViewState();
@@ -85,6 +89,7 @@ class _ChatTranscriptViewState extends State<ChatTranscriptView> {
                 ),
                 selected: _selectedMessageIndex == messageIndex,
                 responseBuilder: widget.responseBuilder,
+                llmIcon: widget.llmIcon,
               ),
             );
           },

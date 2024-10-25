@@ -32,6 +32,7 @@ class ChatMessageView extends StatefulWidget {
   /// indicates whether the message is currently selected.
   const ChatMessageView({
     required this.message,
+    required this.llmIcon,
     this.onEdit,
     this.onSelected,
     this.selected = false,
@@ -54,6 +55,9 @@ class ChatMessageView extends StatefulWidget {
   /// A builder function that returns a widget for displaying the message.
   final ResponseBuilder? responseBuilder;
 
+  /// An icon to display for the LLM.
+  final IconData llmIcon;
+
   @override
   State<ChatMessageView> createState() => _ChatMessageViewState();
 }
@@ -71,6 +75,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 : _LlmMessageView(
                     widget.message,
                     responseBuilder: widget.responseBuilder,
+                    llmIcon: widget.llmIcon,
                   ),
             const Gap(6),
             if (widget.selected)
@@ -196,11 +201,16 @@ class _UserMessageView extends StatelessWidget {
 }
 
 class _LlmMessageView extends StatelessWidget {
-  _LlmMessageView(this.message, {ResponseBuilder? responseBuilder}) {
+  _LlmMessageView(
+    this.message, {
+    required this.llmIcon,
+    ResponseBuilder? responseBuilder,
+  }) {
     this.responseBuilder = responseBuilder ?? _responseBuilder;
   }
 
   final ChatMessage message;
+  final IconData llmIcon;
   late final ResponseBuilder responseBuilder;
 
   @override
@@ -219,8 +229,8 @@ class _LlmMessageView extends StatelessWidget {
                         color: Color(0xFFE5E5E5),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        FatIcons.spark_icon,
+                      child: Icon(
+                        llmIcon,
                         color: FatColors.darkIcon,
                         size: 12,
                       ),

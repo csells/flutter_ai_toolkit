@@ -1,3 +1,7 @@
+## 0.2.2
+
+* implemented [#32](https://github.com/csells/flutter_ai_toolkit/issues/32): feature: dev-configured LLM message icon
+
 ## 0.2.1
 
 * fixing the user message edit menu

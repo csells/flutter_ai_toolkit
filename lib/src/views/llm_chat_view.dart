@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 import '../adaptive_snack_bar.dart';
+import '../fat_icons.dart';
 import '../llm_exception.dart';
 import '../models/chat_message.dart';
 import '../platform_helper/platform_helper.dart';
@@ -58,6 +59,7 @@ class LlmChatView extends StatefulWidget {
     this.responseBuilder,
     LlmStreamGenerator? messageSender,
     this.welcomeMessage,
+    this.llmIcon,
     super.key,
   }) : provider = messageSender == null
             ? provider
@@ -76,6 +78,9 @@ class LlmChatView extends StatefulWidget {
   /// An optional welcome message to display when the chat view is first shown.
   /// If null, no welcome message is displayed.
   final String? welcomeMessage;
+
+  /// An optional icon to display for the LLM.
+  final IconData? llmIcon;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
@@ -149,6 +154,7 @@ class _LlmChatViewState extends State<LlmChatView>
               onEditMessage:
                   _pendingPromptResponse == null ? _onEditMessage : null,
               responseBuilder: widget.responseBuilder,
+              llmIcon: widget.llmIcon ?? FatIcons.spark_icon,
             ),
           ),
           ChatInput(
