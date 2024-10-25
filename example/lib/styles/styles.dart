@@ -31,20 +31,13 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
+class _ChatPageState extends State<ChatPage>
+    with SingleTickerProviderStateMixin {
   LlmProvider? _provider;
   List<LlmChatMessage>? _transcript;
-
   late final _controller = AnimationController(
     duration: const Duration(seconds: 1),
     vsync: this,
-    lowerBound: 0.25,
-    upperBound: 1,
-  );
-
-  late final _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.linear,
   );
 
   TextStyle get _creepsterStyle => GoogleFonts.creepster(
@@ -69,9 +62,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     // );
     _provider = EchoProvider();
     _transcript = List<LlmChatMessage>.empty(growable: true);
-    _controller
-      ..value = 1.0
-      ..reverse();
+    _controller.value = 1.0;
+    _controller.reverse();
   }
 
   @override
@@ -92,14 +84,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           ],
         ),
         body: AnimatedBuilder(
-          animation: _animation,
+          animation: _controller,
           builder: (context, child) => Stack(
             children: [
               SizedBox(
                 height: double.infinity,
                 width: double.infinity,
                 child: FadeTransition(
-                  opacity: _animation,
+                  opacity: _controller.drive(
+                    Tween<double>(begin: 0.25, end: 1.0),
+                  ),
                   child: Image.asset(
                     'assets/halloween-bg.png',
                     fit: BoxFit.cover,
@@ -112,7 +106,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 style: LlmChatViewStyle(
                   backgroundColor: Colors.transparent,
                   inputBoxStyle: InputBoxStyle(
-                    backgroundColor: _animation.isAnimating
+                    backgroundColor: _controller.isAnimating
                         ? Colors.transparent
                         : Colors.black,
                   ),
