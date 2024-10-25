@@ -112,6 +112,7 @@ class _ChatInputState extends State<ChatInput> {
     super.didUpdateWidget(oldWidget);
     if (widget.initialMessage != null) {
       _textController.text = widget.initialMessage!.text;
+      _attachments.clear();
       _attachments.addAll(widget.initialMessage!.attachments);
     }
   }

@@ -2,6 +2,8 @@
 
 * implemented [#32](https://github.com/csells/flutter_ai_toolkit/issues/32): feature: dev-configured LLM message icon
 
+* fixed [#19](https://github.com/csells/flutter_ai_toolkit/issues/19): prompt attachments are incorrectly merging when editing after adding attachments to a new prompt
+
 ## 0.2.1
 
 * fixing the user message edit menu
