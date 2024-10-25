@@ -21,6 +21,7 @@ class App extends StatelessWidget {
         theme: ThemeData.from(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         ),
+        debugShowCheckedModeBanner: false,
         home: ChatPage(),
       );
 }
@@ -33,20 +34,29 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // TODO: uncomment this to use Gemini
-  // final provider = GeminiProvider(
-  //   generativeModel: GenerativeModel(
-  //     model: 'gemini-1.5-flash',
-  //     apiKey: geminiApiKey,
-  //   ),
-  // );
-  final provider = EchoProvider();
-  final transcript = List<LlmChatMessage>.empty(growable: true);
-  late Timer _timer;
+  LlmProvider? _provider;
+  List<LlmChatMessage>? _transcript;
+  Timer? _timer;
+  Key? _key;
 
   @override
   void initState() {
     super.initState();
+    reset();
+  }
+
+  void reset() {
+    // TODO: uncomment this to use Gemini
+    // _provider = GeminiProvider(
+    //   generativeModel: GenerativeModel(
+    //     model: 'gemini-1.5-flash',
+    //     apiKey: geminiApiKey,
+    //   ),
+    // );
+    _provider = EchoProvider();
+    _transcript = List<LlmChatMessage>.empty(growable: true);
+    _timer?.cancel();
+    _key = UniqueKey();
 
     // let the background image fade in
     final now = DateTime.now();
@@ -54,8 +64,9 @@ class _ChatPageState extends State<ChatPage> {
       const Duration(milliseconds: 10),
       (_) => setState(
         () {
-          if (DateTime.now().difference(now).inSeconds > 1) {
-            _timer.cancel();
+          if (DateTime.now().difference(now).inSeconds >= 1) {
+            _timer?.cancel();
+            _timer = null;
           }
         },
       ),
@@ -64,19 +75,28 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(App.title)),
+        appBar: AppBar(
+          title: const Text(App.title),
+          actions: [
+            IconButton(
+              onPressed: reset,
+              icon: const Icon(Icons.edit_note),
+            ),
+          ],
+        ),
         body: Stack(
           children: [
             SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: TweenAnimationBuilder<double>(
+                key: _key,
                 tween: Tween<double>(begin: 1, end: 0.25),
                 duration: const Duration(seconds: 1),
                 builder: (context, value, child) => Image.asset(
@@ -87,13 +107,14 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             LlmChatView(
-              provider: provider,
-              transcript: transcript,
+              provider: _provider!,
+              transcript: _transcript,
               style: LlmChatViewStyle(
                 backgroundColor: Colors.transparent,
                 inputBoxStyle: InputBoxStyle(
-                  backgroundColor:
-                      _timer.isActive ? Colors.transparent : Colors.black,
+                  backgroundColor: _timer?.isActive == true
+                      ? Colors.transparent
+                      : Colors.black,
                 ),
                 llmMessageStyle: LlmMessageStyle(
                   icon: Icons.sentiment_very_satisfied,
