@@ -4,6 +4,8 @@
 
 * fixed [#19](https://github.com/csells/flutter_ai_toolkit/issues/19): prompt attachments are incorrectly merging when editing after adding attachments to a new prompt
 
+* implemented [#27](https://github.com/csells/flutter_ai_toolkit/issues/27): feature: styling of colors and fonts #27
+
 ## 0.2.1
 
 * fixing the user message edit menu

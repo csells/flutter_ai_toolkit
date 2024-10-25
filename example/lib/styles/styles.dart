@@ -2,9 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main(List<String> args) async => runApp(const App());
 
@@ -39,6 +42,31 @@ class _ChatPageState extends State<ChatPage> {
   // );
   final provider = EchoProvider();
   final transcript = List<LlmChatMessage>.empty(growable: true);
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // let the background image fade in
+    final now = DateTime.now();
+    _timer = Timer.periodic(
+      const Duration(milliseconds: 10),
+      (_) => setState(
+        () {
+          if (DateTime.now().difference(now).inSeconds > 1) {
+            _timer.cancel();
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -48,10 +76,14 @@ class _ChatPageState extends State<ChatPage> {
             SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: Image.asset(
-                'assets/halloween-bg.png',
-                fit: BoxFit.cover,
-                opacity: const AlwaysStoppedAnimation(0.25),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 1, end: 0.25),
+                duration: const Duration(seconds: 1),
+                builder: (context, value, child) => Image.asset(
+                  'assets/halloween-bg.png',
+                  fit: BoxFit.cover,
+                  opacity: AlwaysStoppedAnimation(value),
+                ),
               ),
             ),
             LlmChatView(
@@ -59,6 +91,10 @@ class _ChatPageState extends State<ChatPage> {
               transcript: transcript,
               style: LlmChatViewStyle(
                 backgroundColor: Colors.transparent,
+                inputBoxStyle: InputBoxStyle(
+                  backgroundColor:
+                      _timer.isActive ? Colors.transparent : Colors.black,
+                ),
                 llmMessageStyle: LlmMessageStyle(
                   icon: Icons.sentiment_very_satisfied,
                   iconColor: Colors.black,
@@ -97,7 +133,7 @@ class _ChatPageState extends State<ChatPage> {
                     ],
                   ),
                   markdownStyle: MarkdownStyleSheet(
-                    p: TextStyle(
+                    p: GoogleFonts.creepster(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,

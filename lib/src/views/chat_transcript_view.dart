@@ -4,8 +4,8 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../models/llm_chat_message.dart';
 import '../models/chat_view_model.dart';
+import '../models/llm_chat_message.dart';
 import 'chat_message_view.dart';
 
 /// A widget that displays a transcript of chat messages.
@@ -40,32 +40,35 @@ class _ChatTranscriptViewState extends State<ChatTranscriptView> {
   int _selectedMessageIndex = -1;
 
   @override
-  Widget build(BuildContext context) => ChatViewModelClient(
-        builder: (context, viewModel, child) => ListView.builder(
-          reverse: true,
-          itemCount: viewModel.transcript.length,
-          itemBuilder: (context, index) {
-            final messageIndex = viewModel.transcript.length - index - 1;
-            final message = viewModel.transcript[messageIndex];
-            final isLastUserMessage = message.origin.isUser &&
-                messageIndex >= viewModel.transcript.length - 2;
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: ChatViewModelClient(
+          builder: (context, viewModel, child) => ListView.builder(
+            reverse: true,
+            itemCount: viewModel.transcript.length,
+            itemBuilder: (context, index) {
+              final messageIndex = viewModel.transcript.length - index - 1;
+              final message = viewModel.transcript[messageIndex];
+              final isLastUserMessage = message.origin.isUser &&
+                  messageIndex >= viewModel.transcript.length - 2;
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: ChatMessageView(
-                message: message,
-                key: ValueKey('message-${message.id}'),
-                onEdit: isLastUserMessage && widget.onEditMessage != null
-                    ? () => widget.onEditMessage?.call(message)
-                    : null,
-                onSelected: (selected) => _onSelectMessage(
-                  messageIndex,
-                  selected,
+              return Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: ChatMessageView(
+                  message: message,
+                  key: ValueKey('message-${message.id}'),
+                  onEdit: isLastUserMessage && widget.onEditMessage != null
+                      ? () => widget.onEditMessage?.call(message)
+                      : null,
+                  onSelected: (selected) => _onSelectMessage(
+                    messageIndex,
+                    selected,
+                  ),
+                  selected: _selectedMessageIndex == messageIndex,
                 ),
-                selected: _selectedMessageIndex == messageIndex,
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       );
 

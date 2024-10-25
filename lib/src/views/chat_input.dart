@@ -128,81 +128,84 @@ class _ChatInputState extends State<ChatInput> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          _AttachmentsView(
-            attachments: _attachments,
-            onRemove: _onRemoveAttachment,
-          ),
-          const Gap(6),
-          ValueListenableBuilder(
-            valueListenable: _textController,
-            builder: (context, value, child) => ListenableBuilder(
-              listenable: _waveController,
-              builder: (context, child) => Row(
-                children: [
-                  _AttachmentActionBar(onAttachments: _onAttachments),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: ChatViewModelClient(
-                        builder: (context, viewModel, child) {
-                          final style = InputBoxStyle.resolve(
-                            viewModel.style?.inputBoxStyle,
-                          );
-
-                          return DecoratedBox(
-                            decoration: style.decoration!,
-                            child: SizedBox(
-                              height: _minInputHeight,
-                              child: _waveController.isRecording
-                                  ? WaveformRecorder(
-                                      controller: _waveController,
-                                      height: _minInputHeight,
-                                      onRecordingStopped: _onRecordingStopped,
-                                    )
-                                  : ChatTextField(
-                                      minLines: 1,
-                                      maxLines: 1024,
-                                      controller: _textController,
-                                      autofocus: true,
-                                      focusNode: _focusNode,
-                                      textInputAction: isMobile
-                                          ? TextInputAction.newline
-                                          : TextInputAction.done,
-                                      onSubmitted: _inputState ==
-                                              _InputState.canSubmitPrompt
-                                          ? (_) => _onSubmitPrompt()
-                                          : (_) => _focusNode.requestFocus(),
-                                      style: style.textStyle!,
-                                      hintText: style.hintText!,
-                                      hintStyle: style.hintStyle!,
-                                      hintPadding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 8,
-                                      ),
-                                    ),
+  Widget build(BuildContext context) => ChatViewModelClient(
+        builder: (context, viewModel, child) {
+          final style = InputBoxStyle.resolve(
+            viewModel.style?.inputBoxStyle,
+          );
+          return Container(
+            color: style.backgroundColor,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _AttachmentsView(
+                  attachments: _attachments,
+                  onRemove: onRemoveAttachment,
+                ),
+                const Gap(6),
+                ValueListenableBuilder(
+                  valueListenable: _textController,
+                  builder: (context, value, child) => ListenableBuilder(
+                    listenable: _waveController,
+                    builder: (context, child) => Row(
+                      children: [
+                        _AttachmentActionBar(onAttachments: onAttachments),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
                             ),
-                          );
-                        },
-                      ),
+                            child: DecoratedBox(
+                              decoration: style.decoration!,
+                              child: SizedBox(
+                                height: _minInputHeight,
+                                child: _waveController.isRecording
+                                    ? WaveformRecorder(
+                                        controller: _waveController,
+                                        height: _minInputHeight,
+                                        onRecordingStopped: onRecordingStopped,
+                                      )
+                                    : ChatTextField(
+                                        minLines: 1,
+                                        maxLines: 1024,
+                                        controller: _textController,
+                                        autofocus: true,
+                                        focusNode: _focusNode,
+                                        textInputAction: isMobile
+                                            ? TextInputAction.newline
+                                            : TextInputAction.done,
+                                        onSubmitted: _inputState ==
+                                                _InputState.canSubmitPrompt
+                                            ? (_) => onSubmitPrompt()
+                                            : (_) => _focusNode.requestFocus(),
+                                        style: style.textStyle!,
+                                        hintText: style.hintText!,
+                                        hintStyle: style.hintStyle!,
+                                        hintPadding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 8,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        _InputButton(
+                          inputState: _inputState,
+                          onSubmitPrompt: onSubmitPrompt,
+                          onCancelPrompt: onCancelPrompt,
+                          onStartRecording: onStartRecording,
+                          onStopRecording: onStopRecording,
+                        ),
+                      ],
                     ),
                   ),
-                  _InputButton(
-                    inputState: _inputState,
-                    onSubmitPrompt: _onSubmitPrompt,
-                    onCancelPrompt: _onCancelPrompt,
-                    onStartRecording: _onStartRecording,
-                    onStopRecording: _onStopRecording,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       );
 
   _InputState get _inputState {
@@ -213,7 +216,7 @@ class _ChatInputState extends State<ChatInput> {
     return _InputState.canSubmitPrompt;
   }
 
-  void _onSubmitPrompt() {
+  void onSubmitPrompt() {
     assert(_inputState == _InputState.canSubmitPrompt);
 
     // the mobile vkb can still cause a submission even if there is no text
@@ -226,21 +229,21 @@ class _ChatInputState extends State<ChatInput> {
     _focusNode.requestFocus();
   }
 
-  void _onCancelPrompt() {
+  void onCancelPrompt() {
     assert(_inputState == _InputState.canCancelPrompt);
     widget.onCancelMessage!();
     _focusNode.requestFocus();
   }
 
-  Future<void> _onStartRecording() async {
+  Future<void> onStartRecording() async {
     await _waveController.startRecording();
   }
 
-  Future<void> _onStopRecording() async {
+  Future<void> onStopRecording() async {
     await _waveController.stopRecording();
   }
 
-  Future<void> _onRecordingStopped() async {
+  Future<void> onRecordingStopped() async {
     final file = _waveController.file;
 
     if (file == null) {
@@ -252,10 +255,10 @@ class _ChatInputState extends State<ChatInput> {
     widget.onTranslateStt(file);
   }
 
-  void _onAttachments(Iterable<Attachment> attachments) =>
+  void onAttachments(Iterable<Attachment> attachments) =>
       setState(() => _attachments.addAll(attachments));
 
-  void _onRemoveAttachment(Attachment attachment) =>
+  void onRemoveAttachment(Attachment attachment) =>
       setState(() => _attachments.remove(attachment));
 }
 

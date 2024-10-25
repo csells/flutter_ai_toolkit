@@ -6,7 +6,6 @@ import 'dart:async';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 import '../../flutter_ai_toolkit.dart';
 import '../adaptive_snack_bar.dart';
@@ -141,13 +140,13 @@ class _LlmChatViewState extends State<LlmChatView>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    super.build(context); // for AutomaticKeepAliveClientMixin
+
+    final style = LlmChatViewStyle.resolve(widget.viewModel.style);
     return ChatViewModelProvider(
       viewModel: widget.viewModel,
       child: Container(
-        color: widget.viewModel.style?.backgroundColor ??
-            FatColors.containerBackground,
-        padding: const EdgeInsets.all(16),
+        color: style.backgroundColor,
         child: Column(
           children: [
             Expanded(
