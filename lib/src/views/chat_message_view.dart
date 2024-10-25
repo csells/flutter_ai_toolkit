@@ -12,10 +12,10 @@ import 'package:gap/gap.dart';
 import '../adaptive_snack_bar.dart';
 import '../fat_icons.dart';
 import '../models/chat_message.dart';
+import '../models/chat_view_model.dart';
 import '../utility.dart';
 import 'attachment_view.dart';
 import 'jumping_dots_progress.dart';
-import 'response_builder.dart';
 
 /// A widget that displays a single chat message with optional selection and
 /// editing functionality.
@@ -32,11 +32,9 @@ class ChatMessageView extends StatefulWidget {
   /// indicates whether the message is currently selected.
   const ChatMessageView({
     required this.message,
-    required this.llmIcon,
     this.onEdit,
     this.onSelected,
     this.selected = false,
-    this.responseBuilder,
     super.key,
   });
 
@@ -52,12 +50,6 @@ class ChatMessageView extends StatefulWidget {
   /// Indicates whether the message is currently selected.
   final bool selected;
 
-  /// A builder function that returns a widget for displaying the message.
-  final ResponseBuilder? responseBuilder;
-
-  /// An icon to display for the LLM.
-  final IconData llmIcon;
-
   @override
   State<ChatMessageView> createState() => _ChatMessageViewState();
 }
@@ -72,11 +64,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
           children: [
             _isUser
                 ? _UserMessageView(widget.message)
-                : _LlmMessageView(
-                    widget.message,
-                    responseBuilder: widget.responseBuilder,
-                    llmIcon: widget.llmIcon,
-                  ),
+                : _LlmMessageView(widget.message),
             const Gap(6),
             if (widget.selected)
               Align(
@@ -201,17 +189,8 @@ class _UserMessageView extends StatelessWidget {
 }
 
 class _LlmMessageView extends StatelessWidget {
-  _LlmMessageView(
-    this.message, {
-    required this.llmIcon,
-    ResponseBuilder? responseBuilder,
-  }) {
-    this.responseBuilder = responseBuilder ?? _responseBuilder;
-  }
-
+  const _LlmMessageView(this.message);
   final ChatMessage message;
-  final IconData llmIcon;
-  late final ResponseBuilder responseBuilder;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -220,31 +199,36 @@ class _LlmMessageView extends StatelessWidget {
             flex: 6,
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE5E5E5),
-                        shape: BoxShape.circle,
+                ChatViewModelClient(
+                  builder: (context, viewModel, child) => Stack(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFE5E5E5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          viewModel.llmIcon,
+                          color: FatColors.darkIcon,
+                          size: 12,
+                        ),
                       ),
-                      child: Icon(
-                        llmIcon,
-                        color: FatColors.darkIcon,
-                        size: 12,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 28),
+                        child: message.text.isEmpty
+                            ? const SizedBox(
+                                width: 24,
+                                child: JumpingDotsProgress(fontSize: 24),
+                              )
+                            : (viewModel.responseBuilder ?? _responseBuilder)(
+                                context,
+                                message.text,
+                              ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28),
-                      child: message.text.isEmpty
-                          ? const SizedBox(
-                              width: 24,
-                              child: JumpingDotsProgress(fontSize: 24),
-                            )
-                          : responseBuilder(context, message.text),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -255,7 +239,8 @@ class _LlmMessageView extends StatelessWidget {
 
   // using SelectionArea so that it works with Cupertino as well as Material,
   // even though SelectionArea is defined as a Material widget. since it doesn't
-  // require running inside a MaterialApp, we're good.
+  // require running inside a MaterialApp, we're good. But only when not on
+  // mobile; the click-and-drag selection model doesn't work on mobile.
   Widget _responseBuilder(BuildContext context, String response) => isMobile
       ? _Markdown(response)
       : Localizations(

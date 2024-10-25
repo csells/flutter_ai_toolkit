@@ -5,36 +5,24 @@
 import 'package:flutter/widgets.dart';
 
 import '../models/chat_message.dart';
+import '../models/chat_view_model.dart';
 import 'chat_message_view.dart';
-import 'response_builder.dart';
 
 /// A widget that displays a transcript of chat messages.
 ///
 /// This widget renders a scrollable list of chat messages, supporting
 /// selection and editing of messages. It displays messages in reverse
 /// chronological order (newest at the bottom).
-///
-/// The [transcript] parameter is a list of [ChatMessage] objects to display.
-/// The optional [onEditMessage] callback allows editing of messages when
-/// triggered.
 class ChatTranscriptView extends StatefulWidget {
   /// Creates a [ChatTranscriptView].
   ///
-  /// The [transcript] parameter is required and contains the list of chat messages to display.
-  /// The [onEditMessage] parameter is optional and provides a callback for editing messages.
-  ///
-  /// If [onEditMessage] is provided, it will be called when a user initiates an edit action
-  /// on an editable message (typically the last user message in the transcript).
+  /// If [onEditMessage] is provided, it will be called when a user initiates an
+  /// edit action on an editable message (typically the last user message in the
+  /// transcript).
   const ChatTranscriptView({
-    required this.transcript,
-    required this.llmIcon,
     this.onEditMessage,
-    this.responseBuilder,
     super.key,
   });
-
-  /// The list of chat messages to display in the transcript.
-  final List<ChatMessage> transcript;
 
   /// Optional callback function for editing a message.
   ///
@@ -44,19 +32,6 @@ class ChatTranscriptView extends StatefulWidget {
   /// parameter.
   final void Function(ChatMessage message)? onEditMessage;
 
-  /// Optional builder function for customizing the display of chat responses.
-  ///
-  /// If provided, this function will be used to build the widget that displays
-  /// the response from the LLM in each chat message. It takes a [BuildContext]
-  /// and a [String] containing the response text, and should return a [Widget]
-  /// that represents the formatted response.
-  ///
-  /// If not provided, a default representation will be used.
-  final ResponseBuilder? responseBuilder;
-
-  /// An optional icon to display for the LLM.
-  final IconData llmIcon;
-
   @override
   State<ChatTranscriptView> createState() => _ChatTranscriptViewState();
 }
@@ -65,15 +40,15 @@ class _ChatTranscriptViewState extends State<ChatTranscriptView> {
   int _selectedMessageIndex = -1;
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) => ListView.builder(
+  Widget build(BuildContext context) => ChatViewModelClient(
+        builder: (context, viewModel, child) => ListView.builder(
           reverse: true,
-          itemCount: widget.transcript.length,
+          itemCount: viewModel.transcript.length,
           itemBuilder: (context, index) {
-            final messageIndex = widget.transcript.length - index - 1;
-            final message = widget.transcript[messageIndex];
+            final messageIndex = viewModel.transcript.length - index - 1;
+            final message = viewModel.transcript[messageIndex];
             final isLastUserMessage = message.origin.isUser &&
-                messageIndex >= widget.transcript.length - 2;
+                messageIndex >= viewModel.transcript.length - 2;
 
             return Padding(
               padding: const EdgeInsets.only(top: 6),
@@ -88,8 +63,6 @@ class _ChatTranscriptViewState extends State<ChatTranscriptView> {
                   selected,
                 ),
                 selected: _selectedMessageIndex == messageIndex,
-                responseBuilder: widget.responseBuilder,
-                llmIcon: widget.llmIcon,
               ),
             );
           },

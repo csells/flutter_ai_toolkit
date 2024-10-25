@@ -9,9 +9,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 
 import '../adaptive_snack_bar.dart';
-import '../fat_icons.dart';
 import '../llm_exception.dart';
 import '../models/chat_message.dart';
+import '../models/chat_view_model.dart';
 import '../platform_helper/platform_helper.dart';
 import '../providers/forwarding_provider.dart';
 import '../providers/llm_provider_interface.dart';
@@ -50,37 +50,38 @@ import 'response_builder.dart';
 ///
 /// The [welcomeMessage] parameter is an optional welcome message to display
 /// when the chat view is first shown. If null, no welcome message is displayed.
+/// The [llmIcon] parameter is an optional icon to display for the LLM messages.
+/// If null, the default icon will be used.
 class LlmChatView extends StatefulWidget {
   /// Creates an LlmChatView.
   ///
   /// The [provider] parameter must not be null.
   LlmChatView({
     required LlmProvider provider,
-    this.responseBuilder,
+    ResponseBuilder? responseBuilder,
     LlmStreamGenerator? messageSender,
-    this.welcomeMessage,
-    this.llmIcon,
+    String? welcomeMessage,
+    IconData? llmIcon,
     super.key,
-  }) : provider = messageSender == null
-            ? provider
-            : ForwardingProvider(
-                provider: provider,
-                messageSender: messageSender,
-              );
+  }) : viewModel = ChatViewModel(
+          provider: messageSender == null
+              ? provider
+              : ForwardingProvider(
+                  provider: provider,
+                  messageSender: messageSender,
+                ),
+          transcript: List<ChatMessage>.empty(growable: true),
+          responseBuilder: responseBuilder,
+          welcomeMessage: welcomeMessage,
+          llmIcon: llmIcon,
+        );
 
-  /// The LLM provider used to generate responses in the chat.
-  final LlmProvider provider;
-
-  /// An optional builder function that allows replacing the widget that
-  /// displays the response.
-  final ResponseBuilder? responseBuilder;
-
-  /// An optional welcome message to display when the chat view is first shown.
-  /// If null, no welcome message is displayed.
-  final String? welcomeMessage;
-
-  /// An optional icon to display for the LLM.
-  final IconData? llmIcon;
+  /// The view model containing the chat state and configuration.
+  ///
+  /// This [ChatViewModel] instance holds the LLM provider, transcript,
+  /// response builder, welcome message, and LLM icon for the chat interface.
+  /// It encapsulates the core data and functionality needed for the chat view.
+  final ChatViewModel viewModel;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
@@ -126,8 +127,6 @@ class _LlmChatViewState extends State<LlmChatView>
   @override
   bool get wantKeepAlive => true;
 
-  final _transcript = List<ChatMessage>.empty(growable: true);
-
   _LlmResponse? _pendingPromptResponse;
   ChatMessage? _initialMessage;
   _LlmResponse? _pendingSttResponse;
@@ -135,37 +134,39 @@ class _LlmChatViewState extends State<LlmChatView>
   @override
   void initState() {
     super.initState();
-    if (widget.welcomeMessage != null) {
-      _transcript.add(ChatMessage.llmWelcome(widget.welcomeMessage!));
+    if (widget.viewModel.welcomeMessage != null) {
+      widget.viewModel.transcript.add(
+        ChatMessage.llmWelcome(widget.viewModel.welcomeMessage!),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      color: FatColors.containerBackground,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Expanded(
-            child: ChatTranscriptView(
-              transcript: _transcript,
-              onEditMessage:
-                  _pendingPromptResponse == null ? _onEditMessage : null,
-              responseBuilder: widget.responseBuilder,
-              llmIcon: widget.llmIcon ?? FatIcons.spark_icon,
+    return ChatViewModelProvider(
+      viewModel: widget.viewModel,
+      child: Container(
+        color: FatColors.containerBackground,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Expanded(
+              child: ChatTranscriptView(
+                onEditMessage:
+                    _pendingPromptResponse == null ? _onEditMessage : null,
+              ),
             ),
-          ),
-          ChatInput(
-            initialMessage: _initialMessage,
-            onSendMessage: _onSendMessage,
-            onCancelMessage:
-                _pendingPromptResponse == null ? null : _onCancelMessage,
-            onTranslateStt: _onTranslateStt,
-            onCancelStt: _pendingSttResponse == null ? null : _onCancelStt,
-          ),
-        ],
+            ChatInput(
+              initialMessage: _initialMessage,
+              onSendMessage: _onSendMessage,
+              onCancelMessage:
+                  _pendingPromptResponse == null ? null : _onCancelMessage,
+              onTranslateStt: _onTranslateStt,
+              onCancelStt: _pendingSttResponse == null ? null : _onCancelStt,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -179,10 +180,10 @@ class _LlmChatViewState extends State<LlmChatView>
     final userMessage = ChatMessage.user(prompt, attachments);
     final llmMessage = ChatMessage.llm();
 
-    _transcript.addAll([userMessage, llmMessage]);
+    widget.viewModel.transcript.addAll([userMessage, llmMessage]);
 
     _pendingPromptResponse = _LlmResponse(
-      stream: widget.provider.sendMessageStream(
+      stream: widget.viewModel.provider.sendMessageStream(
         prompt,
         attachments: attachments,
       ),
@@ -204,12 +205,12 @@ class _LlmChatViewState extends State<LlmChatView>
     assert(_pendingPromptResponse == null);
 
     // remove the last llm message
-    assert(_transcript.last.origin.isLlm);
-    _transcript.removeLast();
+    assert(widget.viewModel.transcript.last.origin.isLlm);
+    widget.viewModel.transcript.removeLast();
 
     // remove the last user message
-    assert(_transcript.last.origin.isUser);
-    final userMessage = _transcript.removeLast();
+    assert(widget.viewModel.transcript.last.origin.isUser);
+    final userMessage = widget.viewModel.transcript.removeLast();
 
     // set the text of the controller to the last userMessage
     setState(() => _initialMessage = userMessage);
@@ -227,7 +228,7 @@ class _LlmChatViewState extends State<LlmChatView>
     final attachments = [await FileAttachment.fromFile(file)];
 
     _pendingSttResponse = _LlmResponse(
-      stream: widget.provider.generateStream(
+      stream: widget.viewModel.provider.generateStream(
         prompt,
         attachments: attachments,
       ),
