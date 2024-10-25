@@ -69,15 +69,8 @@ class ChatViewModelProvider extends InheritedWidget {
       ?.viewModel;
 
   @override
-  bool updateShouldNotify(ChatViewModelProvider oldWidget) {
-    final shouldNotify = viewModel != oldWidget.viewModel;
-    if (shouldNotify) {
-      debugPrint('ChatViewModelProvider: updateShouldNotify => true');
-    } else {
-      debugPrint('ChatViewModelProvider: updateShouldNotify => false');
-    }
-    return shouldNotify;
-  }
+  bool updateShouldNotify(ChatViewModelProvider oldWidget) =>
+      viewModel != oldWidget.viewModel;
 }
 
 class ChatViewModelClient extends StatelessWidget {

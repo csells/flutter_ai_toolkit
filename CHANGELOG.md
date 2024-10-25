@@ -6,6 +6,8 @@
 
 * implemented [#27](https://github.com/csells/flutter_ai_toolkit/issues/27): feature: styling of colors and fonts #27
 
+* TODO: https://github.com/csells/flutter_ai_toolkit/issues/13
+
 ## 0.2.1
 
 * fixing the user message edit menu
