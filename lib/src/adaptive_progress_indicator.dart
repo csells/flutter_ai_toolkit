@@ -13,10 +13,13 @@ class AdaptiveCircularProgressIndicator extends StatelessWidget {
   ///
   /// The [key] parameter is optional and is used to control how one widget
   /// replaces another widget in the tree.
-  const AdaptiveCircularProgressIndicator({super.key});
+  const AdaptiveCircularProgressIndicator({required this.color, super.key});
+
+  /// The color of the progress indicator.
+  final Color color;
 
   @override
   Widget build(BuildContext context) => isCupertinoApp(context)
-      ? CupertinoActivityIndicator()
-      : CircularProgressIndicator();
+      ? CupertinoActivityIndicator(color: color)
+      : CircularProgressIndicator(color: color);
 }

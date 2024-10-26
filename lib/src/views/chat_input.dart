@@ -13,14 +13,12 @@ import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../adaptive_progress_indicator.dart';
 import '../adaptive_snack_bar.dart';
-import '../fat_icons.dart';
 import '../models/chat_view_model.dart';
 import '../providers/llm_provider_interface.dart';
 import '../utility.dart';
+import 'action_button.dart';
 import 'attachment_view.dart';
 import 'chat_text_field.dart';
-import 'circle_button.dart';
-import 'fat_colors_styles.dart';
 import 'image_preview_dialog.dart';
 import 'llm_chat_view_style.dart';
 
@@ -130,11 +128,13 @@ class _ChatInputState extends State<ChatInput> {
   @override
   Widget build(BuildContext context) => ChatViewModelClient(
         builder: (context, viewModel, child) {
-          final style = InputBoxStyle.resolve(
+          final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+          final inputStyle = InputBoxStyle.resolve(
             viewModel.style?.inputBoxStyle,
           );
+
           return Container(
-            color: style.backgroundColor,
+            color: inputStyle.backgroundColor,
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -157,7 +157,7 @@ class _ChatInputState extends State<ChatInput> {
                               vertical: 8,
                             ),
                             child: DecoratedBox(
-                              decoration: style.decoration!,
+                              decoration: inputStyle.decoration!,
                               child: SizedBox(
                                 height: _minInputHeight,
                                 child: _waveController.isRecording
@@ -179,9 +179,9 @@ class _ChatInputState extends State<ChatInput> {
                                                 _InputState.canSubmitPrompt
                                             ? (_) => onSubmitPrompt()
                                             : (_) => _focusNode.requestFocus(),
-                                        style: style.textStyle!,
-                                        hintText: style.hintText!,
-                                        hintStyle: style.hintStyle!,
+                                        style: inputStyle.textStyle!,
+                                        hintText: inputStyle.hintText!,
+                                        hintStyle: inputStyle.hintStyle!,
                                         hintPadding: const EdgeInsets.symmetric(
                                           horizontal: 12,
                                           vertical: 8,
@@ -193,6 +193,7 @@ class _ChatInputState extends State<ChatInput> {
                         ),
                         _InputButton(
                           inputState: _inputState,
+                          chatStyle: chatStyle,
                           onSubmitPrompt: onSubmitPrompt,
                           onCancelPrompt: onCancelPrompt,
                           onStartRecording: onStartRecording,
@@ -265,6 +266,7 @@ class _ChatInputState extends State<ChatInput> {
 class _InputButton extends StatelessWidget {
   const _InputButton({
     required this.inputState,
+    required this.chatStyle,
     required this.onSubmitPrompt,
     required this.onCancelPrompt,
     required this.onStartRecording,
@@ -272,6 +274,7 @@ class _InputButton extends StatelessWidget {
   });
 
   final _InputState inputState;
+  final LlmChatViewStyle chatStyle;
   final void Function() onSubmitPrompt;
   final void Function() onCancelPrompt;
   final void Function() onStartRecording;
@@ -279,25 +282,25 @@ class _InputButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (inputState) {
-        _InputState.canSubmitPrompt => CircleButton(
-            icon: FatIcons.submit_icon,
+        _InputState.canSubmitPrompt => ActionButton(
+            style: chatStyle.submitButtonStyle!,
             onPressed: onSubmitPrompt,
-            iconColor: FatColors.whiteIcon,
-            backgroundColor: FatColors.darkButtonBackground,
           ),
-        _InputState.canCancelPrompt => CircleButton(
-            icon: FatIcons.stop,
+        _InputState.canCancelPrompt => ActionButton(
+            style: chatStyle.cancelButtonStyle!,
             onPressed: onCancelPrompt,
           ),
-        _InputState.canStt => CircleButton(
-            icon: FatIcons.mic,
+        _InputState.canStt => ActionButton(
+            style: chatStyle.recordButtonStyle!,
             onPressed: onStartRecording,
           ),
-        _InputState.isRecording => CircleButton(
-            icon: FatIcons.stop,
+        _InputState.isRecording => ActionButton(
+            style: chatStyle.cancelButtonStyle!,
             onPressed: onStopRecording,
           ),
-        _InputState.canCancelStt => const AdaptiveCircularProgressIndicator(),
+        _InputState.canCancelStt => AdaptiveCircularProgressIndicator(
+            color: chatStyle.progressIndicatorColor!,
+          ),
       };
 }
 
@@ -349,39 +352,36 @@ class _AttachmentActionBarState extends State<_AttachmentActionBar> {
   }
 
   @override
-  Widget build(BuildContext context) => _expanded
-      ? CircleButtonBar([
-          CircleButton(
-            onPressed: _onToggleMenu,
-            icon: FatIcons.close,
-            iconColor: FatColors.whiteIcon,
-            backgroundColor: FatColors.greyBackground,
-          ),
-          if (_canCamera)
-            CircleButton(
-              onPressed: _onCamera,
-              icon: FatIcons.camera_alt,
-              iconColor: FatColors.whiteIcon,
-              backgroundColor: FatColors.darkButtonBackground,
-            ),
-          CircleButton(
-            onPressed: _onGallery,
-            icon: FatIcons.image,
-            iconColor: FatColors.whiteIcon,
-            backgroundColor: FatColors.darkButtonBackground,
-          ),
-          if (_canFile)
-            CircleButton(
-              onPressed: _onFile,
-              icon: FatIcons.attach_file,
-              iconColor: FatColors.whiteIcon,
-              backgroundColor: FatColors.darkButtonBackground,
-            ),
-        ])
-      : CircleButton(
-          onPressed: _onToggleMenu,
-          icon: FatIcons.add,
-        );
+  Widget build(BuildContext context) => ChatViewModelClient(
+        builder: (context, viewModel, child) {
+          final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+          return _expanded
+              ? ActionButtonBar([
+                  ActionButton(
+                    onPressed: _onToggleMenu,
+                    style: chatStyle.toggleButtonStyle!,
+                  ),
+                  if (_canCamera)
+                    ActionButton(
+                      onPressed: _onCamera,
+                      style: chatStyle.cameraButtonStyle!,
+                    ),
+                  ActionButton(
+                    onPressed: _onGallery,
+                    style: chatStyle.galleryButtonStyle!,
+                  ),
+                  if (_canFile)
+                    ActionButton(
+                      onPressed: _onFile,
+                      style: chatStyle.attachFileButtonStyle!,
+                    ),
+                ])
+              : ActionButton(
+                  onPressed: _onToggleMenu,
+                  style: chatStyle.addButtonStyle!,
+                );
+        },
+      );
 
   void _onToggleMenu() => setState(() => _expanded = !_expanded);
   void _onCamera() => _pickImage(ImageSource.camera);
@@ -454,10 +454,15 @@ class _RemovableAttachment extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(2),
-            child: CircleButton(
-              icon: FatIcons.close,
-              size: 20,
-              onPressed: () => onRemove(attachment),
+            child: ChatViewModelClient(
+              builder: (context, viewModel, child) {
+                final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+                return ActionButton(
+                  style: chatStyle.closeButtonStyle!,
+                  size: 20,
+                  onPressed: () => onRemove(attachment),
+                );
+              },
             ),
           ),
         ],

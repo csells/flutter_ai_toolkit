@@ -4,13 +4,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ai_toolkit/src/views/circle_button.dart';
+import 'package:flutter_ai_toolkit/src/views/action_button.dart';
 import 'package:flutter_ai_toolkit/src/views/fat_colors_styles.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 
 import '../adaptive_snack_bar.dart';
-import '../fat_icons.dart';
 import '../models/chat_view_model.dart';
 import '../models/llm_chat_message.dart';
 import '../utility.dart';
@@ -59,56 +58,55 @@ class _ChatMessageViewState extends State<ChatMessageView> {
   bool get _isUser => widget.message.origin.isUser;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onLongPress: _onSelect,
-        child: Column(
-          children: [
-            _isUser
-                ? _UserMessageView(widget.message)
-                : _LlmMessageView(widget.message),
-            const Gap(6),
-            if (widget.selected)
-              Align(
-                alignment:
-                    _isUser ? Alignment.centerRight : Alignment.centerLeft,
-                child: CircleButtonBar(
-                  _isUser
-                      ? [
-                          if (widget.onEdit != null)
-                            CircleButton(
-                              onPressed: _onEdit,
-                              icon: FatIcons.edit,
-                              iconColor: FatColors.whiteIcon,
-                              backgroundColor: FatColors.darkButtonBackground,
-                            ),
-                          CircleButton(
-                            onPressed: _onCopy,
-                            icon: FatIcons.content_copy,
-                            iconColor: FatColors.whiteIcon,
-                            backgroundColor: FatColors.darkButtonBackground,
-                          ),
-                          CircleButton(
-                            onPressed: _onSelect,
-                            icon: FatIcons.close,
-                            iconColor: FatColors.whiteIcon,
-                            backgroundColor: FatColors.greyBackground,
-                          ),
-                        ]
-                      : [
-                          CircleButton(
-                            onPressed: _onSelect,
-                            icon: FatIcons.close,
-                            backgroundColor: FatColors.greyBackground,
-                          ),
-                          CircleButton(
-                            onPressed: _onCopy,
-                            icon: FatIcons.content_copy,
-                          ),
-                        ],
-                ),
-              ),
-          ],
-        ),
+  Widget build(BuildContext context) => ChatViewModelClient(
+        builder: (context, viewModel, child) {
+          final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+
+          return GestureDetector(
+            onLongPress: _onSelect,
+            child: Column(
+              children: [
+                _isUser
+                    ? _UserMessageView(widget.message)
+                    : _LlmMessageView(widget.message),
+                const Gap(6),
+                if (widget.selected)
+                  Align(
+                    alignment:
+                        _isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: ActionButtonBar(
+                      _isUser
+                          ? [
+                              if (widget.onEdit != null)
+                                ActionButton(
+                                  onPressed: _onEdit,
+                                  style: chatStyle.editButtonStyle!,
+                                ),
+                              ActionButton(
+                                onPressed: _onCopy,
+                                style: chatStyle.copyButtonStyle!,
+                              ),
+                              ActionButton(
+                                onPressed: _onSelect,
+                                style: chatStyle.closeButtonStyle!,
+                              ),
+                            ]
+                          : [
+                              ActionButton(
+                                onPressed: _onSelect,
+                                style: chatStyle.closeButtonStyle!,
+                              ),
+                              ActionButton(
+                                onPressed: _onCopy,
+                                style: chatStyle.copyButtonStyle!,
+                              ),
+                            ],
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
       );
 
   void _onSelect() => widget.onSelected?.call(!widget.selected);
@@ -202,7 +200,8 @@ class _LlmMessageView extends StatelessWidget {
               children: [
                 ChatViewModelClient(
                   builder: (context, viewModel, child) {
-                    final style = LlmMessageStyle.resolve(
+                    final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+                    final llmStyle = LlmMessageStyle.resolve(
                       viewModel.style?.llmMessageStyle,
                     );
 
@@ -210,7 +209,7 @@ class _LlmMessageView extends StatelessWidget {
                         (c, r) => _responseBuilder(
                               context: c,
                               response: r,
-                              styleSheet: style.markdownStyle!,
+                              styleSheet: llmStyle.markdownStyle!,
                             );
 
                     return Stack(
@@ -218,15 +217,15 @@ class _LlmMessageView extends StatelessWidget {
                         Container(
                           height: 20,
                           width: 20,
-                          decoration: style.iconDecoration,
+                          decoration: llmStyle.iconDecoration,
                           child: Icon(
-                            style.icon,
-                            color: style.iconColor,
+                            llmStyle.icon,
+                            color: llmStyle.iconColor,
                             size: 12,
                           ),
                         ),
                         Container(
-                          decoration: style.decoration,
+                          decoration: llmStyle.decoration,
                           margin: const EdgeInsets.only(left: 28),
                           padding: const EdgeInsets.all(8),
                           child: message.text.isEmpty
@@ -234,7 +233,7 @@ class _LlmMessageView extends StatelessWidget {
                                   width: 24,
                                   child: JumpingDotsProgress(
                                     fontSize: 24,
-                                    color: style.progressIndicatorColor!,
+                                    color: chatStyle.progressIndicatorColor!,
                                   ),
                                 )
                               : responseBuilder(context, message.text),

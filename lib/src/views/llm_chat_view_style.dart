@@ -5,23 +5,28 @@ import '../fat_icons.dart';
 import 'fat_colors_styles.dart';
 
 // TODO: merge this with view_styles.dart
-// TODO: add icon buttons
-// static const IconData submit_icon =
-// static const IconData spark_icon =
-// static const IconData add =
-// static const IconData attach_file =
-// static const IconData stop =
-// static const IconData mic =
-// static const IconData close =
-// static const IconData camera_alt =
-// static const IconData image =
-// static const IconData edit =
-// static const IconData content_copy =
+
+enum _ActionButtonType {
+  add,
+  attachFile,
+  camera,
+  cancel,
+  close,
+  copy,
+  edit,
+  gallery,
+  record,
+  submit,
+  toggle,
+}
 
 /// Style for the entire chat widget.
 class LlmChatViewStyle {
   /// Background color of the entire chat widget.
   final Color? backgroundColor;
+
+  /// The color of the progress indicator.
+  final Color? progressIndicatorColor;
 
   /// Style for user messages.
   final UserMessageStyle? userMessageStyle;
@@ -32,24 +37,85 @@ class LlmChatViewStyle {
   /// Style for the input text box.
   final InputBoxStyle? inputBoxStyle;
 
-  /// Style for icon buttons in the chat widget.
-  final IconButtonStyle? iconButtonStyle;
+  /// Style for the add button.
+  final ActionButtonStyle? addButtonStyle;
+
+  /// Style for the attach file button.
+  final ActionButtonStyle? attachFileButtonStyle;
+
+  /// Style for the camera button.
+  final ActionButtonStyle? cameraButtonStyle;
+
+  /// Style for the cancel button.
+  final ActionButtonStyle? cancelButtonStyle;
+
+  /// Style for the close button.
+  final ActionButtonStyle? closeButtonStyle;
+
+  /// Style for the copy button.
+  final ActionButtonStyle? copyButtonStyle;
+
+  /// Style for the edit button.
+  final ActionButtonStyle? editButtonStyle;
+
+  /// Style for the gallery button.
+  final ActionButtonStyle? galleryButtonStyle;
+
+  /// Style for the record button.
+  final ActionButtonStyle? recordButtonStyle;
+
+  /// Style for the submit button.
+  final ActionButtonStyle? submitButtonStyle;
+
+  /// Style for the toggle button.
+  final ActionButtonStyle? toggleButtonStyle;
 
   /// Creates a style object for the chat widget.
   const LlmChatViewStyle({
     this.backgroundColor,
+    this.progressIndicatorColor,
     this.userMessageStyle,
     this.llmMessageStyle,
     this.inputBoxStyle,
-    this.iconButtonStyle,
+    this.addButtonStyle,
+    this.attachFileButtonStyle,
+    this.cameraButtonStyle,
+    this.cancelButtonStyle,
+    this.closeButtonStyle,
+    this.copyButtonStyle,
+    this.editButtonStyle,
+    this.galleryButtonStyle,
+    this.recordButtonStyle,
+    this.submitButtonStyle,
+    this.toggleButtonStyle,
   });
 
   /// Provides default style if none is specified.
   static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
         backgroundColor: FatColors.containerBackground,
+        progressIndicatorColor: FatColors.black,
         userMessageStyle: UserMessageStyle.defaultStyle,
         llmMessageStyle: LlmMessageStyle.defaultStyle,
         inputBoxStyle: InputBoxStyle.defaultStyle,
+        addButtonStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.add),
+        cancelButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.cancel),
+        recordButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.record),
+        submitButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.submit),
+        toggleButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.toggle),
+        attachFileButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.attachFile),
+        galleryButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.gallery),
+        cameraButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.camera),
+        closeButtonStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.close),
+        copyButtonStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.copy),
+        editButtonStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.edit),
       );
 
   /// Resolves the LlmChatViewStyle by combining the provided style with default values.
@@ -68,14 +134,59 @@ class LlmChatViewStyle {
     defaultStyle ??= LlmChatViewStyle.defaultStyles;
     return LlmChatViewStyle(
       backgroundColor: style?.backgroundColor ?? defaultStyle.backgroundColor,
+      progressIndicatorColor:
+          style?.progressIndicatorColor ?? defaultStyle.progressIndicatorColor,
       userMessageStyle: UserMessageStyle.resolve(style?.userMessageStyle,
           defaultStyle: defaultStyle.userMessageStyle),
       llmMessageStyle: LlmMessageStyle.resolve(style?.llmMessageStyle,
           defaultStyle: defaultStyle.llmMessageStyle),
       inputBoxStyle: InputBoxStyle.resolve(style?.inputBoxStyle,
           defaultStyle: defaultStyle.inputBoxStyle),
-      // iconButtonStyle: IconButtonStyle.resolve(style?.iconButtonStyle,
-      //     defaultStyle: defaultStyle.iconButtonStyle),
+      addButtonStyle: ActionButtonStyle.resolve(
+        style?.addButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.add),
+      ),
+      attachFileButtonStyle: ActionButtonStyle.resolve(
+        style?.attachFileButtonStyle,
+        defaultStyle:
+            ActionButtonStyle.defaultStyle(_ActionButtonType.attachFile),
+      ),
+      cameraButtonStyle: ActionButtonStyle.resolve(
+        style?.cameraButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.camera),
+      ),
+      cancelButtonStyle: ActionButtonStyle.resolve(
+        style?.cancelButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.cancel),
+      ),
+      closeButtonStyle: ActionButtonStyle.resolve(
+        style?.closeButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.close),
+      ),
+      copyButtonStyle: ActionButtonStyle.resolve(
+        style?.copyButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.copy),
+      ),
+      editButtonStyle: ActionButtonStyle.resolve(
+        style?.editButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.edit),
+      ),
+      galleryButtonStyle: ActionButtonStyle.resolve(
+        style?.galleryButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.gallery),
+      ),
+      recordButtonStyle: ActionButtonStyle.resolve(
+        style?.recordButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.record),
+      ),
+      submitButtonStyle: ActionButtonStyle.resolve(
+        style?.submitButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.submit),
+      ),
+      toggleButtonStyle: ActionButtonStyle.resolve(
+        style?.toggleButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(_ActionButtonType.toggle),
+      ),
     );
   }
 }
@@ -104,6 +215,7 @@ class UserMessageStyle {
 
   /// Provides default style data for user messages.
   static UserMessageStyle get defaultStyle => UserMessageStyle(
+        // TODO
         // textStyle: theme.textTheme.bodyLarge?.copyWith(
         //   color: FatColors.black,
         //   fontWeight: FontWeight.normal,
@@ -148,7 +260,6 @@ class LlmMessageStyle {
     this.iconDecoration,
     this.decoration,
     this.markdownStyle,
-    this.progressIndicatorColor,
   });
 
   /// The icon to display for the LLM messages.
@@ -165,9 +276,6 @@ class LlmMessageStyle {
 
   /// The markdown style sheet for LLM messages.
   final MarkdownStyleSheet? markdownStyle;
-
-  /// The color of the progress indicator.
-  final Color? progressIndicatorColor;
 
   /// Provides default style for LLM messages.
   static LlmMessageStyle get defaultStyle => LlmMessageStyle(
@@ -209,7 +317,6 @@ class LlmMessageStyle {
             bottomRight: Radius.circular(20),
           ),
         ),
-        progressIndicatorColor: FatColors.black,
       );
 
   /// Resolves the provided style with the default style.
@@ -237,8 +344,6 @@ class LlmMessageStyle {
       iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
       markdownStyle: style?.markdownStyle ?? defaultStyle.markdownStyle,
       decoration: style?.decoration ?? defaultStyle.decoration,
-      progressIndicatorColor:
-          style?.progressIndicatorColor ?? defaultStyle.progressIndicatorColor,
     );
   }
 }
@@ -298,39 +403,108 @@ class InputBoxStyle {
 }
 
 /// Style for icon buttons.
-class IconButtonStyle {
+class ActionButtonStyle {
+  /// The icon to display for the icon button.
+  final IconData? icon;
+
   /// The color of the icon.
   final Color? iconColor;
 
-  /// The background color of the icon button.
-  final Color? backgroundColor;
-
-  /// The outline color of the icon button.
-  final Color? outlineColor;
-
-  /// The shape of the icon button.
-  final ShapeBorder? shape;
-
-  /// The size of the icon button.
-  final double? size;
+  /// The decoration for the icon.
+  final Decoration? iconDecoration;
 
   /// Creates an IconButtonStyle.
-  const IconButtonStyle({
+  const ActionButtonStyle({
+    this.icon,
     this.iconColor,
-    this.backgroundColor,
-    this.outlineColor,
-    this.shape,
-    this.size,
+    this.iconDecoration,
   });
 
   /// Provides default style for icon buttons.
-  factory IconButtonStyle.defaultStyle() {
-    return IconButtonStyle(
-      // iconColor: Colors.grey[700],
-      // backgroundColor: Colors.transparent,
-      // outlineColor: Colors.transparent,
-      shape: null,
-      size: 24.0,
+  static ActionButtonStyle defaultStyle(_ActionButtonType type) {
+    IconData icon;
+    var color = FatColors.darkIcon;
+    var bgColor = FatColors.lightButtonBackground;
+
+    switch (type) {
+      case _ActionButtonType.add:
+        icon = FatIcons.add;
+        break;
+      case _ActionButtonType.attachFile:
+        icon = FatIcons.attach_file;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.camera:
+        icon = FatIcons.camera_alt;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.cancel:
+        icon = FatIcons.stop;
+        break;
+      case _ActionButtonType.close:
+        icon = FatIcons.close;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.copy:
+        icon = FatIcons.content_copy;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.edit:
+        icon = FatIcons.edit;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.gallery:
+        icon = FatIcons.image;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.record:
+        icon = FatIcons.mic;
+        break;
+      case _ActionButtonType.submit:
+        icon = FatIcons.submit_icon;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
+        break;
+      case _ActionButtonType.toggle:
+        icon = FatIcons.close;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.greyBackground;
+        break;
+    }
+
+    return ActionButtonStyle(
+      icon: icon,
+      iconColor: color,
+      iconDecoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+    );
+  }
+
+  /// Resolves the IconButtonStyle by combining the provided style with default
+  /// values.
+  ///
+  /// This method takes an optional [style] and merges it with the
+  /// [defaultStyle]. If [defaultStyle] is not provided, it uses
+  /// [IconButtonStyle.defaultStyle()].
+  ///
+  /// [style] - The custom IconButtonStyle to apply. Can be null. [defaultStyle]
+  /// - The default IconButtonStyle to use as a base. If null, uses
+  /// [IconButtonStyle.defaultStyle()].
+  ///
+  /// Returns a new [ActionButtonStyle] instance with resolved properties.
+  static ActionButtonStyle resolve(
+    ActionButtonStyle? style, {
+    required ActionButtonStyle defaultStyle,
+  }) {
+    return ActionButtonStyle(
+      icon: style?.icon ?? defaultStyle.icon,
+      iconColor: style?.iconColor ?? defaultStyle.iconColor,
+      iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
     );
   }
 }

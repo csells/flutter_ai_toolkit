@@ -38,6 +38,8 @@ class _ChatPageState extends State<ChatPage>
   late final _controller = AnimationController(
     duration: const Duration(seconds: 1),
     vsync: this,
+    lowerBound: 0.25,
+    upperBound: 1.0,
   );
 
   TextStyle get _creepsterStyle => GoogleFonts.creepster(
@@ -90,14 +92,10 @@ class _ChatPageState extends State<ChatPage>
               SizedBox(
                 height: double.infinity,
                 width: double.infinity,
-                child: FadeTransition(
-                  opacity: _controller.drive(
-                    Tween<double>(begin: 0.25, end: 1.0),
-                  ),
-                  child: Image.asset(
-                    'assets/halloween-bg.png',
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.asset(
+                  'assets/halloween-bg.png',
+                  fit: BoxFit.cover,
+                  opacity: _controller,
                 ),
               ),
               LlmChatView(
@@ -105,10 +103,18 @@ class _ChatPageState extends State<ChatPage>
                 transcript: _transcript,
                 style: LlmChatViewStyle(
                   backgroundColor: Colors.transparent,
+                  progressIndicatorColor: Colors.purple,
                   inputBoxStyle: InputBoxStyle(
                     backgroundColor: _controller.isAnimating
                         ? Colors.transparent
                         : Colors.black,
+                    decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      border: Border.all(color: Colors.orange),
+                    ),
+                    textStyle: _creepsterStyle.copyWith(color: Colors.black),
+                    hintText: 'how may I help you...',
+                    hintStyle: _creepsterStyle.copyWith(color: Colors.orange),
                   ),
                   llmMessageStyle: LlmMessageStyle(
                     icon: Icons.sentiment_very_satisfied,

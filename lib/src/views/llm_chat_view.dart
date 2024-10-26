@@ -142,11 +142,11 @@ class _LlmChatViewState extends State<LlmChatView>
   Widget build(BuildContext context) {
     super.build(context); // for AutomaticKeepAliveClientMixin
 
-    final style = LlmChatViewStyle.resolve(widget.viewModel.style);
+    final chatStyle = LlmChatViewStyle.resolve(widget.viewModel.style);
     return ChatViewModelProvider(
       viewModel: widget.viewModel,
       child: Container(
-        color: style.backgroundColor,
+        color: chatStyle.backgroundColor,
         child: Column(
           children: [
             Expanded(
