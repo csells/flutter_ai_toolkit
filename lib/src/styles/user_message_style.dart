@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'fat_colors.dart';
 import 'fat_text_styles.dart';
+import 'style_helpers.dart' as sh;
 
 /// Style for user messages.
 class UserMessageStyle {
@@ -18,7 +19,10 @@ class UserMessageStyle {
   });
 
   /// Provides default style data for user messages.
-  static UserMessageStyle get defaultStyle => UserMessageStyle(
+  static UserMessageStyle get defaultStyle => lightStyle;
+
+  /// Provides a default light style.
+  static UserMessageStyle get lightStyle => UserMessageStyle(
         textStyle: FatTextStyles.body1,
         decoration: const BoxDecoration(
           color: FatColors.userMessageBackground,
@@ -30,6 +34,18 @@ class UserMessageStyle {
           ),
         ),
       );
+
+  /// Provides a default dark style.
+  static UserMessageStyle get darkStyle {
+    final style = lightStyle;
+    return UserMessageStyle(
+      textStyle: sh.invertTextStyle(style.textStyle),
+      // decoration: sh.invertDecoration(style.decoration),
+      decoration: (style.decoration as BoxDecoration).copyWith(
+        color: FatColors.greyBackground,
+      ),
+    );
+  }
 
   /// Resolves the UserMessageStyle by combining the provided style with default values.
   ///

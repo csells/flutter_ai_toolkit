@@ -1,4 +1,14 @@
-## 0.2.2
+## 0.4.0
+
+* implemented [#13](https://github.com/csells/flutter_ai_toolkit/issues/13): UI needs dark mode support
+
+* TODO: chat serialization
+
+* TODO: desktop form-factor UX improvements
+
+* TODO: bug fixes
+
+## 0.3.0
 
 * implemented [#32](https://github.com/csells/flutter_ai_toolkit/issues/32): feature: dev-configured LLM message icon
 

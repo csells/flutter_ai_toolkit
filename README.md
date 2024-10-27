@@ -124,8 +124,8 @@ Note: There's no API key; Firebase manages all of that for you in the Firebase p
 
 ## More Features Coming Soon!
 As I mentioned, the AI Toolkit is just in the alpha phase of it's lifetime and it's under active development. Coming soon, you should expect the following features:
-- stand-alone chatbot app sample with multi-session support
 - chat session serialization/deserialization
+- stand-alone chatbot app sample with multi-session support
 - thoroughly tested multi-platform support, including Windows and Linux
 
 ## Feedback!

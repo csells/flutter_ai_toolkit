@@ -6,6 +6,7 @@ import 'chat_input_style.dart';
 import 'fat_colors.dart';
 import 'file_attachment_style.dart';
 import 'llm_message_style.dart';
+import 'style_helpers.dart' as sh;
 import 'user_message_style.dart';
 
 /// Style for the entire chat widget.
@@ -87,7 +88,10 @@ class LlmChatViewStyle {
   final FileAttachmentStyle? fileAttachmentStyle;
 
   /// Provides default style if none is specified.
-  static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
+  static LlmChatViewStyle get defaultStyle => lightStyle;
+
+  /// Provides a default light style.
+  static LlmChatViewStyle get lightStyle => LlmChatViewStyle(
         backgroundColor: FatColors.containerBackground,
         progressIndicatorColor: FatColors.black,
         userMessageStyle: UserMessageStyle.defaultStyle,
@@ -118,6 +122,34 @@ class LlmChatViewStyle {
         fileAttachmentStyle: FileAttachmentStyle.defaultStyle,
       );
 
+  /// Provides a default dark style.
+  static LlmChatViewStyle get darkStyle {
+    final style = lightStyle;
+    return LlmChatViewStyle(
+      backgroundColor: sh.invertColor(style.backgroundColor),
+      progressIndicatorColor: sh.invertColor(style.progressIndicatorColor),
+      userMessageStyle: UserMessageStyle.darkStyle,
+      llmMessageStyle: LlmMessageStyle.darkStyle,
+      chatInputStyle: ChatInputStyle.darkStyle,
+      addButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.add),
+      attachFileButtonStyle:
+          ActionButtonStyle.darkStyle(ActionButtonType.attachFile),
+      cameraButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.camera),
+      stopButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.stop),
+      recordButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.record),
+      submitButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.submit),
+      closeMenuButtonStyle:
+          ActionButtonStyle.darkStyle(ActionButtonType.closeMenu),
+      actionButtonBarDecoration:
+          sh.invertDecoration(style.actionButtonBarDecoration),
+      fileAttachmentStyle: FileAttachmentStyle.darkStyle,
+      closeButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.close),
+      copyButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.copy),
+      editButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.edit),
+      galleryButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.gallery),
+    );
+  }
+
   /// Resolves the LlmChatViewStyle by combining the provided style with default values.
   ///
   /// This method takes an optional [style] and merges it with the [defaultStyle].
@@ -131,7 +163,7 @@ class LlmChatViewStyle {
     LlmChatViewStyle? style, {
     LlmChatViewStyle? defaultStyle,
   }) {
-    defaultStyle ??= LlmChatViewStyle.defaultStyles;
+    defaultStyle ??= LlmChatViewStyle.defaultStyle;
     return LlmChatViewStyle(
       backgroundColor: style?.backgroundColor ?? defaultStyle.backgroundColor,
       progressIndicatorColor:

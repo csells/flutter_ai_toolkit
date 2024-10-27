@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'fat_colors.dart';
 import 'fat_text_styles.dart';
+import 'style_helpers.dart' as sh;
 
 /// Style for the input text box.
 class ChatInputStyle {
@@ -26,20 +27,39 @@ class ChatInputStyle {
   /// The background color of the input box.
   final Color? backgroundColor;
 
-  /// The shape of the input box.
-  final BoxDecoration? decoration;
+  /// The decoration of the input box.
+  final Decoration? decoration;
 
-  /// Provides default style for the input text box.
-  static ChatInputStyle get defaultStyle => ChatInputStyle(
+  /// Provides a default style.
+  static ChatInputStyle get defaultStyle => lightStyle;
+
+  /// Provides a default light style.
+  static ChatInputStyle get lightStyle => ChatInputStyle(
         textStyle: FatTextStyles.body2,
         hintStyle: FatTextStyles.body2.copyWith(color: FatColors.hintText),
         hintText: "Ask me anything...",
         backgroundColor: FatColors.containerBackground,
         decoration: BoxDecoration(
+          color: FatColors.containerBackground,
           border: Border.all(width: 1, color: FatColors.outline),
           borderRadius: BorderRadius.circular(24),
         ),
       );
+
+  /// Provides a default dark style.
+  static ChatInputStyle get darkStyle {
+    final style = lightStyle;
+    return ChatInputStyle(
+      decoration: sh.invertDecoration(style.decoration),
+      textStyle: sh.invertTextStyle(style.textStyle),
+      // hintStyle: sh.invertTextStyle(style.hintStyle),
+      hintStyle: FatTextStyles.body2.copyWith(
+        color: FatColors.greyBackground,
+      ),
+      hintText: style.hintText,
+      backgroundColor: sh.invertColor(style.backgroundColor),
+    );
+  }
 
   /// Merges the provided styles with the default styles.
   static ChatInputStyle resolve(

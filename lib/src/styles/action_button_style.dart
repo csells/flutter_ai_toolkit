@@ -4,6 +4,7 @@ import 'action_button_type.dart';
 import 'fat_colors.dart';
 import 'fat_icons.dart';
 import 'fat_text_styles.dart';
+import 'style_helpers.dart' as sh;
 
 /// Style for icon buttons.
 class ActionButtonStyle {
@@ -36,7 +37,11 @@ class ActionButtonStyle {
   });
 
   /// Provides default style for icon buttons.
-  static ActionButtonStyle defaultStyle(ActionButtonType type) {
+  static ActionButtonStyle defaultStyle(ActionButtonType type) =>
+      lightStyle(type);
+
+  /// Provides default light style for icon buttons.
+  static ActionButtonStyle lightStyle(ActionButtonType type) {
     IconData icon;
     var color = FatColors.darkIcon;
     var bgColor = FatColors.lightButtonBackground;
@@ -120,6 +125,28 @@ class ActionButtonStyle {
     );
   }
 
+  /// Provides a default dark style.
+  static ActionButtonStyle darkStyle(ActionButtonType type) {
+    final style = lightStyle(type);
+    return ActionButtonStyle(
+      icon: style.icon,
+      iconColor: sh.invertColor(style.iconColor),
+      iconDecoration: switch (type) {
+        ActionButtonType.add ||
+        ActionButtonType.record ||
+        ActionButtonType.stop =>
+          BoxDecoration(
+            color: FatColors.greyBackground,
+            shape: BoxShape.circle,
+          ),
+        _ => sh.invertDecoration(style.iconDecoration),
+      },
+      tooltip: style.tooltip,
+      tooltipTextStyle: sh.invertTextStyle(style.tooltipTextStyle),
+      tooltipDecoration: sh.invertDecoration(style.tooltipDecoration),
+    );
+  }
+
   /// Resolves the IconButtonStyle by combining the provided style with default
   /// values.
   ///
@@ -135,16 +162,15 @@ class ActionButtonStyle {
   static ActionButtonStyle resolve(
     ActionButtonStyle? style, {
     required ActionButtonStyle defaultStyle,
-  }) {
-    return ActionButtonStyle(
-      icon: style?.icon ?? defaultStyle.icon,
-      iconColor: style?.iconColor ?? defaultStyle.iconColor,
-      iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
-      tooltip: style?.tooltip ?? defaultStyle.tooltip,
-      tooltipTextStyle:
-          style?.tooltipTextStyle ?? defaultStyle.tooltipTextStyle,
-      tooltipDecoration:
-          style?.tooltipDecoration ?? defaultStyle.tooltipDecoration,
-    );
-  }
+  }) =>
+      ActionButtonStyle(
+        icon: style?.icon ?? defaultStyle.icon,
+        iconColor: style?.iconColor ?? defaultStyle.iconColor,
+        iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
+        tooltip: style?.tooltip ?? defaultStyle.tooltip,
+        tooltipTextStyle:
+            style?.tooltipTextStyle ?? defaultStyle.tooltipTextStyle,
+        tooltipDecoration:
+            style?.tooltipDecoration ?? defaultStyle.tooltipDecoration,
+      );
 }

@@ -1,9 +1,10 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'fat_colors.dart';
 import 'fat_icons.dart';
 import 'fat_text_styles.dart';
+import 'style_helpers.dart' as sh;
 
 /// Style for LLM messages.
 class LlmMessageStyle {
@@ -31,8 +32,11 @@ class LlmMessageStyle {
   /// The markdown style sheet for LLM messages.
   final MarkdownStyleSheet? markdownStyle;
 
-  /// Provides default style for LLM messages.
-  static LlmMessageStyle get defaultStyle => LlmMessageStyle(
+  /// Provides a default style.
+  static LlmMessageStyle get defaultStyle => lightStyle;
+
+  /// Provides a default light style.
+  static LlmMessageStyle get lightStyle => LlmMessageStyle(
         icon: FatIcons.spark_icon,
         iconColor: FatColors.darkIcon,
         iconDecoration: BoxDecoration(
@@ -45,16 +49,16 @@ class LlmMessageStyle {
           checkbox: FatTextStyles.body1,
           code: FatTextStyles.code,
           del: FatTextStyles.body1,
-          em: FatTextStyles.body1,
+          em: FatTextStyles.body1.copyWith(fontStyle: FontStyle.italic),
           h1: FatTextStyles.heading1,
           h2: FatTextStyles.heading2,
-          h3: FatTextStyles.body1,
+          h3: FatTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
           h4: FatTextStyles.body1,
           h5: FatTextStyles.body1,
           h6: FatTextStyles.body1,
           listBullet: FatTextStyles.body1,
           img: FatTextStyles.body1,
-          strong: FatTextStyles.body1,
+          strong: FatTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
           p: FatTextStyles.body1,
           tableBody: FatTextStyles.body1,
           tableHead: FatTextStyles.body1,
@@ -72,6 +76,22 @@ class LlmMessageStyle {
           ),
         ),
       );
+
+  /// Provides a default dark style.
+  static LlmMessageStyle get darkStyle {
+    final style = lightStyle;
+    return LlmMessageStyle(
+      icon: style.icon,
+      iconColor: sh.invertColor(style.iconColor),
+      // iconDecoration: sh.invertDecoration(style.iconDecoration),
+      iconDecoration: BoxDecoration(
+        color: FatColors.greyBackground,
+        shape: BoxShape.circle,
+      ),
+      markdownStyle: _invertMarkdownStyle(style.markdownStyle),
+      decoration: sh.invertDecoration(style.decoration),
+    );
+  }
 
   /// Resolves the provided style with the default style.
   ///
@@ -100,4 +120,28 @@ class LlmMessageStyle {
       decoration: style?.decoration ?? defaultStyle.decoration,
     );
   }
+
+  static MarkdownStyleSheet? _invertMarkdownStyle(
+    MarkdownStyleSheet? markdownStyle,
+  ) =>
+      markdownStyle?.copyWith(
+        a: sh.invertTextStyle(markdownStyle.a),
+        blockquote: sh.invertTextStyle(markdownStyle.blockquote),
+        checkbox: sh.invertTextStyle(markdownStyle.checkbox),
+        code: sh.invertTextStyle(markdownStyle.code),
+        del: sh.invertTextStyle(markdownStyle.del),
+        em: sh.invertTextStyle(markdownStyle.em),
+        strong: sh.invertTextStyle(markdownStyle.strong),
+        p: sh.invertTextStyle(markdownStyle.p),
+        tableBody: sh.invertTextStyle(markdownStyle.tableBody),
+        tableHead: sh.invertTextStyle(markdownStyle.tableHead),
+        h1: sh.invertTextStyle(markdownStyle.h1),
+        h2: sh.invertTextStyle(markdownStyle.h2),
+        h3: sh.invertTextStyle(markdownStyle.h3),
+        h4: sh.invertTextStyle(markdownStyle.h4),
+        h5: sh.invertTextStyle(markdownStyle.h5),
+        h6: sh.invertTextStyle(markdownStyle.h6),
+        listBullet: sh.invertTextStyle(markdownStyle.listBullet),
+        img: sh.invertTextStyle(markdownStyle.img),
+      );
 }

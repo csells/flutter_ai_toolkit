@@ -12,7 +12,7 @@ import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../llm_exception.dart';
 import '../../models/chat_view_model/chat_view_model.dart';
 import '../../models/chat_view_model/chat_view_model_provider.dart';
-import '../../platform_helper/platform_helper_io.dart';
+import '../../platform_helper/platform_helper.dart' as ph;
 import '../../providers/forwarding_provider.dart';
 import '../chat_history_view.dart';
 import '../chat_input/chat_input.dart';
@@ -202,7 +202,7 @@ class _LlmChatViewState extends State<LlmChatView>
     );
 
     // delete the file when we're done
-    await PlatformHelper.deleteFile(file);
+    await ph.deleteFile(file);
 
     setState(() {});
   }

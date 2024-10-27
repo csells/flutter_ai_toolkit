@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'fat_colors.dart';
 import 'fat_icons.dart';
 import 'fat_text_styles.dart';
+import 'style_helpers.dart' as sh;
 
 /// Style for file attachments in the chat view.
 class FileAttachmentStyle {
@@ -34,8 +35,11 @@ class FileAttachmentStyle {
   /// The text style for the filetype.
   final TextStyle? filetypeStyle;
 
-  /// Provides default style for file attachments.
-  static FileAttachmentStyle get defaultStyle => FileAttachmentStyle(
+  /// Provides a default style.
+  static FileAttachmentStyle get defaultStyle => lightStyle;
+
+  /// Provides a default light style.
+  static FileAttachmentStyle get lightStyle => FileAttachmentStyle(
         decoration: ShapeDecoration(
           color: FatColors.fileContainerBackground,
           shape: RoundedRectangleBorder(
@@ -53,6 +57,26 @@ class FileAttachmentStyle {
         filenameStyle: FatTextStyles.filename,
         filetypeStyle: FatTextStyles.filetype,
       );
+
+  /// Provides a default dark style.
+  static FileAttachmentStyle get darkStyle {
+    final style = lightStyle;
+    return FileAttachmentStyle(
+      // decoration: sh.invertDecoration(style.decoration),
+      decoration: ShapeDecoration(
+        color: FatColors.greyBackground,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      icon: style.icon,
+      iconColor: sh.invertColor(style.iconColor),
+      iconDecoration: sh.invertDecoration(style.iconDecoration),
+      filenameStyle: sh.invertTextStyle(style.filenameStyle),
+      // filetypeStyle: sh.invertTextStyle(style.filetypeStyle),
+      filetypeStyle: style.filetypeStyle!.copyWith(color: FatColors.black),
+    );
+  }
 
   /// Resolves the FileAttachmentStyle by combining the provided style with default values.
   ///
