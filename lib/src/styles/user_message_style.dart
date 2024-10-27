@@ -1,38 +1,33 @@
 import 'package:flutter/widgets.dart';
 
+import 'fat_colors.dart';
+import 'fat_text_style.dart';
+
 /// Style for user messages.
 class UserMessageStyle {
   /// The text style for user messages.
   final TextStyle? textStyle;
 
-  /// The background color for user message bubbles.
-  final Color? backgroundColor;
-
-  /// The outline color for user message bubbles.
-  final Color? outlineColor;
-
-  /// The shape of user message bubbles.
-  final ShapeBorder? shape;
+  /// The decoration for user message bubbles.
+  final Decoration? decoration;
 
   /// Creates a UserMessageStyle.
   const UserMessageStyle({
     this.textStyle,
-    this.backgroundColor,
-    this.outlineColor,
-    this.shape,
+    this.decoration,
   });
 
   /// Provides default style data for user messages.
   static UserMessageStyle get defaultStyle => UserMessageStyle(
-        // TODO
-        // textStyle: theme.textTheme.bodyLarge?.copyWith(
-        //   color: FatColors.black,
-        //   fontWeight: FontWeight.normal,
-        // ),
-        // backgroundColor: Colors.blue[100],
-        // outlineColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+        textStyle: FatTextStyles.body1,
+        decoration: const BoxDecoration(
+          color: FatColors.userMessageBackground,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.zero,
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
         ),
       );
 
@@ -52,10 +47,7 @@ class UserMessageStyle {
     defaultStyle ??= UserMessageStyle.defaultStyle;
     return UserMessageStyle(
       textStyle: userMessageStyle?.textStyle ?? defaultStyle.textStyle,
-      backgroundColor:
-          userMessageStyle?.backgroundColor ?? defaultStyle.backgroundColor,
-      outlineColor: userMessageStyle?.outlineColor ?? defaultStyle.outlineColor,
-      shape: userMessageStyle?.shape ?? defaultStyle.shape,
+      decoration: userMessageStyle?.decoration ?? defaultStyle.decoration,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+import '../../models/chat_view_model/chat_view_model_client.dart';
 import '../../models/llm_chat_message/llm_chat_message.dart';
-import '../../styles/fat_colors.dart';
-import '../../styles/fat_text_styles.dart';
+import '../../styles/styles.dart';
 import '../attachment_view/attachment_view.dart';
 
 /// A widget that displays a user's message in a chat interface.
@@ -42,31 +42,28 @@ class UserMessageView extends StatelessWidget {
                       ),
                     ),
                 ],
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: FatColors.userMessageBackground,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.zero,
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
+                ChatViewModelClient(
+                  builder: (context, viewModel, child) {
+                    final userStyle = UserMessageStyle.resolve(
+                      viewModel.style?.userMessageStyle,
+                    );
+
+                    return Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        decoration: userStyle.decoration,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 12,
+                            bottom: 12,
+                          ),
+                          child: Text(message.text, style: userStyle.textStyle),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 12,
-                        bottom: 12,
-                      ),
-                      child: Text(
-                        message.text,
-                        style: FatTextStyles.body1,
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ],
             ),

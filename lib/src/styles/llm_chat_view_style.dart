@@ -4,7 +4,6 @@ import 'action_button_style.dart';
 import 'action_button_type.dart';
 import 'chat_input_style.dart';
 import 'fat_colors.dart';
-import 'fat_text_styles.dart';
 import 'llm_message_style.dart';
 import 'user_message_style.dart';
 
@@ -15,9 +14,6 @@ class LlmChatViewStyle {
 
   /// The color of the progress indicator.
   final Color? progressIndicatorColor;
-
-  /// The style of the tooltip.
-  final TextStyle? tooltipTextStyle;
 
   /// Style for user messages.
   final UserMessageStyle? userMessageStyle;
@@ -65,7 +61,6 @@ class LlmChatViewStyle {
   const LlmChatViewStyle({
     this.backgroundColor,
     this.progressIndicatorColor,
-    this.tooltipTextStyle,
     this.userMessageStyle,
     this.llmMessageStyle,
     this.chatInputStyle,
@@ -86,7 +81,6 @@ class LlmChatViewStyle {
   static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
         backgroundColor: FatColors.containerBackground,
         progressIndicatorColor: FatColors.black,
-        tooltipTextStyle: FatTextStyles.tooltip,
         userMessageStyle: UserMessageStyle.defaultStyle,
         llmMessageStyle: LlmMessageStyle.defaultStyle,
         chatInputStyle: ChatInputStyle.defaultStyle,

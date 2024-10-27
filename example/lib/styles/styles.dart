@@ -42,10 +42,28 @@ class _ChatPageState extends State<ChatPage>
     upperBound: 1.0,
   );
 
-  TextStyle get _halloweenStyle => GoogleFonts.hennyPenny(
-        color: Colors.white,
-        fontSize: 24,
-      );
+  late final TextStyle _halloweenTextStyle = GoogleFonts.hennyPenny(
+    color: Colors.white,
+    fontSize: 24,
+  );
+
+  late final _halloweenActionButtonStyle = ActionButtonStyle(
+    tooltipTextStyle: _halloweenTextStyle,
+    iconColor: Colors.black,
+    iconDecoration: BoxDecoration(
+      color: Colors.orange,
+      borderRadius: BorderRadius.circular(8),
+    ),
+  );
+
+  late final _halloweenMenuButtonStyle = ActionButtonStyle(
+    tooltipTextStyle: _halloweenTextStyle,
+    iconColor: Colors.orange,
+    iconDecoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(8),
+    ),
+  );
 
   @override
   void initState() {
@@ -111,10 +129,34 @@ class _ChatPageState extends State<ChatPage>
                       color: Colors.yellow,
                       border: Border.all(color: Colors.orange),
                     ),
-                    textStyle: _halloweenStyle.copyWith(color: Colors.black),
+                    textStyle:
+                        _halloweenTextStyle.copyWith(color: Colors.black),
                     hintText: 'good evening...',
-                    hintStyle: _halloweenStyle.copyWith(
+                    hintStyle: _halloweenTextStyle.copyWith(
                         color: Colors.orange.withOpacity(.5)),
+                  ),
+                  userMessageStyle: UserMessageStyle(
+                    textStyle:
+                        _halloweenTextStyle.copyWith(color: Colors.black),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white,
+                          Colors.grey.shade300,
+                          Colors.grey.shade400,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
                   ),
                   llmMessageStyle: LlmMessageStyle(
                     icon: Icons.sentiment_very_satisfied,
@@ -154,19 +196,21 @@ class _ChatPageState extends State<ChatPage>
                       ],
                     ),
                     markdownStyle: MarkdownStyleSheet(
-                      p: _halloweenStyle,
-                      listBullet: _halloweenStyle,
+                      p: _halloweenTextStyle,
+                      listBullet: _halloweenTextStyle,
                     ),
                   ),
-                  recordButtonStyle: ActionButtonStyle(
-                    tooltipTextStyle: _halloweenStyle,
-                  ),
-                  stopButtonStyle: ActionButtonStyle(
-                    tooltipTextStyle: _halloweenStyle,
-                  ),
-                  submitButtonStyle: ActionButtonStyle(
-                    tooltipTextStyle: _halloweenStyle,
-                  ),
+                  recordButtonStyle: _halloweenActionButtonStyle,
+                  stopButtonStyle: _halloweenActionButtonStyle,
+                  submitButtonStyle: _halloweenActionButtonStyle,
+                  addButtonStyle: _halloweenActionButtonStyle,
+                  attachFileButtonStyle: _halloweenMenuButtonStyle,
+                  cameraButtonStyle: _halloweenMenuButtonStyle,
+                  closeButtonStyle: _halloweenActionButtonStyle,
+                  closeMenuButtonStyle: _halloweenActionButtonStyle,
+                  copyButtonStyle: _halloweenMenuButtonStyle,
+                  editButtonStyle: _halloweenMenuButtonStyle,
+                  galleryButtonStyle: _halloweenMenuButtonStyle,
                 ),
               ),
             ],
