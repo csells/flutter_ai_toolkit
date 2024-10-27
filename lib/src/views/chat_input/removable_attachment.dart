@@ -1,9 +1,13 @@
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/widgets.dart';
 
 import '../../dialogs/adaptive_dialog.dart';
 import '../../dialogs/image_preview_dialog.dart';
 import '../../models/chat_view_model/chat_view_model_client.dart';
-import '../../providers/llm_provider_interface.dart';
+import '../../providers/interface/attachments.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
 import '../attachment_view/attachment_view.dart';

@@ -1,5 +1,6 @@
-// NOTE: RB: 240826: Switched to a form for editing recipes. Added text hints
-// and validation for required fields.
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 import 'dart:convert';
 

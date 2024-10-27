@@ -4,7 +4,7 @@
 
 import 'package:uuid/uuid.dart';
 
-import '../../providers/llm_provider_interface.dart';
+import '../../providers/interface/attachments.dart';
 import 'message_origin.dart';
 
 /// Represents a message in a chat conversation.

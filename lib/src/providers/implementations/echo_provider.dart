@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import '../llm_exception.dart';
-import 'llm_provider_interface.dart';
+import '../../llm_exception.dart';
+import '../interface/attachments.dart';
+import '../interface/llm_provider.dart';
 
 /// A simple LLM provider that echoes the input prompt and attachment
 /// information.

@@ -1,6 +1,10 @@
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/widgets.dart';
 
-import '../../providers/llm_provider_interface.dart';
+import '../../providers/interface/attachments.dart';
 import 'removable_attachment.dart';
 
 /// A widget that displays a horizontal list of attachments with the ability to remove them.

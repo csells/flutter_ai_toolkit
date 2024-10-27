@@ -4,7 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../../providers/llm_provider_interface.dart';
+import '../../providers/interface/attachments.dart';
 import 'file_attatchment_view.dart';
 import 'image_attachment_view.dart';
 

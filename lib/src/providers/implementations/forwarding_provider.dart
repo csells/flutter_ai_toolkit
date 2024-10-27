@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'llm_provider_interface.dart';
+import '../interface/attachments.dart';
+import '../interface/llm_provider.dart';
 
 /// A provider class that forwards the generation of text to a user-provided
 /// function.

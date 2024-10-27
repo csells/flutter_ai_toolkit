@@ -12,7 +12,7 @@ import 'package:waveform_recorder/waveform_recorder.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../models/chat_view_model/chat_view_model_client.dart';
 import '../../models/llm_chat_message/llm_chat_message.dart';
-import '../../providers/llm_provider_interface.dart';
+import '../../providers/interface/attachments.dart';
 import '../../styles/chat_input_style.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../utility.dart';

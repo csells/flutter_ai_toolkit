@@ -4,7 +4,8 @@
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 
-import 'llm_provider_interface.dart';
+import '../interface/attachments.dart';
+import '../interface/llm_provider.dart';
 
 /// A provider class for interacting with Firebase Vertex AI's language model.
 ///

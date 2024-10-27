@@ -1,4 +1,6 @@
-// NOTE: 240826: Now sorting recipe list by title
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +21,6 @@ class RecipeListView extends StatefulWidget {
 class _RecipeListViewState extends State<RecipeListView> {
   final _expanded = <String, bool>{};
 
-  // NEW: RB: 240826: Sort by Title:
   Iterable<Recipe> _filteredRecipes(Iterable<Recipe> recipes) => recipes
       .where((recipe) =>
           recipe.title

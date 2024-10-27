@@ -1,3 +1,7 @@
+// Copyright 2024 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /// Represents the different states of the chat input.
 enum InputState {
   /// The input has text and the submit button is enabled.

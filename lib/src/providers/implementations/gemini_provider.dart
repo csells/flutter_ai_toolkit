@@ -4,7 +4,8 @@
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-import 'llm_provider_interface.dart';
+import '../interface/attachments.dart';
+import '../interface/llm_provider.dart';
 
 /// A provider class for interacting with Google's Gemini AI language model.
 ///
