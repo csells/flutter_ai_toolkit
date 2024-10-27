@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_ai_toolkit/src/models/chat_view_model/chat_view_model_client.dart';
+import 'package:flutter_ai_toolkit/src/chat_view_model/chat_view_model_client.dart';
 import 'package:gap/gap.dart';
 
 import '../../providers/interface/attachments.dart';

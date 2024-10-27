@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
+import 'package:flutter_ai_toolkit/src/providers/interface/chat_message.dart';
 
 import '../interface/attachments.dart';
 import '../interface/llm_provider.dart';
+import '../interface/message_origin.dart';
 
 /// A provider class for interacting with Firebase Vertex AI's language model.
 ///
@@ -21,16 +23,40 @@ class VertexProvider extends LlmProvider {
   /// [embeddingModel] is an optional [GenerativeModel] instance for creating
   /// embeddings. If provided, it will be used for document and query embedding
   /// operations.
+  ///
+  /// [history] is an optional list of previous chat messages to initialize the
+  /// chat session with.
+  ///
+  /// [safetySettings] is an optional list of safety settings to apply to the
+  /// model's responses.
+  ///
+  /// [generationConfig] is an optional configuration for controlling the model's
+  /// generation behavior.
   VertexProvider({
     GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,
+    Iterable<ChatMessage>? history,
+    List<SafetySetting>? safetySettings,
+    GenerationConfig? generationConfig,
   })  : _generativeModel = generativeModel,
         _embeddingModel = embeddingModel,
-        _chat = generativeModel?.startChat();
+        _safetySettings = safetySettings,
+        _generationConfig = generationConfig {
+    _chat = _startChat(history?.map(_contentFrom).toList());
+  }
 
   final GenerativeModel? _generativeModel;
   final GenerativeModel? _embeddingModel;
-  final ChatSession? _chat;
+  final List<SafetySetting>? _safetySettings;
+  final GenerationConfig? _generationConfig;
+  ChatSession? _chat;
+
+  ChatSession? _startChat(List<Content>? history) =>
+      _generativeModel?.startChat(
+        history: history,
+        safetySettings: _safetySettings,
+        generationConfig: _generationConfig,
+      );
 
   @override
   Future<List<double>> getDocumentEmbedding(String document) =>
@@ -109,8 +135,66 @@ class VertexProvider extends LlmProvider {
     }
   }
 
-  Part _partFrom(Attachment attachment) => switch (attachment) {
+  @override
+  Iterable<ChatMessage> get history {
+    if (_generativeModel == null) {
+      throw Exception('generativeModel is not initialized');
+    }
+
+    return _chat!.history
+        .where((c) => c.role == 'user' || c.role == 'model')
+        .map(_messageFrom);
+  }
+
+  static Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
+
+  static Content _contentFrom(ChatMessage message) => Content(
+        message.origin.isUser ? 'user' : 'model',
+        [
+          TextPart(message.text ?? ''),
+          ...message.attachments.map(_partFrom),
+        ],
+      );
+
+  // TODO: get the FileAttachmentname and check the mapping
+  static Attachment _attachmentFrom(Part part) => switch (part) {
+        (InlineDataPart p) =>
+          FileAttachment(name: '', mimeType: p.mimeType, bytes: p.bytes),
+        (FileData p) => LinkAttachment(name: '', url: Uri.parse(p.fileUri)),
+        _ => throw UnimplementedError('Unsupported part type: $part'),
+      };
+
+  static ChatMessage _messageFrom(Content content) => ChatMessage(
+        text: content.parts.whereType<TextPart>().map((p) => p.text).join(),
+        origin: content.role == 'user' ? MessageOrigin.user : MessageOrigin.llm,
+        attachments: content.parts.map(_attachmentFrom).toList(),
+      );
+
+  @override
+  ({ChatMessage? llmMessage, ChatMessage? userMessage}) getLastMessagePair({
+    bool pop = false,
+  }) {
+    final history = _chat!.history.toList();
+    // ignore: prefer_is_empty
+    final llmIndex = history.length != 0 ? history.length - 1 : -1;
+    final userIndex = history.length != 1 ? history.length - 2 : -1;
+    final llm = llmIndex == -1 ? null : history[llmIndex];
+    final user = userIndex == -1 ? null : history[userIndex];
+    assert(llm == null || llm.role == 'model');
+    assert(user == null || user.role == 'user');
+
+    if (pop) {
+      history.removeLast();
+      history.removeLast();
+      _chat = _startChat(history);
+    }
+
+    return (
+      llmMessage: llm == null ? null : _messageFrom(llm),
+      userMessage: user == null ? null : _messageFrom(user)
+    );
+  }
 }

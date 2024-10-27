@@ -8,8 +8,8 @@ import 'package:flutter_ai_toolkit/src/views/action_button/action_button.dart';
 import 'package:gap/gap.dart';
 
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
-import '../../models/chat_view_model/chat_view_model_client.dart';
-import '../../models/llm_chat_message/llm_chat_message.dart';
+import '../../chat_view_model/chat_view_model_client.dart';
+import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button_bar.dart';
 import 'llm_message_view.dart';
@@ -37,7 +37,7 @@ class ChatMessageView extends StatefulWidget {
   });
 
   /// The chat message to be displayed.
-  final LlmChatMessage message;
+  final ChatMessage message;
 
   /// Callback function triggered when the edit action is selected.
   final void Function()? onEdit;
@@ -117,7 +117,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
 
   Future<void> _onCopy() async {
     widget.onSelected?.call(false);
-    await Clipboard.setData(ClipboardData(text: widget.message.text));
+    await Clipboard.setData(ClipboardData(text: widget.message.text ?? ''));
 
     if (context.mounted) {
       // ignore: use_build_context_synchronously

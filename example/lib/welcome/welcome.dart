@@ -29,12 +29,16 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text(App.title)),
         body: LlmChatView(
-          welcomeMessage: 'Hello and welcome to the Flutter AI Toolkit!',
           provider: GeminiProvider(
             generativeModel: GenerativeModel(
               model: 'gemini-1.5-flash',
               apiKey: geminiApiKey,
             ),
+            history: [
+              ChatMessage.llmWelcome(
+                'Hello and welcome to the Flutter AI Toolkit!',
+              )
+            ],
           ),
         ),
       );

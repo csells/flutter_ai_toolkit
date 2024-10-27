@@ -10,8 +10,8 @@ import '../../dialogs/adaptive_dialog.dart';
 import '../../dialogs/adaptive_dialog_action.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../llm_exception.dart';
-import '../../models/chat_view_model/chat_view_model.dart';
-import '../../models/chat_view_model/chat_view_model_provider.dart';
+import '../../chat_view_model/chat_view_model.dart';
+import '../../chat_view_model/chat_view_model_provider.dart';
 import '../../platform_helper/platform_helper.dart' as ph;
 import '../../providers/implementations/forwarding_provider.dart';
 import '../../providers/interface/attachments.dart';
@@ -57,11 +57,9 @@ class LlmChatView extends StatefulWidget {
   /// The [provider] parameter must not be null.
   LlmChatView({
     required LlmProvider provider,
+    LlmChatViewStyle? style,
     ResponseBuilder? responseBuilder,
     LlmStreamGenerator? messageSender,
-    String? welcomeMessage,
-    LlmChatViewStyle? style,
-    List<LlmChatMessage>? transcript,
     super.key,
   }) : viewModel = ChatViewModel(
           provider: messageSender == null
@@ -70,9 +68,7 @@ class LlmChatView extends StatefulWidget {
                   provider: provider,
                   messageSender: messageSender,
                 ),
-          transcript: transcript ?? List<LlmChatMessage>.empty(growable: true),
           responseBuilder: responseBuilder,
-          welcomeMessage: welcomeMessage,
           style: style,
         );
 
@@ -93,18 +89,8 @@ class _LlmChatViewState extends State<LlmChatView>
   bool get wantKeepAlive => true;
 
   LlmResponse? _pendingPromptResponse;
-  LlmChatMessage? _initialMessage;
+  ChatMessage? _initialMessage;
   LlmResponse? _pendingSttResponse;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.viewModel.welcomeMessage != null) {
-      widget.viewModel.transcript.add(
-        LlmChatMessage.llmWelcome(widget.viewModel.welcomeMessage!),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,17 +129,13 @@ class _LlmChatViewState extends State<LlmChatView>
   ) async {
     _initialMessage = null;
 
-    final userMessage = LlmChatMessage.user(prompt, attachments);
-    final llmMessage = LlmChatMessage.llm();
-
-    widget.viewModel.transcript.addAll([userMessage, llmMessage]);
-
     _pendingPromptResponse = LlmResponse(
+      // TODO: once ForwardingProvider is gone, use messageSender here instance
       stream: widget.viewModel.provider.sendMessageStream(
         prompt,
         attachments: attachments,
       ),
-      message: llmMessage,
+      onUpdate: (_) => setState(() {}),
       onDone: _onPromptDone,
     );
 
@@ -167,19 +149,20 @@ class _LlmChatViewState extends State<LlmChatView>
 
   void _onCancelMessage() => _pendingPromptResponse?.cancel();
 
-  void _onEditMessage(LlmChatMessage message) {
+  void _onEditMessage(ChatMessage message) {
     assert(_pendingPromptResponse == null);
 
-    // remove the last llm message
-    assert(widget.viewModel.transcript.last.origin.isLlm);
-    widget.viewModel.transcript.removeLast();
+    // TODO: support this in the provider
+    // // remove the last llm message
+    // assert(widget.viewModel.transcript.last.origin.isLlm);
+    // widget.viewModel.transcript.removeLast();
 
-    // remove the last user message
-    assert(widget.viewModel.transcript.last.origin.isUser);
-    final userMessage = widget.viewModel.transcript.removeLast();
+    // // remove the last user message
+    // assert(widget.viewModel.transcript.last.origin.isUser);
+    // final userMessage = widget.viewModel.transcript.removeLast();
 
     // set the text of the controller to the last userMessage
-    setState(() => _initialMessage = userMessage);
+    // setState(() => _initialMessage = userMessage);
   }
 
   Future<void> _onTranslateStt(XFile file) async {
@@ -193,27 +176,30 @@ class _LlmChatViewState extends State<LlmChatView>
         'provide the result of translating the foreground audio.';
     final attachments = [await FileAttachment.fromFile(file)];
 
+    String response = '';
     _pendingSttResponse = LlmResponse(
       stream: widget.viewModel.provider.generateStream(
         prompt,
         attachments: attachments,
       ),
-      message: LlmChatMessage.llm(),
-      onDone: _onSttDone,
+      onUpdate: (text) => setState(() => response += text),
+      onDone: (error) async {
+        _onSttDone(error, response, file);
+      },
     );
-
-    // delete the file when we're done
-    await ph.deleteFile(file);
 
     setState(() {});
   }
 
-  void _onSttDone(LlmException? error) {
+  void _onSttDone(LlmException? error, String response, XFile file) async {
     assert(_pendingSttResponse != null);
     setState(() {
-      _initialMessage = _pendingSttResponse!.message;
+      _initialMessage = ChatMessage.llm()..append(response);
       _pendingSttResponse = null;
     });
+
+    // delete the file now that the LLM has translated it
+    ph.deleteFile(file);
 
     _showLlmException(error);
   }

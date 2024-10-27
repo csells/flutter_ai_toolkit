@@ -5,17 +5,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
-void main(List<String> args) async => runApp(_App());
+void main(List<String> args) async => runApp(App());
 
-class _App extends StatelessWidget {
+class App extends StatefulWidget {
   static const title = 'Example: Echo Test';
+
+  const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final _provider = EchoProvider();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: title,
+        title: App.title,
         home: Scaffold(
-          appBar: AppBar(title: const Text(title)),
-          body: LlmChatView(provider: EchoProvider()),
+          appBar: AppBar(title: const Text(App.title)),
+          body: LlmChatView(provider: _provider),
         ),
       );
 }

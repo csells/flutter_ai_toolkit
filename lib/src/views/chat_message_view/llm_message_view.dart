@@ -5,8 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../../models/chat_view_model/chat_view_model_client.dart';
-import '../../models/llm_chat_message/llm_chat_message.dart';
+import '../../chat_view_model/chat_view_model_client.dart';
+import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../styles/llm_message_style.dart';
 import '../../utility.dart';
@@ -20,7 +20,7 @@ class LlmMessageView extends StatelessWidget {
   const LlmMessageView(this.message, {super.key});
 
   /// The LLM chat message to be displayed.
-  final LlmChatMessage message;
+  final ChatMessage message;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -59,7 +59,7 @@ class LlmMessageView extends StatelessWidget {
                           decoration: llmStyle.decoration,
                           margin: const EdgeInsets.only(left: 28),
                           padding: const EdgeInsets.all(8),
-                          child: message.text.isEmpty
+                          child: message.text == null
                               ? SizedBox(
                                   width: 24,
                                   child: JumpingDotsProgressIndicator(
@@ -67,7 +67,7 @@ class LlmMessageView extends StatelessWidget {
                                     color: chatStyle.progressIndicatorColor!,
                                   ),
                                 )
-                              : responseBuilder(context, message.text),
+                              : responseBuilder(context, message.text ?? ''),
                         ),
                       ],
                     );

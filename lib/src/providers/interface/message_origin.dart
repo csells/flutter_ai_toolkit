@@ -11,18 +11,8 @@ enum MessageOrigin {
   llm;
 
   /// Checks if the message origin is from the user.
-  ///
-  /// Returns `true` if the origin is [MessageOrigin.user], `false` otherwise.
-  bool get isUser => switch (this) {
-        MessageOrigin.user => true,
-        MessageOrigin.llm => false,
-      };
+  bool get isUser => this == MessageOrigin.user;
 
   /// Checks if the message origin is from the LLM.
-  ///
-  /// Returns `true` if the origin is [MessageOrigin.llm], `false` otherwise.
-  bool get isLlm => switch (this) {
-        MessageOrigin.user => false,
-        MessageOrigin.llm => true,
-      };
+  bool get isLlm => this == MessageOrigin.llm;
 }

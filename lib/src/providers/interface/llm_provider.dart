@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'attachments.dart';
+import 'chat_message.dart';
 
 /// An abstract class representing a Language Model (LLM) provider.
 ///
@@ -66,6 +67,33 @@ abstract class LlmProvider {
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments,
+  });
+
+  /// Returns an iterable of [ChatMessage] objects representing the chat history.
+  ///
+  /// This getter provides access to the conversation history maintained by the LLM provider.
+  /// The history typically includes both user messages and LLM responses in chronological order.
+  ///
+  /// Returns an [Iterable] of [ChatMessage] objects.
+  Iterable<ChatMessage> get history;
+
+  /// Returns the last user-LLM message pair from the chat history.
+  ///
+  /// This method retrieves the most recent pair of messages exchanged between
+  /// the user and the LLM. The pair consists of a user message followed by the
+  /// LLM's response.
+  ///
+  /// If [pop] is true, the pair will be removed from the history. Defaults to
+  /// false.
+  ///
+  /// Returns a record containing:
+  /// - [user]: The last [ChatMessage] from the user
+  /// - [llm]: The corresponding [ChatMessage] response from the LLM
+  ///
+  /// Throws a [StateError] if there are no complete message pairs in the
+  /// history.
+  ({ChatMessage? userMessage, ChatMessage? llmMessage}) getLastMessagePair({
+    bool pop,
   });
 }
 

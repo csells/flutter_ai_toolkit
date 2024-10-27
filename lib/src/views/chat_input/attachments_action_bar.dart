@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
-import '../../models/chat_view_model/chat_view_model_client.dart';
+import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/attachments.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';

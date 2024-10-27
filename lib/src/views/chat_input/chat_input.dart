@@ -9,10 +9,10 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
+import '../../chat_view_model/chat_view_model_client.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
-import '../../models/chat_view_model/chat_view_model_client.dart';
-import '../../models/llm_chat_message/llm_chat_message.dart';
 import '../../providers/interface/attachments.dart';
+import '../../providers/interface/chat_message.dart';
 import '../../styles/chat_input_style.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../utility.dart';
@@ -62,7 +62,7 @@ class ChatInput extends StatefulWidget {
   final void Function()? onCancelStt;
 
   /// The initial message to populate the input field, if any.
-  final LlmChatMessage? initialMessage;
+  final ChatMessage? initialMessage;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
@@ -103,7 +103,7 @@ class _ChatInputState extends State<ChatInput> {
   void didUpdateWidget(covariant ChatInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialMessage != null) {
-      _textController.text = widget.initialMessage!.text;
+      _textController.text = widget.initialMessage!.text ?? '';
       _attachments.clear();
       _attachments.addAll(widget.initialMessage!.attachments);
     }

@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter_ai_toolkit/src/providers/interface/chat_message.dart';
+
 import '../interface/attachments.dart';
 import '../interface/llm_provider.dart';
 
@@ -49,4 +51,13 @@ class ForwardingProvider extends LlmProvider {
     Iterable<Attachment> attachments = const [],
   }) =>
       messageSender(prompt, attachments: attachments);
+
+  @override
+  Iterable<ChatMessage> get history => provider.history;
+
+  @override
+  ({ChatMessage? llmMessage, ChatMessage? userMessage}) getLastMessagePair({
+    bool pop = false,
+  }) =>
+      provider.getLastMessagePair(pop: pop);
 }

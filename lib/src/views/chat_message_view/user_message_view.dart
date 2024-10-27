@@ -4,8 +4,8 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../../models/chat_view_model/chat_view_model_client.dart';
-import '../../models/llm_chat_message/llm_chat_message.dart';
+import '../../chat_view_model/chat_view_model_client.dart';
+import '../../providers/interface/chat_message.dart';
 import '../../styles/styles.dart';
 import '../attachment_view/attachment_view.dart';
 
@@ -17,11 +17,11 @@ import '../attachment_view/attachment_view.dart';
 class UserMessageView extends StatelessWidget {
   /// Creates a [UserMessageView].
   ///
-  /// The [message] parameter is required and contains the [LlmChatMessage] to be displayed.
+  /// The [message] parameter is required and contains the [ChatMessage] to be displayed.
   const UserMessageView(this.message, {super.key});
 
   /// The chat message to be displayed.
-  final LlmChatMessage message;
+  final ChatMessage message;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -63,7 +63,10 @@ class UserMessageView extends StatelessWidget {
                             top: 12,
                             bottom: 12,
                           ),
-                          child: Text(message.text, style: userStyle.textStyle),
+                          child: Text(
+                            message.text ?? '',
+                            style: userStyle.textStyle,
+                          ),
                         ),
                       ),
                     );

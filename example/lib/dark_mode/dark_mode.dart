@@ -46,9 +46,6 @@ class _ChatPageState extends State<ChatPage> {
     ),
   );
 
-  final List<LlmChatMessage> _transcript =
-      List<LlmChatMessage>.empty(growable: true);
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -65,7 +62,6 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: LlmChatView(
           provider: _provider,
-          transcript: _transcript,
           style: App.themeMode.value == ThemeMode.dark
               ? LlmChatViewStyle.darkStyle
               : LlmChatViewStyle.lightStyle,

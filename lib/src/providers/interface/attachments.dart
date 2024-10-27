@@ -49,6 +49,13 @@ final class FileAttachment extends Attachment {
     required this.bytes,
   });
 
+  @override
+  String toString() => 'FileAttachment('
+      'name: $name, '
+      'mimeType: $mimeType, '
+      'bytes: ${bytes.length} bytes'
+      ')';
+
   /// Creates a [FileAttachment] from an [XFile].
   ///
   /// This factory method asynchronously reads the file content and determines
@@ -84,6 +91,13 @@ final class ImageFileAttachment extends FileAttachment {
     required super.mimeType,
     required super.bytes,
   }) : assert(Attachment._isImage(mimeType));
+
+  @override
+  String toString() => 'ImageFileAttachment('
+      'name: $name, '
+      'mimeType: $mimeType, '
+      'bytes: ${bytes.length} bytes'
+      ')';
 
   /// Creates an [ImageFileAttachment] from an [XFile].
   ///
@@ -126,6 +140,15 @@ final class LinkAttachment extends Attachment {
   ///
   /// [name] is the name of the link attachment.
   /// [url] is the URI of the link.
-  LinkAttachment({required super.name, required this.url})
-      : mimeType = lookupMimeType(url.path) ?? 'application/octet-stream';
+  LinkAttachment({
+    required super.name,
+    required this.url,
+  }) : mimeType = lookupMimeType(url.path) ?? 'application/octet-stream';
+
+  @override
+  String toString() => 'LinkAttachment('
+      'name: $name, '
+      'url: $url, '
+      'mimeType: $mimeType'
+      ')';
 }
