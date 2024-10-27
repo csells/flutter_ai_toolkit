@@ -58,6 +58,13 @@
       "program": "lib/dark_mode/dark_mode.dart",
     },
     {
+      "name": "history",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/history/history.dart",
+    },
+    {
       "name": "recipes",
       "cwd": "example",
       "request": "launch",

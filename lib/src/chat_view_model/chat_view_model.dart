@@ -2,51 +2,54 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import '../../flutter_ai_toolkit.dart';
+import '../llm_chat_view_controller.dart';
+import '../styles/llm_chat_view_style.dart';
 import '../views/response_builder.dart';
 
-/// A view model class for managing the state and data of a chat interface.
+/// A view model class that manages the state and configuration of a chat interface.
 ///
-/// This class encapsulates the necessary components for rendering and
-/// interacting with a chat view, including the LLM provider, message history,
-/// response builder, welcome message, and styling options.
+/// This class holds the controller and styling information needed to render and
+/// manage a chat view. It works in conjunction with [LlmChatViewController] to
+/// handle the business logic and state management of the chat interface.
 class ChatViewModel {
-  /// Creates a new [ChatViewModel] instance.
+  /// Creates a [ChatViewModel] with the required controller and style.
   ///
-  /// All parameters are required to ensure a fully functional chat view.
+  /// The [controller] parameter must not be null and manages the chat state and
+  /// interactions.
   ///
-  /// - [provider]: The LLM provider used to generate responses in the chat.
-  /// - [responseBuilder]: An optional builder function for customizing response display.
-  /// - [welcomeMessage]: An optional welcome message to show when the chat view is first displayed.
-  /// - [style]: The styling options for the chat view.
+  /// The [style] parameter allows customizing the visual appearance of the chat
+  /// interface. If null, default styling will be used.
   ChatViewModel({
-    required this.provider,
-    required this.responseBuilder,
+    required this.controller,
     required this.style,
+    this.responseBuilder,
   });
 
-  /// The LLM provider used to generate responses in the chat.
-  final LlmProvider provider;
+  /// The controller that manages the chat state and interactions.
+  ///
+  /// This controller handles operations like sending messages, managing the chat
+  /// history, and processing responses from the LLM provider.
+  final LlmChatViewController controller;
 
-  /// An optional builder function that allows replacing the widget that
-  /// displays the response.
-  final ResponseBuilder? responseBuilder;
-
-  /// The style of the chat view.
+  /// The style configuration for the chat view.
+  ///
+  /// Defines visual properties like colors, decorations, and layout parameters
+  /// for the chat interface. If null, default styling will be applied.
   final LlmChatViewStyle? style;
+
+  /// The builder for the chat response.
+  final ResponseBuilder? responseBuilder;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChatViewModel &&
-          other.provider == provider &&
-          other.responseBuilder == responseBuilder &&
+          other.controller == controller &&
           other.style == style);
 
   @override
   int get hashCode => Object.hash(
-        provider,
-        responseBuilder,
+        controller,
         style,
       );
 }

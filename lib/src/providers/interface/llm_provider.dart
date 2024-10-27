@@ -69,32 +69,25 @@ abstract class LlmProvider {
     Iterable<Attachment> attachments,
   });
 
-  /// Returns an iterable of [ChatMessage] objects representing the chat history.
+  /// Returns an iterable of [ChatMessage] objects representing the chat
+  /// history.
   ///
-  /// This getter provides access to the conversation history maintained by the LLM provider.
-  /// The history typically includes both user messages and LLM responses in chronological order.
+  /// This getter provides access to the conversation history maintained by the
+  /// LLM provider. The history typically includes both user messages and LLM
+  /// responses in chronological order.
   ///
   /// Returns an [Iterable] of [ChatMessage] objects.
   Iterable<ChatMessage> get history;
 
-  /// Returns the last user-LLM message pair from the chat history.
+  /// Sets the chat history to the provided messages.
   ///
-  /// This method retrieves the most recent pair of messages exchanged between
-  /// the user and the LLM. The pair consists of a user message followed by the
-  /// LLM's response.
+  /// This setter allows updating the conversation history maintained by the LLM
+  /// provider. The provided [history] replaces the existing history with a new
+  /// set of messages.
   ///
-  /// If [pop] is true, the pair will be removed from the history. Defaults to
-  /// false.
-  ///
-  /// Returns a record containing:
-  /// - [user]: The last [ChatMessage] from the user
-  /// - [llm]: The corresponding [ChatMessage] response from the LLM
-  ///
-  /// Throws a [StateError] if there are no complete message pairs in the
-  /// history.
-  ({ChatMessage? userMessage, ChatMessage? llmMessage}) getLastMessagePair({
-    bool pop,
-  });
+  /// [history] is an [Iterable] of [ChatMessage] objects representing the new
+  /// chat history.
+  set history(Iterable<ChatMessage> history);
 }
 
 /// A function that generates a stream of text based on a prompt and

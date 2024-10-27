@@ -81,16 +81,8 @@ class EchoProvider extends LlmProvider {
   Iterable<ChatMessage> get history => _history;
 
   @override
-  ({ChatMessage? llmMessage, ChatMessage? userMessage}) getLastMessagePair({
-    bool pop = false,
-  }) {
-    final llmIndex = _history.lastIndexWhere((m) => m.origin.isLlm);
-    final userIndex = _history.lastIndexWhere((m) => m.origin.isUser);
-    assert(llmIndex == -1 || llmIndex == _history.length - 1);
-    assert(userIndex == -1 || userIndex == _history.length - 2);
-    final llm = llmIndex == -1 ? null : _history[llmIndex];
-    final user = userIndex == -1 ? null : _history[userIndex];
-    if (pop) _history.removeRange(userIndex, _history.length);
-    return (llmMessage: llm, userMessage: user);
+  set history(Iterable<ChatMessage> history) {
+    _history.clear();
+    _history.addAll(history);
   }
 }

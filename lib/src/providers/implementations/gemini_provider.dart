@@ -133,6 +133,10 @@ class GeminiProvider extends LlmProvider {
         .map(_messageFrom);
   }
 
+  @override
+  set history(Iterable<ChatMessage> history) =>
+      _chat = _startChat(history.map(_contentFrom).toList());
+
   static Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => DataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FilePart(a.url),
@@ -159,31 +163,6 @@ class GeminiProvider extends LlmProvider {
         origin: content.role == 'user' ? MessageOrigin.user : MessageOrigin.llm,
         attachments: content.parts.map(_attachmentFrom).toList(),
       );
-
-  @override
-  ({ChatMessage? llmMessage, ChatMessage? userMessage}) getLastMessagePair({
-    bool pop = false,
-  }) {
-    final history = _chat!.history.toList();
-    // ignore: prefer_is_empty
-    final llmIndex = history.length != 0 ? history.length - 1 : -1;
-    final userIndex = history.length != 1 ? history.length - 2 : -1;
-    final llm = llmIndex == -1 ? null : history[llmIndex];
-    final user = userIndex == -1 ? null : history[userIndex];
-    assert(llm == null || llm.role == 'model');
-    assert(user == null || user.role == 'user');
-
-    if (pop) {
-      history.removeLast();
-      history.removeLast();
-      _chat = _startChat(history);
-    }
-
-    return (
-      llmMessage: llm == null ? null : _messageFrom(llm),
-      userMessage: user == null ? null : _messageFrom(user)
-    );
-  }
 
   void _checkModel(String name, GenerativeModel? model) {
     if (model == null) throw Exception('$name is not initialized');

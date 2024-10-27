@@ -25,6 +25,8 @@ class ChatMessage {
         assert(origin.isUser && text != null && text.isNotEmpty ||
             origin.isLlm && text == null);
 
+  String? _text;
+
   /// Factory constructor for creating an LLM-originated message.
   ///
   /// Creates a message with an empty text content and no attachments.
@@ -57,9 +59,6 @@ class ChatMessage {
   /// The origin of the message (user or LLM).
   final MessageOrigin origin;
 
-  /// The text content of the message.
-  String? _text;
-
   /// Any attachments associated with the message.
   final Iterable<Attachment> attachments;
 
@@ -70,4 +69,11 @@ class ChatMessage {
   ///
   /// This is typically used for LLM messages that are streamed in parts.
   void append(String text) => _text = (_text ?? '') + text;
+
+  @override
+  String toString() => 'ChatMessage('
+      'origin: $origin, '
+      'text: $text, '
+      'attachments: $attachments'
+      ')';
 }

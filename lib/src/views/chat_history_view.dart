@@ -43,34 +43,37 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16),
         child: ChatViewModelClient(
-          builder: (context, viewModel, child) {
-            final history = viewModel.provider.history.toList();
-            return ListView.builder(
-              reverse: true,
-              itemCount: history.length,
-              itemBuilder: (context, index) {
-                final messageIndex = history.length - index - 1;
-                final message = history[messageIndex];
-                final isLastUserMessage =
-                    message.origin.isUser && messageIndex >= history.length - 2;
+          builder: (context, viewModel, child) => ListenableBuilder(
+            listenable: viewModel.controller,
+            builder: (context, child) {
+              final history = viewModel.controller.history.toList();
+              return ListView.builder(
+                reverse: true,
+                itemCount: history.length,
+                itemBuilder: (context, index) {
+                  final messageIndex = history.length - index - 1;
+                  final message = history[messageIndex];
+                  final isLastUserMessage = message.origin.isUser &&
+                      messageIndex >= history.length - 2;
 
-                return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: ChatMessageView(
-                    message: message,
-                    onEdit: isLastUserMessage && widget.onEditMessage != null
-                        ? () => widget.onEditMessage?.call(message)
-                        : null,
-                    onSelected: (selected) => _onSelectMessage(
-                      messageIndex,
-                      selected,
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: ChatMessageView(
+                      message: message,
+                      onEdit: isLastUserMessage && widget.onEditMessage != null
+                          ? () => widget.onEditMessage?.call(message)
+                          : null,
+                      onSelected: (selected) => _onSelectMessage(
+                        messageIndex,
+                        selected,
+                      ),
+                      selected: _selectedMessageIndex == messageIndex,
                     ),
-                    selected: _selectedMessageIndex == messageIndex,
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              );
+            },
+          ),
         ),
       );
 

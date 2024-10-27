@@ -67,10 +67,7 @@ class VertexProvider extends LlmProvider {
       _getEmbedding(query, TaskType.retrievalQuery);
 
   Future<List<double>> _getEmbedding(String s, TaskType embeddingTask) async {
-    if (_embeddingModel == null) {
-      throw Exception('embeddingModel is not initialized');
-    }
-
+    _checkModel('embeddingModel', _embeddingModel);
     assert(embeddingTask == TaskType.retrievalDocument ||
         embeddingTask == TaskType.retrievalQuery);
 
@@ -87,15 +84,12 @@ class VertexProvider extends LlmProvider {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) {
-    if (_generativeModel == null) {
-      throw Exception('generativeModel not initialized');
-    }
-
+    _checkModel('generativeModel', _generativeModel);
     return _generateStream(
       prompt: prompt,
       attachments: attachments,
       contentStreamGenerator: (c) =>
-          _generativeModel.generateContentStream([c]),
+          _generativeModel!.generateContentStream([c]),
     );
   }
 
@@ -137,21 +131,22 @@ class VertexProvider extends LlmProvider {
 
   @override
   Iterable<ChatMessage> get history {
-    if (_generativeModel == null) {
-      throw Exception('generativeModel is not initialized');
-    }
-
+    _checkModel('generativeModel', _generativeModel);
     return _chat!.history
         .where((c) => c.role == 'user' || c.role == 'model')
         .map(_messageFrom);
   }
 
-  static Part _partFrom(Attachment attachment) => switch (attachment) {
+  @override
+  set history(Iterable<ChatMessage> history) =>
+      _chat = _startChat(history.map(_contentFrom).toList());
+
+  Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
 
-  static Content _contentFrom(ChatMessage message) => Content(
+  Content _contentFrom(ChatMessage message) => Content(
         message.origin.isUser ? 'user' : 'model',
         [
           TextPart(message.text ?? ''),
@@ -160,41 +155,20 @@ class VertexProvider extends LlmProvider {
       );
 
   // TODO: get the FileAttachmentname and check the mapping
-  static Attachment _attachmentFrom(Part part) => switch (part) {
+  Attachment _attachmentFrom(Part part) => switch (part) {
         (InlineDataPart p) =>
           FileAttachment(name: '', mimeType: p.mimeType, bytes: p.bytes),
         (FileData p) => LinkAttachment(name: '', url: Uri.parse(p.fileUri)),
         _ => throw UnimplementedError('Unsupported part type: $part'),
       };
 
-  static ChatMessage _messageFrom(Content content) => ChatMessage(
+  ChatMessage _messageFrom(Content content) => ChatMessage(
         text: content.parts.whereType<TextPart>().map((p) => p.text).join(),
         origin: content.role == 'user' ? MessageOrigin.user : MessageOrigin.llm,
         attachments: content.parts.map(_attachmentFrom).toList(),
       );
 
-  @override
-  ({ChatMessage? llmMessage, ChatMessage? userMessage}) getLastMessagePair({
-    bool pop = false,
-  }) {
-    final history = _chat!.history.toList();
-    // ignore: prefer_is_empty
-    final llmIndex = history.length != 0 ? history.length - 1 : -1;
-    final userIndex = history.length != 1 ? history.length - 2 : -1;
-    final llm = llmIndex == -1 ? null : history[llmIndex];
-    final user = userIndex == -1 ? null : history[userIndex];
-    assert(llm == null || llm.role == 'model');
-    assert(user == null || user.role == 'user');
-
-    if (pop) {
-      history.removeLast();
-      history.removeLast();
-      _chat = _startChat(history);
-    }
-
-    return (
-      llmMessage: llm == null ? null : _messageFrom(llm),
-      userMessage: user == null ? null : _messageFrom(user)
-    );
+  void _checkModel(String name, GenerativeModel? model) {
+    if (model == null) throw Exception('$name is not initialized');
   }
 }

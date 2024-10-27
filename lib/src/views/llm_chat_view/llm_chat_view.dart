@@ -5,79 +5,78 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../flutter_ai_toolkit.dart';
+import '../../chat_view_model/chat_view_model.dart';
+import '../../chat_view_model/chat_view_model_provider.dart';
 import '../../dialogs/adaptive_dialog.dart';
 import '../../dialogs/adaptive_dialog_action.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
+import '../../llm_chat_view_controller.dart';
 import '../../llm_exception.dart';
-import '../../chat_view_model/chat_view_model.dart';
-import '../../chat_view_model/chat_view_model_provider.dart';
 import '../../platform_helper/platform_helper.dart' as ph;
-import '../../providers/implementations/forwarding_provider.dart';
 import '../../providers/interface/attachments.dart';
+import '../../providers/interface/chat_message.dart';
+import '../../providers/interface/llm_provider.dart';
+import '../../styles/llm_chat_view_style.dart';
 import '../chat_history_view.dart';
 import '../chat_input/chat_input.dart';
 import '../response_builder.dart';
 import 'llm_response.dart';
 
-/// A widget that displays a chat interface for interacting with an LLM
-/// (Language Learning Model).
+/// A widget that displays a chat interface for interacting with an LLM (Language Model).
 ///
-/// This widget creates a chat view where users can send messages to an LLM and
-/// receive responses. It handles the display of the chat transcript and the
-/// input mechanism for sending new messages.
+/// This widget provides a complete chat interface, including a message history view
+/// and an input area for sending new messages. It can be configured with either
+/// an [LlmProvider] or an [LlmChatViewController] to manage the chat interactions.
 ///
-/// The [provider] parameter is required and specifies the LLM provider to use
-/// for generating responses.
-/// A widget that displays a chat interface for interacting with an LLM
-/// (Language Learning Model).
-///
-/// This widget creates a chat view where users can send messages to an LLM and
-/// receive responses. It handles the display of the chat transcript and the
-/// input mechanism for sending new messages.
-///
-/// The [provider] parameter is required and specifies the LLM provider to use
-/// for generating responses.
-///
-/// The [responseBuilder] parameter is an optional function that allows
-/// customizing how responses are displayed in the chat interface.
-///
-/// The [messageSender] parameter is an optional function that allows
-/// preprocessing of messages before they are sent to the LLM provider.
-/// This can be used for tasks such as prompt engineering or adding context
-/// to the conversation. If provided, this function will be called for each
-/// message before it is sent to the LLM provider. It should return a
-/// Stream<String> containing the processed message.
-///
-/// The [welcomeMessage] parameter is an optional welcome message to display
-/// when the chat view is first shown. If null, no welcome message is displayed.
+/// Example usage:
+/// ```dart
+/// LlmChatView(
+///   provider: MyLlmProvider(),
+///   style: LlmChatViewStyle(
+///     backgroundColor: Colors.white,
+///     // ... other style properties
+///   ),
+/// )
+/// ```
 class LlmChatView extends StatefulWidget {
-  /// Creates an LlmChatView.
+  /// Creates an [LlmChatView] widget.
   ///
-  /// The [provider] parameter must not be null.
+  /// You must provide either a [provider] or a [controller], but not both.
+  /// If [provider] is provided, a new [LlmChatViewController] will be created internally.
+  ///
+  /// The [style] parameter can be used to customize the appearance of the chat view.
+  /// The [responseBuilder] allows custom rendering of chat responses.
+  ///
+  /// Throws an [ArgumentError] if both [provider] and [controller] are provided,
+  /// or if neither is provided.
   LlmChatView({
-    required LlmProvider provider,
+    LlmProvider? provider,
+    LlmChatViewController? controller,
     LlmChatViewStyle? style,
     ResponseBuilder? responseBuilder,
-    LlmStreamGenerator? messageSender,
     super.key,
-  }) : viewModel = ChatViewModel(
-          provider: messageSender == null
-              ? provider
-              : ForwardingProvider(
-                  provider: provider,
-                  messageSender: messageSender,
-                ),
-          responseBuilder: responseBuilder,
-          style: style,
-        );
+  }) {
+    if (provider != null && controller != null) {
+      throw ArgumentError('Cannot provide both provider and controller');
+    }
+
+    if (provider == null && controller == null) {
+      throw ArgumentError('Must provide either provider or controller');
+    }
+
+    viewModel = ChatViewModel(
+      controller: controller ?? LlmChatViewController(provider: provider!),
+      responseBuilder: responseBuilder,
+      style: style,
+    );
+  }
 
   /// The view model containing the chat state and configuration.
   ///
   /// This [ChatViewModel] instance holds the LLM provider, transcript,
   /// response builder, welcome message, and LLM icon for the chat interface.
   /// It encapsulates the core data and functionality needed for the chat view.
-  final ChatViewModel viewModel;
+  late final ChatViewModel viewModel;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
@@ -130,12 +129,11 @@ class _LlmChatViewState extends State<LlmChatView>
     _initialMessage = null;
 
     _pendingPromptResponse = LlmResponse(
-      // TODO: once ForwardingProvider is gone, use messageSender here instance
-      stream: widget.viewModel.provider.sendMessageStream(
+      stream: widget.viewModel.controller.sendMessageStream(
         prompt,
         attachments: attachments,
       ),
-      onUpdate: (_) => setState(() {}),
+      onUpdate: (_) {},
       onDone: _onPromptDone,
     );
 
@@ -152,17 +150,21 @@ class _LlmChatViewState extends State<LlmChatView>
   void _onEditMessage(ChatMessage message) {
     assert(_pendingPromptResponse == null);
 
-    // TODO: support this in the provider
-    // // remove the last llm message
-    // assert(widget.viewModel.transcript.last.origin.isLlm);
-    // widget.viewModel.transcript.removeLast();
+    // remove the last llm message
+    final history = widget.viewModel.controller.history.toList();
+    assert(history.last.origin.isLlm);
+    history.removeLast();
 
-    // // remove the last user message
-    // assert(widget.viewModel.transcript.last.origin.isUser);
-    // final userMessage = widget.viewModel.transcript.removeLast();
+    // remove the last user message
+    assert(history.last.origin.isUser);
+    final userMessage = history.removeLast();
 
-    // set the text of the controller to the last userMessage
-    // setState(() => _initialMessage = userMessage);
+    // set the history to the new history
+    widget.viewModel.controller.history = history;
+
+    //set the text of the controller to the last userMessage to provide initial
+    //prompt and attachments for the user to edit
+    setState(() => _initialMessage = userMessage);
   }
 
   Future<void> _onTranslateStt(XFile file) async {
@@ -178,14 +180,12 @@ class _LlmChatViewState extends State<LlmChatView>
 
     String response = '';
     _pendingSttResponse = LlmResponse(
-      stream: widget.viewModel.provider.generateStream(
+      stream: widget.viewModel.controller.generateStream(
         prompt,
         attachments: attachments,
       ),
-      onUpdate: (text) => setState(() => response += text),
-      onDone: (error) async {
-        _onSttDone(error, response, file);
-      },
+      onUpdate: (text) => response += text,
+      onDone: (error) async => _onSttDone(error, response, file),
     );
 
     setState(() {});
@@ -194,7 +194,7 @@ class _LlmChatViewState extends State<LlmChatView>
   void _onSttDone(LlmException? error, String response, XFile file) async {
     assert(_pendingSttResponse != null);
     setState(() {
-      _initialMessage = ChatMessage.llm()..append(response);
+      _initialMessage = ChatMessage.user(response, []);
       _pendingSttResponse = null;
     });
 
