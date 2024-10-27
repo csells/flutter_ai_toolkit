@@ -22,6 +22,8 @@ class AttachmentView extends StatelessWidget {
   /// The attachment to be displayed.
   final Attachment attachment;
 
+  /// The style for the attachment view.
+
   @override
   Widget build(BuildContext context) => switch (attachment) {
         (ImageFileAttachment a) => ImageAttachmentView(a),

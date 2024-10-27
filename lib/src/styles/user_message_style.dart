@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'fat_colors.dart';
-import 'fat_text_style.dart';
+import 'fat_text_styles.dart';
 
 /// Style for user messages.
 class UserMessageStyle {
@@ -33,21 +33,21 @@ class UserMessageStyle {
 
   /// Resolves the UserMessageStyle by combining the provided style with default values.
   ///
-  /// This method takes an optional [userMessageStyle] and merges it with the
+  /// This method takes an optional [style] and merges it with the
   /// [defaultStyle]. If [defaultStyle] is not provided, it uses [UserMessageStyle.defaultStyle].
   ///
-  /// [userMessageStyle] - The custom UserMessageStyle to apply. Can be null.
+  /// [style] - The custom UserMessageStyle to apply. Can be null.
   /// [defaultStyle] - The default UserMessageStyle to use as a base. If null, uses [UserMessageStyle.defaultStyle].
   ///
   /// Returns a new [UserMessageStyle] instance with resolved properties.
   static UserMessageStyle resolve(
-    UserMessageStyle? userMessageStyle, {
+    UserMessageStyle? style, {
     UserMessageStyle? defaultStyle,
   }) {
     defaultStyle ??= UserMessageStyle.defaultStyle;
     return UserMessageStyle(
-      textStyle: userMessageStyle?.textStyle ?? defaultStyle.textStyle,
-      decoration: userMessageStyle?.decoration ?? defaultStyle.decoration,
+      textStyle: style?.textStyle ?? defaultStyle.textStyle,
+      decoration: style?.decoration ?? defaultStyle.decoration,
     );
   }
 }

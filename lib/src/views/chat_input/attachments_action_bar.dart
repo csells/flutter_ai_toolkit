@@ -46,7 +46,7 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
         builder: (context, viewModel, child) {
           final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
           return _expanded
-              ? ActionButtonBar([
+              ? ActionButtonBar(style: chatStyle, [
                   ActionButton(
                     onPressed: _onToggleMenu,
                     style: chatStyle.closeMenuButtonStyle!,

@@ -59,11 +59,29 @@ abstract final class FatTextStyles {
     fontWeight: FontWeight.w400,
   );
 
-  /// Secondary body text style.
+  /// Tooltip text style.
   ///
   /// Used for the text of tooltips.
   static final TextStyle tooltip = GoogleFonts.roboto(
     color: FatColors.tooltipText.withOpacity(0.9),
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// Filename text style.
+  ///
+  /// Used for the text of file attachments.
+  static final TextStyle filename = GoogleFonts.roboto(
+    color: FatColors.enabledText,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// File type text style.
+  ///
+  /// Used for displaying the file type or MIME type of attachments.
+  static final TextStyle filetype = GoogleFonts.roboto(
+    color: FatColors.hintText,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );

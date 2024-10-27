@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../styles/fat_colors.dart';
+import '../../styles/styles.dart';
 import 'action_button.dart';
 
 /// A widget that displays a horizontal bar of [ActionButton]s.
@@ -13,17 +13,21 @@ class ActionButtonBar extends StatelessWidget {
   ///
   /// The [buttons] parameter is required and specifies the list of
   /// [ActionButton]s to be displayed in the bar.
-  const ActionButtonBar(this.buttons, {super.key});
+  const ActionButtonBar(
+    this.buttons, {
+    required this.style,
+    super.key,
+  });
 
   /// The list of [ActionButton]s to be displayed in the bar.
   final List<ActionButton> buttons;
 
+  /// The style of the action button bar.
+  final LlmChatViewStyle style;
+
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: FatColors.darkButtonBackground,
-          borderRadius: BorderRadius.circular(20),
-        ),
+        decoration: style.actionButtonBarDecoration,
         child: OverflowBar(
           children: buttons,
         ),

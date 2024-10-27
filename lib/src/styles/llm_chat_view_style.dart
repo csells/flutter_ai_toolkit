@@ -4,11 +4,34 @@ import 'action_button_style.dart';
 import 'action_button_type.dart';
 import 'chat_input_style.dart';
 import 'fat_colors.dart';
+import 'file_attachment_style.dart';
 import 'llm_message_style.dart';
 import 'user_message_style.dart';
 
 /// Style for the entire chat widget.
 class LlmChatViewStyle {
+  /// Creates a style object for the chat widget.
+  const LlmChatViewStyle({
+    this.backgroundColor,
+    this.progressIndicatorColor,
+    this.userMessageStyle,
+    this.llmMessageStyle,
+    this.chatInputStyle,
+    this.addButtonStyle,
+    this.attachFileButtonStyle,
+    this.cameraButtonStyle,
+    this.stopButtonStyle,
+    this.closeButtonStyle,
+    this.copyButtonStyle,
+    this.editButtonStyle,
+    this.galleryButtonStyle,
+    this.recordButtonStyle,
+    this.submitButtonStyle,
+    this.closeMenuButtonStyle,
+    this.actionButtonBarDecoration,
+    this.fileAttachmentStyle,
+  });
+
   /// Background color of the entire chat widget.
   final Color? backgroundColor;
 
@@ -57,25 +80,11 @@ class LlmChatViewStyle {
   /// Style for the close menu button.
   final ActionButtonStyle? closeMenuButtonStyle;
 
-  /// Creates a style object for the chat widget.
-  const LlmChatViewStyle({
-    this.backgroundColor,
-    this.progressIndicatorColor,
-    this.userMessageStyle,
-    this.llmMessageStyle,
-    this.chatInputStyle,
-    this.addButtonStyle,
-    this.attachFileButtonStyle,
-    this.cameraButtonStyle,
-    this.stopButtonStyle,
-    this.closeButtonStyle,
-    this.copyButtonStyle,
-    this.editButtonStyle,
-    this.galleryButtonStyle,
-    this.recordButtonStyle,
-    this.submitButtonStyle,
-    this.closeMenuButtonStyle,
-  });
+  /// Decoration for the action button bar.
+  final Decoration? actionButtonBarDecoration;
+
+  /// Style for file attachments.
+  final FileAttachmentStyle? fileAttachmentStyle;
 
   /// Provides default style if none is specified.
   static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
@@ -102,6 +111,11 @@ class LlmChatViewStyle {
             ActionButtonStyle.defaultStyle(ActionButtonType.close),
         copyButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.copy),
         editButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.edit),
+        actionButtonBarDecoration: BoxDecoration(
+          color: FatColors.darkButtonBackground,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        fileAttachmentStyle: FileAttachmentStyle.defaultStyle,
       );
 
   /// Resolves the LlmChatViewStyle by combining the provided style with default values.
@@ -174,6 +188,8 @@ class LlmChatViewStyle {
         defaultStyle:
             ActionButtonStyle.defaultStyle(ActionButtonType.closeMenu),
       ),
+      actionButtonBarDecoration: style?.actionButtonBarDecoration ??
+          defaultStyle.actionButtonBarDecoration,
     );
   }
 }

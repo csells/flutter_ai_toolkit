@@ -32,6 +32,7 @@ abstract final class FatColors {
 
   // Color 300 (#CACACA)
   static const Color hintText = Color(0xFFCACACA);
+  static const Color fileAttachmentIconBackground = Color(0xFFCACACA);
   static const Color greyButtonBackground = Color(0xFFCACACA);
   static const Color lightIcon = Color(0xFFCACACA);
   static const Color imagePlaceholder = Color(0xFFCACACA);

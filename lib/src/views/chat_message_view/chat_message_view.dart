@@ -10,8 +10,8 @@ import 'package:gap/gap.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../models/chat_view_model/chat_view_model_client.dart';
 import '../../models/llm_chat_message/llm_chat_message.dart';
-import '../action_button/action_button_bar.dart';
 import '../../styles/llm_chat_view_style.dart';
+import '../action_button/action_button_bar.dart';
 import 'llm_message_view.dart';
 import 'user_message_view.dart';
 
@@ -73,6 +73,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                     alignment:
                         _isUser ? Alignment.centerRight : Alignment.centerLeft,
                     child: ActionButtonBar(
+                      style: chatStyle,
                       _isUser
                           ? [
                               if (widget.onEdit != null)
