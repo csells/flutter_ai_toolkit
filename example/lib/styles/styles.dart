@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+
+import '../gemini_api_key.dart';
 
 void main(List<String> args) async => runApp(const App());
 
@@ -49,14 +52,12 @@ class _ChatPageState extends State<ChatPage>
   }
 
   void reset() {
-    // TODO: uncomment this to use Gemini
-    // _provider = GeminiProvider(
-    //   generativeModel: GenerativeModel(
-    //     model: 'gemini-1.5-flash',
-    //     apiKey: geminiApiKey,
-    //   ),
-    // );
-    _provider = EchoProvider();
+    _provider = GeminiProvider(
+      generativeModel: GenerativeModel(
+        model: 'gemini-1.5-flash',
+        apiKey: geminiApiKey,
+      ),
+    );
     _transcript = List<LlmChatMessage>.empty(growable: true);
     _controller.value = 1.0;
     _controller.reverse();
