@@ -17,6 +17,7 @@ abstract final class FatColors {
   static const Color llmMessageBackground = Color(0xFFFFFFFF);
   static const Color llmMessageOutline = Color(0xFFFFFFFF);
   static const Color whiteIcon = Color(0xFFFFFFFF);
+  static const Color tooltipText = Color(0xFFFFFFFF);
 
   // Color 100 (#F5F5F5)
   static const Color userMessageBackground = Color(0xFFF5F5F5);
@@ -40,6 +41,7 @@ abstract final class FatColors {
   // Color 400 (#535353)
   static const Color greyBackground = Color(0xFF535353);
   static const Color llmNameText = Color(0xFF535353);
+  static const Color tooltipBackground = Color(0xFF535353);
 
   // Color 500 (#2F2F2F)
   static const Color darkButtonBackground = Color(0xFF2F2F2F);

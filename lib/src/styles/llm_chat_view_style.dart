@@ -4,6 +4,7 @@ import 'action_button_style.dart';
 import 'action_button_type.dart';
 import 'chat_input_style.dart';
 import 'fat_colors.dart';
+import 'fat_text_styles.dart';
 import 'llm_message_style.dart';
 import 'user_message_style.dart';
 
@@ -14,6 +15,9 @@ class LlmChatViewStyle {
 
   /// The color of the progress indicator.
   final Color? progressIndicatorColor;
+
+  /// The style of the tooltip.
+  final TextStyle? tooltipTextStyle;
 
   /// Style for user messages.
   final UserMessageStyle? userMessageStyle;
@@ -33,8 +37,8 @@ class LlmChatViewStyle {
   /// Style for the camera button.
   final ActionButtonStyle? cameraButtonStyle;
 
-  /// Style for the cancel button.
-  final ActionButtonStyle? cancelButtonStyle;
+  /// Style for the stop button.
+  final ActionButtonStyle? stopButtonStyle;
 
   /// Style for the close button.
   final ActionButtonStyle? closeButtonStyle;
@@ -61,13 +65,14 @@ class LlmChatViewStyle {
   const LlmChatViewStyle({
     this.backgroundColor,
     this.progressIndicatorColor,
+    this.tooltipTextStyle,
     this.userMessageStyle,
     this.llmMessageStyle,
     this.chatInputStyle,
     this.addButtonStyle,
     this.attachFileButtonStyle,
     this.cameraButtonStyle,
-    this.cancelButtonStyle,
+    this.stopButtonStyle,
     this.closeButtonStyle,
     this.copyButtonStyle,
     this.editButtonStyle,
@@ -81,12 +86,12 @@ class LlmChatViewStyle {
   static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
         backgroundColor: FatColors.containerBackground,
         progressIndicatorColor: FatColors.black,
+        tooltipTextStyle: FatTextStyles.tooltip,
         userMessageStyle: UserMessageStyle.defaultStyle,
         llmMessageStyle: LlmMessageStyle.defaultStyle,
         chatInputStyle: ChatInputStyle.defaultStyle,
         addButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.add),
-        cancelButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.cancel),
+        stopButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.stop),
         recordButtonStyle:
             ActionButtonStyle.defaultStyle(ActionButtonType.record),
         submitButtonStyle:
@@ -142,9 +147,9 @@ class LlmChatViewStyle {
         style?.cameraButtonStyle,
         defaultStyle: ActionButtonStyle.defaultStyle(ActionButtonType.camera),
       ),
-      cancelButtonStyle: ActionButtonStyle.resolve(
-        style?.cancelButtonStyle,
-        defaultStyle: ActionButtonStyle.defaultStyle(ActionButtonType.cancel),
+      stopButtonStyle: ActionButtonStyle.resolve(
+        style?.stopButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(ActionButtonType.stop),
       ),
       closeButtonStyle: ActionButtonStyle.resolve(
         style?.closeButtonStyle,

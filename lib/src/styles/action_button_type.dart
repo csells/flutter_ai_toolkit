@@ -10,7 +10,7 @@ enum ActionButtonType {
   camera,
 
   /// Button to cancel an ongoing action or input.
-  cancel,
+  stop,
 
   /// Button to close the current view or dialog.
   close,

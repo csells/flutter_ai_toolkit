@@ -158,6 +158,15 @@ class _ChatPageState extends State<ChatPage>
                       listBullet: _halloweenStyle,
                     ),
                   ),
+                  recordButtonStyle: ActionButtonStyle(
+                    tooltipTextStyle: _halloweenStyle,
+                  ),
+                  stopButtonStyle: ActionButtonStyle(
+                    tooltipTextStyle: _halloweenStyle,
+                  ),
+                  submitButtonStyle: ActionButtonStyle(
+                    tooltipTextStyle: _halloweenStyle,
+                  ),
                 ),
               ),
             ],

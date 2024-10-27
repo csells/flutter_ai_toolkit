@@ -59,6 +59,15 @@ abstract final class FatTextStyles {
     fontWeight: FontWeight.w400,
   );
 
+  /// Secondary body text style.
+  ///
+  /// Used for the text of tooltips.
+  static final TextStyle tooltip = GoogleFonts.roboto(
+    color: FatColors.tooltipText.withOpacity(0.9),
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+
   /// Label text style.
   ///
   /// Used for small labels, captions, or helper text.

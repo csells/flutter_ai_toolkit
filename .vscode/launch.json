@@ -44,18 +44,18 @@
       "program": "lib/styles/styles.dart",
     },
     {
-      "name": "recipes",
-      "cwd": "example",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/recipes/recipes.dart",
-    },
-    {
       "name": "cupertino",
       "cwd": "example",
       "request": "launch",
       "type": "dart",
       "program": "lib/cupertino/cupertino.dart",
+    },
+    {
+      "name": "recipes",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/recipes/recipes.dart",
     },
   ]
 }

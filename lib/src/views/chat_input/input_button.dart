@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
-import '../adaptive_progress_indicator.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
+import '../adaptive_progress_indicator.dart';
 import 'input_state.dart';
 
 /// A button widget that adapts its appearance and behavior based on the current input state.
@@ -51,7 +51,7 @@ class InputButton extends StatelessWidget {
             onPressed: onSubmitPrompt,
           ),
         InputState.canCancelPrompt => ActionButton(
-            style: chatStyle.cancelButtonStyle!,
+            style: chatStyle.stopButtonStyle!,
             onPressed: onCancelPrompt,
           ),
         InputState.canStt => ActionButton(
@@ -59,7 +59,7 @@ class InputButton extends StatelessWidget {
             onPressed: onStartRecording,
           ),
         InputState.isRecording => ActionButton(
-            style: chatStyle.cancelButtonStyle!,
+            style: chatStyle.stopButtonStyle!,
             onPressed: onStopRecording,
           ),
         InputState.canCancelStt => AdaptiveCircularProgressIndicator(

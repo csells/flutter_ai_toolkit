@@ -2,9 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/material.dart' show Tooltip;
 import 'package:flutter/widgets.dart';
 
 import '../../styles/action_button_style.dart';
+import '../../utility.dart';
 
 /// A button widget with an icon.
 ///
@@ -14,11 +16,11 @@ import '../../styles/action_button_style.dart';
 class ActionButton extends StatelessWidget {
   /// Creates an [ActionButton].
   ///
-  /// The [onPressed] callback is required and is called when the button is tapped.
-  /// The [icon] parameter specifies the icon to display in the button.
-  /// The [iconColor] determines the color of the icon.
-  /// The [iconDecoration] defines the decoration of the button.
-  /// The [size] parameter sets the diameter of the circular button, defaulting to 40.
+  /// The [onPressed] callback is required and is called when the button is
+  /// tapped. The [icon] parameter specifies the icon to display in the button.
+  /// The [iconColor] determines the color of the icon. The [iconDecoration]
+  /// defines the decoration of the button. The [size] parameter sets the
+  /// diameter of the circular button, defaulting to 40.
   const ActionButton({
     super.key,
     required this.onPressed,
@@ -43,11 +45,23 @@ class ActionButton extends StatelessWidget {
           width: size,
           height: size,
           decoration: style.iconDecoration,
-          child: Icon(
-            style.icon,
-            color: style.iconColor,
-            size: size * 0.6,
-          ),
+          // tooltips aren't a thing in cupertino, so skip it
+          child: isCupertinoApp(context)
+              ? Icon(
+                  style.icon,
+                  color: style.iconColor,
+                  size: size * 0.6,
+                )
+              : Tooltip(
+                  message: style.tooltip,
+                  textStyle: style.tooltipTextStyle,
+                  decoration: style.tooltipDecoration,
+                  child: Icon(
+                    style.icon,
+                    color: style.iconColor,
+                    size: size * 0.6,
+                  ),
+                ),
         ),
       );
 }

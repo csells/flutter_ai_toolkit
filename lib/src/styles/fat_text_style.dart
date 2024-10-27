@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fat_colors.dart';
 
 /// A utility class that defines text styles for the Fat design system.
-abstract final class FatTextStyle {
+abstract final class FatTextStyles {
   /// Large display text style.
   ///
   /// Used for the most prominent text elements, typically headers or titles.
@@ -55,6 +55,15 @@ abstract final class FatTextStyle {
   /// Used for less prominent body text or supporting information.
   static final TextStyle body2 = GoogleFonts.roboto(
     color: FatColors.enabledText,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// Tooltip text style.
+  ///
+  /// Used for the text of tooltips.
+  static final TextStyle tooltip = GoogleFonts.roboto(
+    color: FatColors.tooltipText,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );

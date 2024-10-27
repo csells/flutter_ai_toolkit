@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'action_button_type.dart';
 import 'fat_colors.dart';
 import 'fat_icons.dart';
+import 'fat_text_styles.dart';
 
 /// Style for icon buttons.
 class ActionButtonStyle {
@@ -15,11 +16,23 @@ class ActionButtonStyle {
   /// The decoration for the icon.
   final Decoration? iconDecoration;
 
+  /// The tooltip for the icon button.
+  final String? tooltip;
+
+  /// The text style of the tooltip.
+  final TextStyle? tooltipTextStyle;
+
+  /// The decoration of the tooltip.
+  final Decoration? tooltipDecoration;
+
   /// Creates an IconButtonStyle.
   const ActionButtonStyle({
     this.icon,
     this.iconColor,
     this.iconDecoration,
+    this.tooltip,
+    this.tooltipTextStyle,
+    this.tooltipDecoration,
   });
 
   /// Provides default style for icon buttons.
@@ -27,56 +40,73 @@ class ActionButtonStyle {
     IconData icon;
     var color = FatColors.darkIcon;
     var bgColor = FatColors.lightButtonBackground;
+    String tooltip;
+    var tooltipTextStyle = FatTextStyles.tooltip;
+    var tooltipDecoration = BoxDecoration(
+      color: FatColors.tooltipBackground,
+      borderRadius: const BorderRadius.all(Radius.circular(4)),
+    );
 
     switch (type) {
       case ActionButtonType.add:
         icon = FatIcons.add;
+        tooltip = 'Add Attachment';
         break;
       case ActionButtonType.attachFile:
         icon = FatIcons.attach_file;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Attach File';
         break;
       case ActionButtonType.camera:
         icon = FatIcons.camera_alt;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Take Photo';
         break;
-      case ActionButtonType.cancel:
+      case ActionButtonType.stop:
         icon = FatIcons.stop;
+        tooltip = 'Stop';
         break;
       case ActionButtonType.close:
         icon = FatIcons.close;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Close';
         break;
       case ActionButtonType.copy:
         icon = FatIcons.content_copy;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Copy to Clipboard';
         break;
       case ActionButtonType.edit:
         icon = FatIcons.edit;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Edit Message';
         break;
       case ActionButtonType.gallery:
         icon = FatIcons.image;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Image Gallery';
         break;
       case ActionButtonType.record:
         icon = FatIcons.mic;
+        tooltip = 'Record Audio';
         break;
       case ActionButtonType.submit:
         icon = FatIcons.submit_icon;
         color = FatColors.whiteIcon;
         bgColor = FatColors.darkButtonBackground;
+        tooltip = 'Submit Message';
         break;
       case ActionButtonType.closeMenu:
         icon = FatIcons.close;
         color = FatColors.whiteIcon;
         bgColor = FatColors.greyBackground;
+        tooltip = 'Close Menu';
         break;
     }
 
@@ -84,6 +114,9 @@ class ActionButtonStyle {
       icon: icon,
       iconColor: color,
       iconDecoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+      tooltip: tooltip,
+      tooltipTextStyle: tooltipTextStyle,
+      tooltipDecoration: tooltipDecoration,
     );
   }
 
@@ -107,6 +140,11 @@ class ActionButtonStyle {
       icon: style?.icon ?? defaultStyle.icon,
       iconColor: style?.iconColor ?? defaultStyle.iconColor,
       iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
+      tooltip: style?.tooltip ?? defaultStyle.tooltip,
+      tooltipTextStyle:
+          style?.tooltipTextStyle ?? defaultStyle.tooltipTextStyle,
+      tooltipDecoration:
+          style?.tooltipDecoration ?? defaultStyle.tooltipDecoration,
     );
   }
 }
