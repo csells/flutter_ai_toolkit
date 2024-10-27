@@ -6,7 +6,7 @@
 
 import 'package:flutter/widgets.dart';
 
-abstract final class FatColor {
+abstract final class FatColors {
   static const Color transparent = Color(0x00000000);
   // static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);

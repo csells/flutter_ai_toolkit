@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
-import '../../fat_icons.dart';
 import '../../providers/llm_provider_interface.dart';
-import '../../styles/fat_color.dart';
-import '../../styles/fat_text_style.dart';
+import '../../styles/fat_colors.dart';
+import '../../styles/fat_icons.dart';
+import '../../styles/fat_text_styles.dart';
 
 /// A widget that displays a file attachment.
 ///
@@ -25,7 +25,7 @@ class FileAttachmentView extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.all(8),
         decoration: ShapeDecoration(
-          color: FatColor.userMessageBackground,
+          color: FatColors.userMessageBackground,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -37,14 +37,14 @@ class FileAttachmentView extends StatelessWidget {
               height: 64,
               padding: const EdgeInsets.all(10),
               decoration: ShapeDecoration(
-                color: FatColor.hintText,
+                color: FatColors.hintText,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: const Icon(
                 FatIcons.attach_file,
-                color: FatColor.darkIcon,
+                color: FatColors.darkIcon,
                 size: 24,
               ),
             ),
@@ -56,13 +56,13 @@ class FileAttachmentView extends StatelessWidget {
                 children: [
                   Text(
                     attachment.name,
-                    style: FatTextStyle.body2,
+                    style: FatTextStyles.body2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     attachment.mimeType,
-                    style: FatTextStyle.body2.copyWith(
-                      color: FatColor.hintText,
+                    style: FatTextStyles.body2.copyWith(
+                      color: FatColors.hintText,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),

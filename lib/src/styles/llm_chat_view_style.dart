@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'action_button_style.dart';
 import 'action_button_type.dart';
 import 'chat_input_style.dart';
-import 'fat_color.dart';
+import 'fat_colors.dart';
 import 'llm_message_style.dart';
 import 'user_message_style.dart';
 
@@ -79,8 +79,8 @@ class LlmChatViewStyle {
 
   /// Provides default style if none is specified.
   static LlmChatViewStyle get defaultStyles => LlmChatViewStyle(
-        backgroundColor: FatColor.containerBackground,
-        progressIndicatorColor: FatColor.black,
+        backgroundColor: FatColors.containerBackground,
+        progressIndicatorColor: FatColors.black,
         userMessageStyle: UserMessageStyle.defaultStyle,
         llmMessageStyle: LlmMessageStyle.defaultStyle,
         chatInputStyle: ChatInputStyle.defaultStyle,

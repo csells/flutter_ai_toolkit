@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fat_colors.dart';
 
 /// A utility class that defines text styles for the Fat design system.
-abstract final class FatTextStyle {
+abstract final class FatTextStyles {
   /// Large display text style.
   ///
   /// Used for the most prominent text elements, typically headers or titles.

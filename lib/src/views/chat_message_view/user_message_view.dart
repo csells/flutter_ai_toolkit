@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import '../../models/llm_chat_message/llm_chat_message.dart';
-import '../../styles/fat_color.dart';
-import '../../styles/fat_text_style.dart';
+import '../../styles/fat_colors.dart';
+import '../../styles/fat_text_styles.dart';
 import '../attachment_view/attachment_view.dart';
 
 /// A widget that displays a user's message in a chat interface.
@@ -46,7 +46,7 @@ class UserMessageView extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: FatColor.userMessageBackground,
+                      color: FatColors.userMessageBackground,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.zero,
@@ -63,7 +63,7 @@ class UserMessageView extends StatelessWidget {
                       ),
                       child: Text(
                         message.text,
-                        style: FatTextStyle.body1,
+                        style: FatTextStyles.body1,
                       ),
                     ),
                   ),

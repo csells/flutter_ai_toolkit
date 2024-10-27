@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+import '../../dialogs/adaptive_dialog.dart';
+import '../../dialogs/image_preview_dialog.dart';
 import '../../providers/llm_provider_interface.dart';
-import '../image_preview_dialog.dart';
 
 /// A widget that displays an image attachment.
 ///
@@ -21,7 +22,11 @@ class ImageAttachmentView extends StatelessWidget {
   Widget build(BuildContext context) => Align(
         alignment: Alignment.centerRight,
         child: GestureDetector(
-            onTap: () => ImagePreviewDialog.show(context, attachment),
+            onTap: () => AdaptiveAlertDialog.show<void>(
+                  context: context,
+                  barrierDismissible: true,
+                  content: ImagePreviewDialog(attachment),
+                ),
             child: Image.memory(attachment.bytes)),
       );
 }

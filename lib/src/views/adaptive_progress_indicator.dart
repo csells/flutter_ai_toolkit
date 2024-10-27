@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'utility.dart';
+import '../utility.dart';
 
 /// A progress indicator that adapts to the current platform.
 ///

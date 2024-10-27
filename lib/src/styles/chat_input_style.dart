@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import 'fat_color.dart';
-import 'fat_text_style.dart';
+import 'fat_colors.dart';
+import 'fat_text_styles.dart';
 
 /// Style for the input text box.
 class ChatInputStyle {
@@ -31,12 +31,12 @@ class ChatInputStyle {
 
   /// Provides default style for the input text box.
   static ChatInputStyle get defaultStyle => ChatInputStyle(
-        textStyle: FatTextStyle.body2,
-        hintStyle: FatTextStyle.body2.copyWith(color: FatColor.hintText),
+        textStyle: FatTextStyles.body2,
+        hintStyle: FatTextStyles.body2.copyWith(color: FatColors.hintText),
         hintText: "Ask me anything...",
-        backgroundColor: FatColor.containerBackground,
+        backgroundColor: FatColors.containerBackground,
         decoration: BoxDecoration(
-          border: Border.all(width: 1, color: FatColor.outline),
+          border: Border.all(width: 1, color: FatColors.outline),
           borderRadius: BorderRadius.circular(24),
         ),
       );

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
-import '../fat_icons.dart';
 import 'action_button_type.dart';
-import 'fat_color.dart';
+import 'fat_colors.dart';
+import 'fat_icons.dart';
 
 /// Style for icon buttons.
 class ActionButtonStyle {
@@ -25,8 +25,8 @@ class ActionButtonStyle {
   /// Provides default style for icon buttons.
   static ActionButtonStyle defaultStyle(ActionButtonType type) {
     IconData icon;
-    var color = FatColor.darkIcon;
-    var bgColor = FatColor.lightButtonBackground;
+    var color = FatColors.darkIcon;
+    var bgColor = FatColors.lightButtonBackground;
 
     switch (type) {
       case ActionButtonType.add:
@@ -34,49 +34,49 @@ class ActionButtonStyle {
         break;
       case ActionButtonType.attachFile:
         icon = FatIcons.attach_file;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.camera:
         icon = FatIcons.camera_alt;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.cancel:
         icon = FatIcons.stop;
         break;
       case ActionButtonType.close:
         icon = FatIcons.close;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.copy:
         icon = FatIcons.content_copy;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.edit:
         icon = FatIcons.edit;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.gallery:
         icon = FatIcons.image;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.record:
         icon = FatIcons.mic;
         break;
       case ActionButtonType.submit:
         icon = FatIcons.submit_icon;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.darkButtonBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.darkButtonBackground;
         break;
       case ActionButtonType.closeMenu:
         icon = FatIcons.close;
-        color = FatColor.whiteIcon;
-        bgColor = FatColor.greyBackground;
+        color = FatColors.whiteIcon;
+        bgColor = FatColors.greyBackground;
         break;
     }
 

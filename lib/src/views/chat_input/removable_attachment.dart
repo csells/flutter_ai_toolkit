@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 
+import '../../dialogs/adaptive_dialog.dart';
+import '../../dialogs/image_preview_dialog.dart';
 import '../../models/chat_view_model/chat_view_model_client.dart';
 import '../../providers/llm_provider_interface.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
 import '../attachment_view/attachment_view.dart';
-import '../image_preview_dialog.dart';
 
 /// A widget that displays an attachment with a remove button.
 class RemovableAttachment extends StatelessWidget {
@@ -32,9 +33,11 @@ class RemovableAttachment extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: attachment is ImageFileAttachment
-                ? () => ImagePreviewDialog.show(
-                      context,
-                      attachment as ImageFileAttachment,
+                ? () => AdaptiveAlertDialog.show<void>(
+                      context: context,
+                      barrierDismissible: true,
+                      content:
+                          ImagePreviewDialog(attachment as ImageFileAttachment),
                     )
                 : null,
             child: Container(

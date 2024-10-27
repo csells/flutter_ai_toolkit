@@ -6,6 +6,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../flutter_ai_toolkit.dart';
+import '../../dialogs/adaptive_dialog.dart';
+import '../../dialogs/adaptive_dialog_action.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../llm_exception.dart';
 import '../../models/chat_view_model/chat_view_model.dart';
@@ -220,13 +222,23 @@ class _LlmChatViewState extends State<LlmChatView>
   void _showLlmException(LlmException? error) {
     if (error == null) return;
 
-    final message = switch (error) {
-      LlmCancelException() => 'LLM operation canceled by user',
-      LlmFailureException() ||
-      LlmException() =>
-        'LLM operation failed: ${error.message}',
-    };
-
-    AdaptiveSnackBar.show(context, message);
+    switch (error) {
+      case LlmCancelException():
+        AdaptiveSnackBar.show(context, 'LLM operation canceled by user');
+        break;
+      case LlmFailureException():
+      case LlmException():
+        AdaptiveAlertDialog.show(
+          context: context,
+          content: Text(error.toString()),
+          actions: [
+            AdaptiveDialogAction(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+        break;
+    }
   }
 }

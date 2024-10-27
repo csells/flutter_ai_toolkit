@@ -1,0 +1,36 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../utility.dart';
+
+/// A button that adapts its appearance based on the design language, either Material or Cupertino.
+///
+/// The [AdaptiveDialogAction] widget is designed to provide a consistent
+/// user experience across different platforms while adhering to
+/// platform-specific design guidelines.
+class AdaptiveDialogAction extends StatelessWidget {
+  /// Creates an adaptive dialog action.
+  ///
+  /// The [onPressed] and [child] arguments must not be null.
+  const AdaptiveDialogAction({
+    required this.onPressed,
+    required this.child,
+    super.key,
+  });
+
+  /// The callback that is called when the button is tapped or pressed.
+  final VoidCallback onPressed;
+
+  /// The widget below this widget in the tree.
+  ///
+  /// Typically a [Text] widget.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => isCupertinoApp(context)
+      ? CupertinoDialogAction(
+          onPressed: onPressed,
+          child: child,
+        )
+      : TextButton(onPressed: onPressed, child: child);
+}

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../styles/fat_color.dart';
+import '../../styles/fat_colors.dart';
 import 'action_button.dart';
 
 /// A widget that displays a horizontal bar of [ActionButton]s.
@@ -21,7 +21,7 @@ class ActionButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: FatColor.darkButtonBackground,
+          color: FatColors.darkButtonBackground,
           borderRadius: BorderRadius.circular(20),
         ),
         child: OverflowBar(
