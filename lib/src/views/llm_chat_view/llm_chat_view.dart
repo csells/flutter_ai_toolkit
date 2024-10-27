@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../flutter_ai_toolkit.dart';
-import '../adaptive_snack_bar.dart';
-import '../llm_exception.dart';
-import '../models/chat_view_model.dart';
-import '../platform_helper/platform_helper.dart';
-import '../providers/forwarding_provider.dart';
-import 'chat_input.dart';
-import 'chat_transcript_view.dart';
-import 'response_builder.dart';
+import '../../../flutter_ai_toolkit.dart';
+import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
+import '../../llm_exception.dart';
+import '../../models/chat_view_model/chat_view_model.dart';
+import '../../models/chat_view_model/chat_view_model_provider.dart';
+import '../../platform_helper/platform_helper_io.dart';
+import '../../providers/forwarding_provider.dart';
+import '../chat_history_view.dart';
+import '../chat_input/chat_input.dart';
+import '../response_builder.dart';
+import 'llm_response.dart';
 
 /// A widget that displays a chat interface for interacting with an LLM
 /// (Language Learning Model).
@@ -84,49 +84,14 @@ class LlmChatView extends StatefulWidget {
   State<LlmChatView> createState() => _LlmChatViewState();
 }
 
-class _LlmResponse {
-  final LlmChatMessage message;
-  final void Function(LlmException? error)? onDone;
-  StreamSubscription<String>? _subscription;
-
-  _LlmResponse({
-    required Stream<String> stream,
-    required this.message,
-    this.onDone,
-  }) {
-    _subscription = stream.listen(
-      (text) => message.append(text),
-      onDone: () => onDone?.call(null),
-      cancelOnError: true,
-      onError: _error,
-    );
-  }
-
-  void cancel() => _close(const LlmCancelException());
-  void _error(dynamic err) => _close(_exception(err));
-
-  LlmException _exception(dynamic err) => switch (err) {
-        (LlmCancelException _) => const LlmCancelException(),
-        (LlmFailureException ex) => ex,
-        _ => LlmFailureException(err.toString()),
-      };
-
-  void _close(LlmException error) {
-    assert(_subscription != null);
-    _subscription!.cancel();
-    _subscription = null;
-    onDone?.call(error);
-  }
-}
-
 class _LlmChatViewState extends State<LlmChatView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
-  _LlmResponse? _pendingPromptResponse;
+  LlmResponse? _pendingPromptResponse;
   LlmChatMessage? _initialMessage;
-  _LlmResponse? _pendingSttResponse;
+  LlmResponse? _pendingSttResponse;
 
   @override
   void initState() {
@@ -150,7 +115,7 @@ class _LlmChatViewState extends State<LlmChatView>
         child: Column(
           children: [
             Expanded(
-              child: ChatTranscriptView(
+              child: ChatHistoryView(
                 onEditMessage:
                     _pendingPromptResponse == null ? _onEditMessage : null,
               ),
@@ -180,7 +145,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
     widget.viewModel.transcript.addAll([userMessage, llmMessage]);
 
-    _pendingPromptResponse = _LlmResponse(
+    _pendingPromptResponse = LlmResponse(
       stream: widget.viewModel.provider.sendMessageStream(
         prompt,
         attachments: attachments,
@@ -225,7 +190,7 @@ class _LlmChatViewState extends State<LlmChatView>
         'provide the result of translating the foreground audio.';
     final attachments = [await FileAttachment.fromFile(file)];
 
-    _pendingSttResponse = _LlmResponse(
+    _pendingSttResponse = LlmResponse(
       stream: widget.viewModel.provider.generateStream(
         prompt,
         attachments: attachments,

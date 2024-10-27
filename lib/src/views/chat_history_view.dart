@@ -4,22 +4,22 @@
 
 import 'package:flutter/widgets.dart';
 
-import '../models/chat_view_model.dart';
-import '../models/llm_chat_message.dart';
-import 'chat_message_view.dart';
+import '../models/chat_view_model/chat_view_model_client.dart';
+import '../models/llm_chat_message/llm_chat_message.dart';
+import 'chat_message_view/chat_message_view.dart';
 
 /// A widget that displays a transcript of chat messages.
 ///
 /// This widget renders a scrollable list of chat messages, supporting
 /// selection and editing of messages. It displays messages in reverse
 /// chronological order (newest at the bottom).
-class ChatTranscriptView extends StatefulWidget {
-  /// Creates a [ChatTranscriptView].
+class ChatHistoryView extends StatefulWidget {
+  /// Creates a [ChatHistoryView].
   ///
   /// If [onEditMessage] is provided, it will be called when a user initiates an
   /// edit action on an editable message (typically the last user message in the
   /// transcript).
-  const ChatTranscriptView({
+  const ChatHistoryView({
     this.onEditMessage,
     super.key,
   });
@@ -33,10 +33,10 @@ class ChatTranscriptView extends StatefulWidget {
   final void Function(LlmChatMessage message)? onEditMessage;
 
   @override
-  State<ChatTranscriptView> createState() => _ChatTranscriptViewState();
+  State<ChatHistoryView> createState() => _ChatHistoryViewState();
 }
 
-class _ChatTranscriptViewState extends State<ChatTranscriptView> {
+class _ChatHistoryViewState extends State<ChatHistoryView> {
   int _selectedMessageIndex = -1;
 
   @override

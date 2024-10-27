@@ -4,8 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'fat_colors_styles.dart';
-import 'llm_chat_view_style.dart';
+import '../../styles/action_button_style.dart';
 
 /// A button widget with an icon.
 ///
@@ -49,33 +48,6 @@ class ActionButton extends StatelessWidget {
             color: style.iconColor,
             size: size * 0.6,
           ),
-        ),
-      );
-}
-
-/// A widget that displays a horizontal bar of [ActionButton]s.
-///
-/// This widget creates a container with rounded corners that houses a series of
-/// [ActionButton]s. The buttons are laid out horizontally and can overflow if
-/// there's not enough space.
-class ActionButtonBar extends StatelessWidget {
-  /// Creates a [ActionButtonBar].
-  ///
-  /// The [buttons] parameter is required and specifies the list of
-  /// [ActionButton]s to be displayed in the bar.
-  const ActionButtonBar(this.buttons, {super.key});
-
-  /// The list of [ActionButton]s to be displayed in the bar.
-  final List<ActionButton> buttons;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: FatColors.darkButtonBackground,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: OverflowBar(
-          children: buttons,
         ),
       );
 }

@@ -42,10 +42,9 @@ class _ChatPageState extends State<ChatPage>
     upperBound: 1.0,
   );
 
-  TextStyle get _creepsterStyle => GoogleFonts.creepster(
+  TextStyle get _halloweenStyle => GoogleFonts.hennyPenny(
         color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 18,
+        fontSize: 24,
       );
 
   @override
@@ -104,7 +103,7 @@ class _ChatPageState extends State<ChatPage>
                 style: LlmChatViewStyle(
                   backgroundColor: Colors.transparent,
                   progressIndicatorColor: Colors.purple,
-                  inputBoxStyle: InputBoxStyle(
+                  chatInputStyle: ChatInputStyle(
                     backgroundColor: _controller.isAnimating
                         ? Colors.transparent
                         : Colors.black,
@@ -112,9 +111,10 @@ class _ChatPageState extends State<ChatPage>
                       color: Colors.yellow,
                       border: Border.all(color: Colors.orange),
                     ),
-                    textStyle: _creepsterStyle.copyWith(color: Colors.black),
-                    hintText: 'how may I help you...',
-                    hintStyle: _creepsterStyle.copyWith(color: Colors.orange),
+                    textStyle: _halloweenStyle.copyWith(color: Colors.black),
+                    hintText: 'good evening...',
+                    hintStyle: _halloweenStyle.copyWith(
+                        color: Colors.orange.withOpacity(.5)),
                   ),
                   llmMessageStyle: LlmMessageStyle(
                     icon: Icons.sentiment_very_satisfied,
@@ -154,8 +154,8 @@ class _ChatPageState extends State<ChatPage>
                       ],
                     ),
                     markdownStyle: MarkdownStyleSheet(
-                      p: _creepsterStyle,
-                      listBullet: _creepsterStyle,
+                      p: _halloweenStyle,
+                      listBullet: _halloweenStyle,
                     ),
                   ),
                 ),

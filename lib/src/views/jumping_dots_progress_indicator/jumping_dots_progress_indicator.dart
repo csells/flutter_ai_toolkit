@@ -7,32 +7,7 @@
 
 import 'package:flutter/widgets.dart';
 
-class _JumpingDot extends AnimatedWidget {
-  final Color color;
-  final double fontSize;
-
-  const _JumpingDot({
-    required Animation<double> animation,
-    required this.color,
-    required this.fontSize,
-  }) : super(listenable: animation);
-
-  Animation<double> get _animation => listenable as Animation<double>;
-
-  @override
-  Widget build(BuildContext context) => SizedBox(
-        height: _animation.value + fontSize,
-        child: Text(
-          '.',
-          style: TextStyle(
-            color: color,
-            fontSize: fontSize,
-            // Center the text vertically within its line height
-            height: 1,
-          ),
-        ),
-      );
-}
+import 'jumping_dot.dart';
 
 /// Creates a list with [numberOfDots] text dots, with 3 dots as default
 /// default [fontSize] of 10.0, default [color] as black, [dotSpacing] (gap
@@ -40,7 +15,7 @@ class _JumpingDot extends AnimatedWidget {
 /// [milliseconds] as 250.
 /// One cycle of animation is one complete round of a dot animating up and back
 /// to its original position.
-class JumpingDotsProgress extends StatefulWidget {
+class JumpingDotsProgressIndicator extends StatefulWidget {
   /// Number of dots that are added in a horizontal list, default = 3.
   final int numberOfDots;
 
@@ -63,7 +38,7 @@ class JumpingDotsProgress extends StatefulWidget {
   final double endTweenValue = 8.0;
 
   /// Creates a jumping dot progress indicator.
-  const JumpingDotsProgress({
+  const JumpingDotsProgressIndicator({
     super.key,
     this.numberOfDots = 3,
     this.fontSize = 10.0,
@@ -73,11 +48,12 @@ class JumpingDotsProgress extends StatefulWidget {
   });
 
   @override
-  _JumpingDotsProgressState createState() => _JumpingDotsProgressState();
+  _JumpingDotsProgressIndicatorState createState() =>
+      _JumpingDotsProgressIndicatorState();
 }
 
-class _JumpingDotsProgressState extends State<JumpingDotsProgress>
-    with TickerProviderStateMixin {
+class _JumpingDotsProgressIndicatorState
+    extends State<JumpingDotsProgressIndicator> with TickerProviderStateMixin {
   final _controllers = <AnimationController>[];
   final _animations = <Animation<double>>[];
   final _widgets = <Widget>[];
@@ -105,7 +81,7 @@ class _JumpingDotsProgressState extends State<JumpingDotsProgress>
       _widgets.add(
         Padding(
           padding: EdgeInsets.only(right: widget.dotSpacing),
-          child: _JumpingDot(
+          child: JumpingDot(
             animation: _animations[dot],
             fontSize: widget.fontSize,
             color: widget.color,

@@ -1,9 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:flutter/widgets.dart';
-
-import '../../flutter_ai_toolkit.dart';
-import '../views/response_builder.dart';
+import '../../../flutter_ai_toolkit.dart';
+import '../../views/response_builder.dart';
 
 class ChatViewModel {
   ChatViewModel({
@@ -47,44 +45,4 @@ class ChatViewModel {
         welcomeMessage,
         style,
       );
-}
-
-class ChatViewModelProvider extends InheritedWidget {
-  const ChatViewModelProvider({
-    super.key,
-    required super.child,
-    required this.viewModel,
-  });
-
-  final ChatViewModel viewModel;
-
-  static ChatViewModel of(BuildContext context) {
-    final viewModel = maybeOf(context);
-    assert(viewModel != null, 'No ChatViewModelProvider found in context');
-    return viewModel!;
-  }
-
-  static ChatViewModel? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<ChatViewModelProvider>()
-      ?.viewModel;
-
-  @override
-  bool updateShouldNotify(ChatViewModelProvider oldWidget) =>
-      viewModel != oldWidget.viewModel;
-}
-
-class ChatViewModelClient extends StatelessWidget {
-  const ChatViewModelClient({
-    required this.builder,
-    this.child,
-    super.key,
-  });
-
-  final Widget Function(
-      BuildContext context, ChatViewModel viewModel, Widget? child) builder;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) =>
-      builder(context, ChatViewModelProvider.of(context), child);
 }

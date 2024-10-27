@@ -37,13 +37,6 @@
       "program": "lib/welcome/welcome.dart",
     },
     {
-      "name": "custom llm icon",
-      "cwd": "example",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/llm_icon/llm_icon.dart",
-    },
-    {
       "name": "custom styles",
       "cwd": "example",
       "request": "launch",
