@@ -4,14 +4,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ai_toolkit/src/views/action_button/action_button.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_ai_toolkit/src/utility.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
 
-import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../chat_view_model/chat_view_model_client.dart';
+import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
-import '../action_button/action_button_bar.dart';
 import 'llm_message_view.dart';
 import 'user_message_view.dart';
 
@@ -31,8 +30,6 @@ class ChatMessageView extends StatefulWidget {
   const ChatMessageView({
     required this.message,
     this.onEdit,
-    this.onSelected,
-    this.selected = false,
     super.key,
   });
 
@@ -41,12 +38,6 @@ class ChatMessageView extends StatefulWidget {
 
   /// Callback function triggered when the edit action is selected.
   final void Function()? onEdit;
-
-  /// Callback function called when the message selection state changes.
-  final void Function(bool)? onSelected;
-
-  /// Indicates whether the message is currently selected.
-  final bool selected;
 
   @override
   State<ChatMessageView> createState() => _ChatMessageViewState();
@@ -59,64 +50,42 @@ class _ChatMessageViewState extends State<ChatMessageView> {
   Widget build(BuildContext context) => ChatViewModelClient(
         builder: (context, viewModel, child) {
           final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+          final child = _isUser
+              ? UserMessageView(widget.message)
+              : LlmMessageView(widget.message);
+          final contextMenu = isMobile
+              ? ContextMenu(
+                  entries: _isUser
+                      ? [
+                          if (widget.onEdit != null)
+                            MenuItem(
+                              label: 'Edit',
+                              icon: chatStyle.editButtonStyle!.icon,
+                              onSelected: widget.onEdit,
+                            ),
+                          MenuItem(
+                            label: 'Copy',
+                            icon: chatStyle.copyButtonStyle!.icon,
+                            onSelected: _onCopy,
+                          ),
+                        ]
+                      : [
+                          MenuItem(
+                            label: 'Copy',
+                            icon: chatStyle.copyButtonStyle!.icon,
+                            onSelected: _onCopy,
+                          ),
+                        ],
+                )
+              : null;
 
-          return GestureDetector(
-            onLongPress: _onSelect,
-            child: Column(
-              children: [
-                _isUser
-                    ? UserMessageView(widget.message)
-                    : LlmMessageView(widget.message),
-                const Gap(6),
-                if (widget.selected)
-                  Align(
-                    alignment:
-                        _isUser ? Alignment.centerRight : Alignment.centerLeft,
-                    child: ActionButtonBar(
-                      style: chatStyle,
-                      _isUser
-                          ? [
-                              if (widget.onEdit != null)
-                                ActionButton(
-                                  onPressed: _onEdit,
-                                  style: chatStyle.editButtonStyle!,
-                                ),
-                              ActionButton(
-                                onPressed: _onCopy,
-                                style: chatStyle.copyButtonStyle!,
-                              ),
-                              ActionButton(
-                                onPressed: _onSelect,
-                                style: chatStyle.closeButtonStyle!,
-                              ),
-                            ]
-                          : [
-                              ActionButton(
-                                onPressed: _onSelect,
-                                style: chatStyle.closeButtonStyle!,
-                              ),
-                              ActionButton(
-                                onPressed: _onCopy,
-                                style: chatStyle.copyButtonStyle!,
-                              ),
-                            ],
-                    ),
-                  ),
-              ],
-            ),
-          );
+          return contextMenu != null
+              ? ContextMenuRegion(contextMenu: contextMenu, child: child)
+              : child;
         },
       );
 
-  void _onSelect() => widget.onSelected?.call(!widget.selected);
-
-  void _onEdit() {
-    widget.onSelected?.call(false);
-    widget.onEdit?.call();
-  }
-
   Future<void> _onCopy() async {
-    widget.onSelected?.call(false);
     await Clipboard.setData(ClipboardData(text: widget.message.text ?? ''));
 
     if (context.mounted) {

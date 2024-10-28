@@ -93,25 +93,23 @@ class LlmMessageView extends StatelessWidget {
     required BuildContext context,
     required String response,
     required MarkdownStyleSheet styleSheet,
-  }) =>
-      isMobile
-          ? MarkdownBody(
-              data: response,
-              selectable: false,
-              styleSheet: styleSheet,
-            )
-          : Localizations(
-              locale: Localizations.localeOf(context),
-              delegates: const [
-                DefaultWidgetsLocalizations.delegate,
-                DefaultMaterialLocalizations.delegate,
-              ],
-              child: SelectionArea(
-                child: MarkdownBody(
-                  data: response,
-                  selectable: false,
-                  styleSheet: styleSheet,
-                ),
-              ),
-            );
+  }) {
+    final child = MarkdownBody(
+      data: response,
+      selectable: false,
+      styleSheet: styleSheet,
+    );
+
+    return isMobile
+        // no mouse-drive selection areas on mobile
+        ? child
+        : Localizations(
+            locale: Localizations.localeOf(context),
+            delegates: const [
+              DefaultWidgetsLocalizations.delegate,
+              DefaultMaterialLocalizations.delegate,
+            ],
+            child: SelectionArea(child: child),
+          );
+  }
 }

@@ -12,6 +12,10 @@
 
 * implemented [#31](https://github.com/csells/flutter_ai_toolkit/issues/31): feature: provide a list of initial suggested prompts to display in an empty chat session
 
+* implemented [#25](https://github.com/csells/flutter_ai_toolkit/issues/25): better mobile long-press action menu for chat messages
+
+* fixed [#47](https://github.com/csells/flutter_ai_toolkit/issues/25): bug: Long pressing a message and then clicking outside of the toolbar should make the toolbar disappear
+
 ## 0.3.0
 
 * implemented [#32](https://github.com/csells/flutter_ai_toolkit/issues/32): feature: dev-configured LLM message icon

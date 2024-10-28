@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/styles.dart';
+import '../../utility.dart';
 import '../attachment_view/attachment_view.dart';
 
 /// A widget that displays a user's message in a chat interface.
@@ -63,9 +64,10 @@ class UserMessageView extends StatelessWidget {
                             top: 12,
                             bottom: 12,
                           ),
-                          child: Text(
-                            message.text ?? '',
-                            style: userStyle.textStyle,
+                          child: _messageBuilder(
+                            context: context,
+                            text: message.text ?? '',
+                            textStyle: userStyle.textStyle,
                           ),
                         ),
                       ),
@@ -77,4 +79,23 @@ class UserMessageView extends StatelessWidget {
           ),
         ],
       );
+
+  Widget _messageBuilder({
+    required BuildContext context,
+    required String text,
+    required TextStyle? textStyle,
+  }) {
+    final child = Text(text, style: textStyle);
+    return isMobile
+        // no mouse-drive selection areas on mobile
+        ? child
+        : Localizations(
+            locale: Localizations.localeOf(context),
+            delegates: const [
+              DefaultWidgetsLocalizations.delegate,
+              DefaultMaterialLocalizations.delegate,
+            ],
+            child: SelectionArea(child: child),
+          );
+  }
 }

@@ -23,6 +23,7 @@ dependencies:
   universal_platform: ^1.1.0
   ollama_dart: ^0.2.1
   waveform_recorder: ^1.2.2
+  flutter_context_menu: ^0.2.0
   
 dev_dependencies:
   flutter_test:
