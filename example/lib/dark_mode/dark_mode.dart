@@ -12,7 +12,7 @@ void main() => runApp(const App());
 
 class App extends StatelessWidget {
   static const title = 'Example: Dark Mode';
-  static final themeMode = ValueNotifier(ThemeMode.light);
+  static final themeMode = ValueNotifier(ThemeMode.dark);
 
   const App({super.key});
 

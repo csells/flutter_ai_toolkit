@@ -6,7 +6,8 @@ import 'package:flutter/widgets.dart';
 
 import '../chat_view_model/chat_view_model_client.dart';
 import '../providers/interface/chat_message.dart';
-import 'chat_message_view/chat_message_view.dart';
+import 'chat_message_view/llm_message_view.dart';
+import 'chat_message_view/user_message_view.dart';
 
 /// A widget that displays a history of chat messages.
 ///
@@ -55,15 +56,18 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       messageIndex >= history.length - 2;
                   final canEdit =
                       isLastUserMessage && widget.onEditMessage != null;
+                  final isUser = message.origin.isUser;
 
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: ChatMessageView(
-                      message: message,
-                      onEdit: canEdit
-                          ? () => widget.onEditMessage?.call(message)
-                          : null,
-                    ),
+                    child: isUser
+                        ? UserMessageView(
+                            message,
+                            onEdit: canEdit
+                                ? () => widget.onEditMessage?.call(message)
+                                : null,
+                          )
+                        : LlmMessageView(message),
                   );
                 },
               );

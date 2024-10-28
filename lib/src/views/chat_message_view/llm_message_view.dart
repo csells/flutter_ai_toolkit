@@ -9,8 +9,8 @@ import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../styles/llm_message_style.dart';
-import '../../utility.dart';
 import '../jumping_dots_progress_indicator/jumping_dots_progress_indicator.dart';
+import 'adaptive_copy_text.dart';
 
 /// A widget that displays an LLM (Language Model) message in a chat interface.
 class LlmMessageView extends StatelessWidget {
@@ -36,13 +36,6 @@ class LlmMessageView extends StatelessWidget {
                       viewModel.style?.llmMessageStyle,
                     );
 
-                    final responseBuilder = viewModel.responseBuilder ??
-                        (c, r) => _responseBuilder(
-                              context: c,
-                              response: r,
-                              styleSheet: llmStyle.markdownStyle!,
-                            );
-
                     return Stack(
                       children: [
                         Container(
@@ -67,7 +60,20 @@ class LlmMessageView extends StatelessWidget {
                                     color: chatStyle.progressIndicatorColor!,
                                   ),
                                 )
-                              : responseBuilder(context, message.text ?? ''),
+                              : AdaptiveCopyText(
+                                  clipboardText: message.text!,
+                                  chatStyle: chatStyle,
+                                  child: viewModel.responseBuilder != null
+                                      ? viewModel.responseBuilder!(
+                                          context,
+                                          message.text!,
+                                        )
+                                      : MarkdownBody(
+                                          data: message.text!,
+                                          selectable: false,
+                                          styleSheet: llmStyle.markdownStyle!,
+                                        ),
+                                ),
                         ),
                       ],
                     );
@@ -79,37 +85,4 @@ class LlmMessageView extends StatelessWidget {
           const Flexible(flex: 2, child: SizedBox()),
         ],
       );
-
-  /// Builds the response widget based on the platform and provided style.
-  ///
-  /// This method uses [SelectionArea] for non-mobile platforms to enable text selection.
-  /// For mobile platforms, it directly renders the markdown without selection capability.
-  ///
-  /// Parameters:
-  /// - [context]: The build context.
-  /// - [response]: The text response to be displayed.
-  /// - [styleSheet]: The markdown style sheet to be applied to the response.
-  Widget _responseBuilder({
-    required BuildContext context,
-    required String response,
-    required MarkdownStyleSheet styleSheet,
-  }) {
-    final child = MarkdownBody(
-      data: response,
-      selectable: false,
-      styleSheet: styleSheet,
-    );
-
-    return isMobile
-        // no mouse-drive selection areas on mobile
-        ? child
-        : Localizations(
-            locale: Localizations.localeOf(context),
-            delegates: const [
-              DefaultWidgetsLocalizations.delegate,
-              DefaultMaterialLocalizations.delegate,
-            ],
-            child: SelectionArea(child: child),
-          );
-  }
 }

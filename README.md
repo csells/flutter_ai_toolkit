@@ -22,6 +22,7 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 - custom styling support
 - dev-configured chatbot label + icon
 - support for Cupertino as well as Material
+- chat session serialization/deserialization
 - swappable support for LLM providers; oob support for Gemini and Vertex
 - support for all Flutter platforms, focusing initially on mobile and web
 
@@ -124,7 +125,6 @@ Note: There's no API key; Firebase manages all of that for you in the Firebase p
 
 ## More Features Coming Soon!
 As I mentioned, the AI Toolkit is just in the alpha phase of it's lifetime and it's under active development. Coming soon, you should expect the following features:
-- chat session serialization/deserialization
 - stand-alone chatbot app sample with multi-session support
 - thoroughly tested multi-platform support, including Windows and Linux
 

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/styles.dart';
-import '../../utility.dart';
 import '../attachment_view/attachment_view.dart';
+import 'adaptive_copy_text.dart';
 
 /// A widget that displays a user's message in a chat interface.
 ///
@@ -19,10 +19,13 @@ class UserMessageView extends StatelessWidget {
   /// Creates a [UserMessageView].
   ///
   /// The [message] parameter is required and contains the [ChatMessage] to be displayed.
-  const UserMessageView(this.message, {super.key});
+  const UserMessageView(this.message, {super.key, this.onEdit});
 
   /// The chat message to be displayed.
   final ChatMessage message;
+
+  /// The callback to be invoked when the message is edited.
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -49,9 +52,11 @@ class UserMessageView extends StatelessWidget {
                 ],
                 ChatViewModelClient(
                   builder: (context, viewModel, child) {
+                    final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
                     final userStyle = UserMessageStyle.resolve(
                       viewModel.style?.userMessageStyle,
                     );
+                    final text = message.text ?? '';
 
                     return Align(
                       alignment: Alignment.topRight,
@@ -64,10 +69,11 @@ class UserMessageView extends StatelessWidget {
                             top: 12,
                             bottom: 12,
                           ),
-                          child: _messageBuilder(
-                            context: context,
-                            text: message.text ?? '',
-                            textStyle: userStyle.textStyle,
+                          child: AdaptiveCopyText(
+                            chatStyle: chatStyle,
+                            clipboardText: text,
+                            onEdit: onEdit,
+                            child: Text(text, style: userStyle.textStyle),
                           ),
                         ),
                       ),
@@ -79,23 +85,4 @@ class UserMessageView extends StatelessWidget {
           ),
         ],
       );
-
-  Widget _messageBuilder({
-    required BuildContext context,
-    required String text,
-    required TextStyle? textStyle,
-  }) {
-    final child = Text(text, style: textStyle);
-    return isMobile
-        // no mouse-drive selection areas on mobile
-        ? child
-        : Localizations(
-            locale: Localizations.localeOf(context),
-            delegates: const [
-              DefaultWidgetsLocalizations.delegate,
-              DefaultMaterialLocalizations.delegate,
-            ],
-            child: SelectionArea(child: child),
-          );
-  }
 }
