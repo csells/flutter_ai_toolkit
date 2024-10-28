@@ -6,6 +6,8 @@
 
 * fixed [#64](https://github.com/csells/flutter_ai_toolkit/issues/64): bug: selection sticks around after clearing the history
 
+* fixed [#63](https://github.com/csells/flutter_ai_toolkit/issues/63): bug: broke multi-line text input
+
 
 ## 0.3.0
 

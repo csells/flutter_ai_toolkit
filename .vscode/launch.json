@@ -48,7 +48,7 @@
       "cwd": "example",
       "request": "launch",
       "type": "dart",
-      "program": "lib/styles/custom_styles.dart",
+      "program": "lib/custom_styles/custom_styles.dart",
     },
     {
       "name": "dark mode",

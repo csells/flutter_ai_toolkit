@@ -150,8 +150,10 @@ class _ChatInputState extends State<ChatInput> {
                             ),
                             child: DecoratedBox(
                               decoration: inputStyle.decoration!,
-                              child: SizedBox(
-                                height: _minInputHeight,
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: _minInputHeight,
+                                ),
                                 child: _waveController.isRecording
                                     ? WaveformRecorder(
                                         controller: _waveController,
