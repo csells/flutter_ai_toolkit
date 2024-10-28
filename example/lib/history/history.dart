@@ -49,8 +49,8 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    _loadHistory();
     _controller.addListener(_saveHistory);
+    _loadHistory();
   }
 
   @override
@@ -74,6 +74,18 @@ class _ChatPageState extends State<ChatPage> {
       );
 
   io.Directory? _historyDir;
+
+  final _welcomeMessage = ChatMessage.llmWelcome(
+    '# Welcome\n'
+    'Hello and welcome to the chat! This sample shows off a simple way to use '
+    'the Flutter AI Toolkit to create a chat history that is saved to disk '
+    'and restored the next time the app is launched.\n\n'
+    '# Note\n'
+    '**Since this sample depends on the availability of a file system and '
+    'the ability to save and restore files, it will not work in an environment '
+    'that does not support these capabilities, such as a web browser.**',
+  );
+
   Future<io.Directory> _getHistoryDir() async {
     if (_historyDir == null) {
       final temp = await pp.getTemporaryDirectory();
@@ -97,9 +109,14 @@ class _ChatPageState extends State<ChatPage> {
     for (var i = 0;; ++i) {
       final file = await _messageFile(i);
       if (!file.existsSync()) break;
+
+      debugPrint('Loading: ${file.path}');
       final map = jsonDecode(await file.readAsString());
       history.add(LlmChatViewController.messageFrom(map));
     }
+
+    // put in a welcome message
+    if (history.isEmpty) history.add(_welcomeMessage);
 
     // set the history on the controller
     _controller.history = history;
@@ -121,14 +138,6 @@ class _ChatPageState extends State<ChatPage> {
       final json = JsonEncoder.withIndent('  ').convert(map);
       await file.writeAsString(json);
     }
-
-    // delete any old messages, e.g. to handle clearing history
-    for (var i = history.length;; ++i) {
-      final file = await _messageFile(i);
-      if (!file.existsSync()) break;
-      debugPrint('Deleting: ${file.path}');
-      await file.delete();
-    }
   }
 
   void _clearHistory() async {
@@ -149,6 +158,16 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
 
-    if (ok == true) _controller.clearHistory();
+    if (ok != true) return;
+
+    // delete any old messages
+    for (var i = 0;; ++i) {
+      final file = await _messageFile(i);
+      if (!file.existsSync()) break;
+      debugPrint('Deleting: ${file.path}');
+      await file.delete();
+    }
+
+    _controller.history = [_welcomeMessage];
   }
 }
