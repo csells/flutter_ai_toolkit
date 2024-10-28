@@ -39,6 +39,7 @@ class VertexProvider extends LlmProvider {
     GenerationConfig? generationConfig,
   })  : _generativeModel = generativeModel,
         _embeddingModel = embeddingModel,
+        _history = history?.toList() ?? [],
         _safetySettings = safetySettings,
         _generationConfig = generationConfig {
     _chat = _startChat(history?.map(_contentFrom).toList());

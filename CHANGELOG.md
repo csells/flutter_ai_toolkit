@@ -8,6 +8,8 @@
 
 * fixed [#63](https://github.com/csells/flutter_ai_toolkit/issues/63): bug: broke multi-line text input
 
+* fixed [#60](https://github.com/csells/flutter_ai_toolkit/issues/60): bug: if an LLM request fails with no text in the response, the progress indicator never stops
+
 
 ## 0.3.0
 

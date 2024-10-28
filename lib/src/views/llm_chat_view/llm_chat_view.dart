@@ -217,6 +217,13 @@ class _LlmChatViewState extends State<LlmChatView>
         break;
       case LlmFailureException():
       case LlmException():
+        // stop from the progress from indicating in case there was a failure
+        // before any text response happened; the progress indicator uses a null
+        // text message to keep progressing. plus we don't want to just show an
+        // empty LLM message.
+        final llmMessage = widget.viewModel.controller.history.last;
+        if (llmMessage.text == null) llmMessage.append('ERROR');
+
         AdaptiveAlertDialog.show(
           context: context,
           content: Text(error.toString()),

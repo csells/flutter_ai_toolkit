@@ -59,6 +59,8 @@ class EchoProvider extends LlmProvider {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
+    if (prompt == 'FAILFAST') throw const LlmFailureException('Failing fast!');
+
     await Future.delayed(const Duration(milliseconds: 1000));
     yield '# Echo\n';
 
