@@ -176,6 +176,11 @@ class _ChatPageState extends State<ChatPage>
                 LlmChatView(
                   controller: _chatController,
                   style: style,
+                  suggestions: [
+                    'I\'m a Star Wars fan. What should I wear for Halloween?',
+                    'I\'m allergic to peanuts. What candy should I avoid at Halloween?',
+                    'What\'s the difference between a pumpkin and a squash?',
+                  ],
                 ),
               ],
             ),

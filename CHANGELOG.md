@@ -1,3 +1,7 @@
+## 0.4.1
+
+* updated samples, demo and README
+
 ## 0.4.0
 
 * implemented [#13](https://github.com/csells/flutter_ai_toolkit/issues/13): UI needs dark mode support
