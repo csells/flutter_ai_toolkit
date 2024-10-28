@@ -4,6 +4,8 @@
 
 * implemented [#30](https://github.com/csells/flutter_ai_toolkit/issues/30): chat serialization/deserialization
 
+* fixed [#64](https://github.com/csells/flutter_ai_toolkit/issues/64): bug: selection sticks around after clearing the history
+
 
 ## 0.3.0
 

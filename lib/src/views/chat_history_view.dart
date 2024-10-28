@@ -40,6 +40,12 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
   var _selectedMessageIndex = -1;
 
   @override
+  void didUpdateWidget(covariant ChatHistoryView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _selectedMessageIndex = -1;
+  }
+
+  @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16),
         child: ChatViewModelClient(
@@ -63,7 +69,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                       onEdit: isLastUserMessage && widget.onEditMessage != null
                           ? () => widget.onEditMessage?.call(message)
                           : null,
-                      onSelected: (selected) => _onSelectMessage(
+                      onSelected: (selected) => onSelectMessage(
                         messageIndex,
                         selected,
                       ),
@@ -77,6 +83,6 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         ),
       );
 
-  void _onSelectMessage(int messageIndex, bool selected) =>
+  void onSelectMessage(int messageIndex, bool selected) =>
       setState(() => _selectedMessageIndex = selected ? messageIndex : -1);
 }
