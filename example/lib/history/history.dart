@@ -7,8 +7,11 @@ import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
+
+import '../gemini_api_key.dart';
 
 void main(List<String> args) async => runApp(const App());
 
@@ -33,23 +36,26 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // final _provider = GeminiProvider(
-  //   generativeModel: GenerativeModel(
-  //     model: 'gemini-1.5-flash',
-  //     apiKey: geminiApiKey,
-  //   ),
-  // );
-  final _controller = LlmChatViewController(provider: EchoProvider());
+  // final _controller = LlmChatViewController(provider: EchoProvider());
+  final _controller = LlmChatViewController(
+    provider: GeminiProvider(
+      generativeModel: GenerativeModel(
+        model: 'gemini-1.5-flash',
+        apiKey: geminiApiKey,
+      ),
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onHistoryChanged);
+    _loadHistory();
+    _controller.addListener(_saveHistory);
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_onHistoryChanged);
+    _controller.removeListener(_saveHistory);
     super.dispose();
   }
 
@@ -66,6 +72,64 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: LlmChatView(controller: _controller),
       );
+
+  io.Directory? _historyDir;
+  Future<io.Directory> _getHistoryDir() async {
+    if (_historyDir == null) {
+      final temp = await pp.getTemporaryDirectory();
+      _historyDir = io.Directory(path.join(temp.path, 'chat-history'));
+      await _historyDir!.create();
+    }
+    return _historyDir!;
+  }
+
+  Future<io.File> _messageFile(int messageNo) async {
+    final fileName = path.join(
+      (await _getHistoryDir()).path,
+      'message-${messageNo.toString().padLeft(3, '0')}.json',
+    );
+    return io.File(fileName);
+  }
+
+  Future<void> _loadHistory() async {
+    // read the history from disk
+    final history = <ChatMessage>[];
+    for (var i = 0;; ++i) {
+      final file = await _messageFile(i);
+      if (!file.existsSync()) break;
+      final map = jsonDecode(await file.readAsString());
+      history.add(LlmChatViewController.messageFrom(map));
+    }
+
+    // set the history on the controller
+    _controller.history = history;
+  }
+
+  Future<void> _saveHistory() async {
+    // get the latest history
+    final history = _controller.history.toList();
+
+    // write the new messages
+    for (var i = 0; i != history.length; ++i) {
+      // skip if the file already exists
+      final file = await _messageFile(i);
+      if (file.existsSync()) continue;
+
+      // write the new message to disk
+      debugPrint('Saving: ${file.path}');
+      final map = LlmChatViewController.mapFrom(history[i]);
+      final json = JsonEncoder.withIndent('  ').convert(map);
+      await file.writeAsString(json);
+    }
+
+    // delete any old messages, e.g. to handle clearing history
+    for (var i = history.length;; ++i) {
+      final file = await _messageFile(i);
+      if (!file.existsSync()) break;
+      debugPrint('Deleting: ${file.path}');
+      await file.delete();
+    }
+  }
 
   void _clearHistory() async {
     final ok = await showDialog<bool>(
@@ -86,45 +150,5 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     if (ok == true) _controller.clearHistory();
-  }
-
-  void _onHistoryChanged() async {
-    io.File messageFile(io.Directory dir, int messageNo) {
-      final fileName = path.join(
-        dir.path,
-        'message-${messageNo.toString().padLeft(3, '0')}.json',
-      );
-      debugPrint('Message: $fileName');
-      return io.File(fileName);
-    }
-
-    // get the latest history
-    final history = _controller.history.toList();
-
-    // get a spot to store the history on disk
-    final temp = await pp.getTemporaryDirectory();
-    final dir = io.Directory(path.join(temp.path, 'chat-history'));
-    await dir.create();
-
-    // write the new messages
-    for (var i = 0; i != history.length; ++i) {
-      // skip if the file already exists
-      final file = messageFile(dir, i);
-      if (file.existsSync()) continue;
-
-      // write the new message to disk
-      final map = LlmChatViewController.mapFrom(history[i]);
-      final json = JsonEncoder.withIndent('  ').convert(map);
-      await file.writeAsString(json);
-    }
-
-    // delete any old messages
-    var i = history.length;
-    while (true) {
-      final file = messageFile(dir, i);
-      if (!file.existsSync()) break;
-      await file.delete();
-      ++i;
-    }
   }
 }

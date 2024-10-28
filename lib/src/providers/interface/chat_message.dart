@@ -22,8 +22,7 @@ class ChatMessage {
     required String? text,
     required this.attachments,
   })  : _text = text,
-        assert(origin.isUser && text != null && text.isNotEmpty ||
-            origin.isLlm && text == null);
+        assert(origin.isUser && text != null && text.isNotEmpty || origin.isLlm);
 
   String? _text;
 

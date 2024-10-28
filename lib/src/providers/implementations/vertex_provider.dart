@@ -7,7 +7,6 @@ import 'package:flutter_ai_toolkit/src/providers/interface/chat_message.dart';
 
 import '../interface/attachments.dart';
 import '../interface/llm_provider.dart';
-import '../interface/message_origin.dart';
 
 /// A provider class for interacting with Firebase Vertex AI's language model.
 ///
@@ -49,6 +48,7 @@ class VertexProvider extends LlmProvider {
   final GenerativeModel? _embeddingModel;
   final List<SafetySetting>? _safetySettings;
   final GenerationConfig? _generationConfig;
+  List<ChatMessage>? _history;
   ChatSession? _chat;
 
   ChatSession? _startChat(List<Content>? history) =>
@@ -97,18 +97,22 @@ class VertexProvider extends LlmProvider {
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
-  }) {
-    if (_generativeModel == null) {
-      throw Exception('generativeModel not initialized');
-    }
+  }) async* {
+    _checkModel('generativeModel', _generativeModel);
+    final userMessage = ChatMessage.user(prompt, attachments);
+    final llmMessage = ChatMessage.llm();
+    _history!.addAll([userMessage, llmMessage]);
 
-    assert(_chat != null);
-
-    return _generateStream(
+    final chunks = _generateStream(
       prompt: prompt,
       attachments: attachments,
       contentStreamGenerator: _chat!.sendMessageStream,
     );
+
+    await for (final chunk in chunks) {
+      llmMessage.append(chunk);
+      yield chunk;
+    }
   }
 
   Stream<String> _generateStream({
@@ -130,42 +134,25 @@ class VertexProvider extends LlmProvider {
   }
 
   @override
-  Iterable<ChatMessage> get history {
-    _checkModel('generativeModel', _generativeModel);
-    return _chat!.history
-        .where((c) => c.role == 'user' || c.role == 'model')
-        .map(_messageFrom);
-  }
+  Iterable<ChatMessage> get history => _history ?? [];
 
   @override
-  set history(Iterable<ChatMessage> history) =>
-      _chat = _startChat(history.map(_contentFrom).toList());
+  set history(Iterable<ChatMessage> history) {
+    _history = history.toList();
+    _chat = _startChat(history.map(_contentFrom).toList());
+  }
 
-  Part _partFrom(Attachment attachment) => switch (attachment) {
+  static Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
         (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
 
-  Content _contentFrom(ChatMessage message) => Content(
+  static Content _contentFrom(ChatMessage message) => Content(
         message.origin.isUser ? 'user' : 'model',
         [
           TextPart(message.text ?? ''),
           ...message.attachments.map(_partFrom),
         ],
-      );
-
-  // TODO: get the FileAttachmentname and check the mapping
-  Attachment _attachmentFrom(Part part) => switch (part) {
-        (InlineDataPart p) =>
-          FileAttachment(name: '', mimeType: p.mimeType, bytes: p.bytes),
-        (FileData p) => LinkAttachment(name: '', url: Uri.parse(p.fileUri)),
-        _ => throw UnimplementedError('Unsupported part type: $part'),
-      };
-
-  ChatMessage _messageFrom(Content content) => ChatMessage(
-        text: content.parts.whereType<TextPart>().map((p) => p.text).join(),
-        origin: content.role == 'user' ? MessageOrigin.user : MessageOrigin.llm,
-        attachments: content.parts.map(_attachmentFrom).toList(),
       );
 
   void _checkModel(String name, GenerativeModel? model) {

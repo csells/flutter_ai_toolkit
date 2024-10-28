@@ -56,6 +56,34 @@ final class FileAttachment extends Attachment {
       'bytes: ${bytes.length} bytes'
       ')';
 
+  /// Factory constructor for creating either a [FileAttachment] or an [ImageFileAttachment].
+  ///
+  /// This factory method determines the type of attachment based on the MIME type.
+  /// If the MIME type indicates an image, it creates an [ImageFileAttachment].
+  /// Otherwise, it creates a [FileAttachment].
+  ///
+  /// [name] is the name of the attachment.
+  /// [mimeType] is the MIME type of the attachment.
+  /// [bytes] is the binary content of the attachment.
+  ///
+  /// Returns an instance of either [FileAttachment] or [ImageFileAttachment].
+  factory FileAttachment.fileOrImage({
+    required String name,
+    required String mimeType,
+    required Uint8List bytes,
+  }) =>
+      Attachment._isImage(mimeType)
+          ? ImageFileAttachment(
+              name: name,
+              mimeType: mimeType,
+              bytes: bytes,
+            )
+          : FileAttachment(
+              name: name,
+              mimeType: mimeType,
+              bytes: bytes,
+            );
+
   /// Creates a [FileAttachment] from an [XFile].
   ///
   /// This factory method asynchronously reads the file content and determines
@@ -64,16 +92,12 @@ final class FileAttachment extends Attachment {
   /// [file] is the XFile object representing the file to be attached.
   ///
   /// Returns a Future that completes with a [FileAttachment] instance.
-  static Future<FileAttachment> fromFile(XFile file) async {
-    final mimeType = Attachment._mimeType(file);
-    return Attachment._isImage(mimeType)
-        ? ImageFileAttachment.fromFile(file)
-        : FileAttachment(
-            name: file.name,
-            mimeType: mimeType,
-            bytes: await file.readAsBytes(),
-          );
-  }
+  static Future<FileAttachment> fromFile(XFile file) async =>
+      FileAttachment.fileOrImage(
+        name: file.name,
+        mimeType: Attachment._mimeType(file),
+        bytes: await file.readAsBytes(),
+      );
 }
 
 /// Represents an image attachment in a chat message.

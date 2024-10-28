@@ -9,7 +9,12 @@ import 'package:flutter/widgets.dart';
 import 'providers/interface/attachments.dart';
 import 'providers/interface/chat_message.dart';
 import 'providers/interface/llm_provider.dart';
+import 'providers/interface/message_origin.dart';
 
+/// A controller class for managing LLM chat interactions and view updates.
+///
+/// This class extends [ChangeNotifier] to provide a way to notify listeners
+/// of changes in the chat state.
 /// A controller class for managing LLM chat interactions and view updates.
 ///
 /// This class extends [ChangeNotifier] to provide a way to notify listeners
@@ -52,13 +57,12 @@ class LlmChatViewController extends ChangeNotifier {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
-    final messageSender = _messageSender ?? _provider.sendMessageStream;
-    final stream = messageSender(prompt, attachments: attachments);
-
-    yield* stream;
-
-    // Notify listeners that the new messages are now available
-    notifyListeners();
+    if (_messageSender != null) {
+      yield* _messageSender(prompt, attachments: attachments);
+    } else {
+      yield* _provider.sendMessageStream(prompt, attachments: attachments);
+      notifyListeners();
+    }
   }
 
   /// Gets the current chat history.
@@ -105,4 +109,34 @@ class LlmChatViewController extends ChangeNotifier {
             },
         ],
       };
+
+  /// Converts a map representation to a [ChatMessage].
+  ///
+  /// The map should contain the following keys:
+  /// - 'origin': The origin of the message (user or model).
+  /// - 'text': The text content of the message.
+  /// - 'attachments': A list of attachments, each represented as a map with:
+  ///   - 'type': The type of the attachment ('file' or 'link').
+  ///   - 'name': The name of the attachment.
+  ///   - 'mimeType': The MIME type of the attachment.
+  ///   - 'data': The data of the attachment, either as a base64 encoded string (for files) or a URL (for links).
+  static ChatMessage messageFrom(Map<String, dynamic> map) => ChatMessage(
+        origin: MessageOrigin.values.byName(map['origin'] as String),
+        text: map['text'] as String,
+        attachments: [
+          for (final attachment in map['attachments'] as List<dynamic>)
+            switch (attachment['type'] as String) {
+              'file' => FileAttachment.fileOrImage(
+                  name: attachment['name'] as String,
+                  mimeType: attachment['mimeType'] as String,
+                  bytes: base64Decode(attachment['data'] as String),
+                ),
+              'link' => LinkAttachment(
+                  name: attachment['name'] as String,
+                  url: Uri.parse(attachment['data'] as String),
+                ),
+              _ => throw UnimplementedError(),
+            },
+        ],
+      );
 }

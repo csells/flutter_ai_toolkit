@@ -2,11 +2,8 @@
 
 * implemented [#13](https://github.com/csells/flutter_ai_toolkit/issues/13): UI needs dark mode support
 
-* TODO: chat serialization
+* implemented [#30](https://github.com/csells/flutter_ai_toolkit/issues/30): chat serialization/deserialization
 
-* TODO: desktop form-factor UX improvements
-
-* TODO: bug fixes
 
 ## 0.3.0
 

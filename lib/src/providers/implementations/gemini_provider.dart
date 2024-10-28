@@ -7,7 +7,6 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../interface/attachments.dart';
 import '../interface/llm_provider.dart';
-import '../interface/message_origin.dart';
 
 /// A provider class for interacting with Google's Gemini AI language model.
 ///
@@ -49,6 +48,7 @@ class GeminiProvider extends LlmProvider {
   final GenerativeModel? _embeddingModel;
   final List<SafetySetting>? _safetySettings;
   final GenerationConfig? _generationConfig;
+  List<ChatMessage>? _history;
   ChatSession? _chat;
 
   ChatSession? _startChat(List<Content>? history) =>
@@ -98,13 +98,22 @@ class GeminiProvider extends LlmProvider {
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
-  }) {
+  }) async* {
     _checkModel('generativeModel', _generativeModel);
-    return _generateStream(
+    final userMessage = ChatMessage.user(prompt, attachments);
+    final llmMessage = ChatMessage.llm();
+    _history!.addAll([userMessage, llmMessage]);
+
+    final chunks = _generateStream(
       prompt: prompt,
       attachments: attachments,
       contentStreamGenerator: _chat!.sendMessageStream,
     );
+
+    await for (final chunk in chunks) {
+      llmMessage.append(chunk);
+      yield chunk;
+    }
   }
 
   Stream<String> _generateStream({
@@ -126,16 +135,13 @@ class GeminiProvider extends LlmProvider {
   }
 
   @override
-  Iterable<ChatMessage> get history {
-    _checkModel('generativeModel', _generativeModel);
-    return _chat!.history
-        .where((c) => c.role == 'user' || c.role == 'model')
-        .map(_messageFrom);
-  }
+  Iterable<ChatMessage> get history => _history ?? [];
 
   @override
-  set history(Iterable<ChatMessage> history) =>
-      _chat = _startChat(history.map(_contentFrom).toList());
+  set history(Iterable<ChatMessage> history) {
+    _history = history.toList();
+    _chat = _startChat(history.map(_contentFrom).toList());
+  }
 
   static Part _partFrom(Attachment attachment) => switch (attachment) {
         (FileAttachment a) => DataPart(a.mimeType, a.bytes),
@@ -148,20 +154,6 @@ class GeminiProvider extends LlmProvider {
           TextPart(message.text ?? ''),
           ...message.attachments.map(_partFrom),
         ],
-      );
-
-  // TODO: get the FileAttachmentname and check the mapping
-  static Attachment _attachmentFrom(Part part) => switch (part) {
-        (DataPart p) =>
-          FileAttachment(name: '', mimeType: p.mimeType, bytes: p.bytes),
-        (FilePart p) => LinkAttachment(name: '', url: p.uri),
-        _ => throw UnimplementedError('Unsupported part type: $part'),
-      };
-
-  static ChatMessage _messageFrom(Content content) => ChatMessage(
-        text: content.parts.whereType<TextPart>().map((p) => p.text).join(),
-        origin: content.role == 'user' ? MessageOrigin.user : MessageOrigin.llm,
-        attachments: content.parts.map(_attachmentFrom).toList(),
       );
 
   void _checkModel(String name, GenerativeModel? model) {
