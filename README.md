@@ -26,7 +26,7 @@ The AI Toolkit is currently under active development and at the alpha stage, wit
 - swappable support for LLM providers; oob support for Gemini and Vertex
 - support for all Flutter platforms, focusing initially on mobile and web
 
-Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini.dart) hosting the AI Tookit running on Android:
+Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/demo/demo.dart) hosting the AI Tookit running on the web:
 
 <img src="https://raw.githubusercontent.com/csells/flutter_ai_toolkit/main/README/screenshot.png" height="800"/>
 
@@ -66,7 +66,7 @@ To configure the `GeminiProvider` you two things:
 1. model string, which you can ready about in [the Gemini models docs](https://ai.google.dev/gemini-api/docs/models/gemini), and 
 1. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
 
-With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini.dart">gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
+With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini/gemini.dart">gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
 
 Note: Be careful not to check your API key into a git repo or share it with anyone.
 
@@ -119,7 +119,7 @@ class ChatPage extends StatelessWidget {
       );
 }
 ```
-If you like, use your Firebase project with the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini.dart">vertex.dart</a> sample. This sample has also been tested on Android, iOS, the web and macOS.
+If you like, use your Firebase project with the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/vertex/vertex.dart">vertex.dart</a> sample. This sample has also been tested on Android, iOS, the web and macOS.
 
 Note: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check), which is beyond the scope of the sample code in this project.
 
