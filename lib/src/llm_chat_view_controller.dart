@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 
 import 'providers/interface/attachments.dart';
@@ -53,17 +55,9 @@ class LlmChatViewController extends ChangeNotifier {
     final messageSender = _messageSender ?? _provider.sendMessageStream;
     final stream = messageSender(prompt, attachments: attachments);
 
-    // Notify listeners that a new message has been added to the history
-    notifyListeners();
+    yield* stream;
 
-    await for (final text in stream) {
-      yield text;
-
-      // Notify listeners that more of the LLM response is now available
-      notifyListeners();
-    }
-
-    // Notify listeners that the complete LLM response is now available
+    // Notify listeners that the new messages are now available
     notifyListeners();
   }
 
@@ -75,4 +69,40 @@ class LlmChatViewController extends ChangeNotifier {
     _provider.history = history;
     notifyListeners();
   }
+
+  /// Clears the chat history and notifies listeners of the change.
+  void clearHistory() => history = const [];
+
+  /// Converts a [ChatMessage] to a map representation.
+  ///
+  /// The map contains the following keys:
+  /// - 'origin': The origin of the message (user or model).
+  /// - 'text': The text content of the message.
+  /// - 'attachments': A list of attachments, each represented as a map with:
+  ///   - 'type': The type of the attachment ('file' or 'link').
+  ///   - 'name': The name of the attachment.
+  ///   - 'mimeType': The MIME type of the attachment.
+  ///   - 'data': The data of the attachment, either as a base64 encoded string (for files) or a URL (for links).
+  static Map<String, dynamic> mapFrom(ChatMessage message) => {
+        'origin': message.origin.name,
+        'text': message.text,
+        'attachments': [
+          for (final attachment in message.attachments)
+            {
+              'type': switch (attachment) {
+                (FileAttachment _) => 'file',
+                (LinkAttachment _) => 'link',
+              },
+              'name': attachment.name,
+              'mimeType': switch (attachment) {
+                (FileAttachment a) => a.mimeType,
+                (LinkAttachment a) => a.mimeType,
+              },
+              'data': switch (attachment) {
+                (FileAttachment a) => base64Encode(a.bytes),
+                (LinkAttachment a) => a.url,
+              },
+            },
+        ],
+      };
 }

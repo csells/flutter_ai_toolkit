@@ -133,7 +133,9 @@ class _LlmChatViewState extends State<LlmChatView>
         prompt,
         attachments: attachments,
       ),
-      onUpdate: (_) {},
+      // update during the streaming response input; the controller will notify
+      // listeners only when the response is complete
+      onUpdate: (_) => setState(() {}),
       onDone: _onPromptDone,
     );
 

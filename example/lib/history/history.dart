@@ -2,8 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:convert';
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as pp;
 
 void main(List<String> args) async => runApp(const App());
 
@@ -16,6 +21,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: title,
         home: ChatPage(),
+        debugShowCheckedModeBanner: false,
       );
 }
 
@@ -47,24 +53,78 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  void _onHistoryChanged() {
-    final history = _controller.history.toList();
-    // ignore: prefer_is_empty
-    final llmIndex = history.length < 1 ? -1 : history.length - 1;
-    final userIndex = history.length < 2 ? -1 : history.length - 2;
-    final llm = llmIndex == -1 ? null : history[llmIndex];
-    final user = userIndex == -1 ? null : history[userIndex];
-    debugPrint(''
-        'USER: ${user?.text}\n'
-        'LLM: ${llm?.text}\n'
-        '');
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(App.title)),
-        body: LlmChatView(
-          controller: _controller,
+        appBar: AppBar(
+          title: const Text(App.title),
+          actions: [
+            IconButton(
+              onPressed: _clearHistory,
+              icon: const Icon(Icons.history),
+            ),
+          ],
         ),
+        body: LlmChatView(controller: _controller),
       );
+
+  void _clearHistory() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear history?'),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Clear'),
+          ),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+
+    if (ok == true) _controller.clearHistory();
+  }
+
+  void _onHistoryChanged() async {
+    io.File messageFile(io.Directory dir, int messageNo) {
+      final fileName = path.join(
+        dir.path,
+        'message-${messageNo.toString().padLeft(3, '0')}.json',
+      );
+      debugPrint('Message: $fileName');
+      return io.File(fileName);
+    }
+
+    // get the latest history
+    final history = _controller.history.toList();
+
+    // get a spot to store the history on disk
+    final temp = await pp.getTemporaryDirectory();
+    final dir = io.Directory(path.join(temp.path, 'chat-history'));
+    await dir.create();
+
+    // write the new messages
+    for (var i = 0; i != history.length; ++i) {
+      // skip if the file already exists
+      final file = messageFile(dir, i);
+      if (file.existsSync()) continue;
+
+      // write the new message to disk
+      final map = LlmChatViewController.mapFrom(history[i]);
+      final json = JsonEncoder.withIndent('  ').convert(map);
+      await file.writeAsString(json);
+    }
+
+    // delete any old messages
+    var i = history.length;
+    while (true) {
+      final file = messageFile(dir, i);
+      if (!file.existsSync()) break;
+      await file.delete();
+      ++i;
+    }
+  }
 }
