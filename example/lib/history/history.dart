@@ -13,7 +13,7 @@ import 'package:path_provider/path_provider.dart' as pp;
 
 import '../gemini_api_key.dart';
 
-void main(List<String> args) async => runApp(const App());
+void main() => runApp(const App());
 
 class App extends StatelessWidget {
   static const title = 'Example: History';

@@ -19,6 +19,7 @@ import '../../providers/interface/llm_provider.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../chat_history_view.dart';
 import '../chat_input/chat_input.dart';
+import '../chat_input/chat_suggestion_view.dart';
 import '../response_builder.dart';
 import 'llm_response.dart';
 
@@ -54,6 +55,7 @@ class LlmChatView extends StatefulWidget {
     LlmChatViewController? controller,
     LlmChatViewStyle? style,
     ResponseBuilder? responseBuilder,
+    this.suggestions = const [],
     super.key,
   }) {
     if (provider != null && controller != null) {
@@ -70,6 +72,13 @@ class LlmChatView extends StatefulWidget {
       style: style,
     );
   }
+
+  /// The list of suggestions to display in the chat interface.
+  ///
+  /// This list contains predefined suggestions that can be shown to the user
+  /// when the chat history is empty. The user can select any of these suggestions
+  /// to quickly start a conversation with the LLM.
+  final List<String> suggestions;
 
   /// The view model containing the chat state and configuration.
   ///
@@ -103,9 +112,22 @@ class _LlmChatViewState extends State<LlmChatView>
         child: Column(
           children: [
             Expanded(
-              child: ChatHistoryView(
-                onEditMessage:
-                    _pendingPromptResponse == null ? _onEditMessage : null,
+              child: Stack(
+                children: [
+                  ChatHistoryView(
+                    onEditMessage:
+                        _pendingPromptResponse == null ? _onEditMessage : null,
+                  ),
+                  if (widget.suggestions.isNotEmpty &&
+                      widget.viewModel.controller.history.isEmpty)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ChatSuggestionsView(
+                        suggestions: widget.suggestions,
+                        onSelectSuggestion: _onSelectSuggestion,
+                      ),
+                    ),
+                ],
               ),
             ),
             ChatInput(
@@ -237,4 +259,7 @@ class _LlmChatViewState extends State<LlmChatView>
         break;
     }
   }
+
+  void _onSelectSuggestion(String suggestion) =>
+      setState(() => _initialMessage = ChatMessage.user(suggestion, []));
 }

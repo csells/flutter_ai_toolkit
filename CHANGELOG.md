@@ -10,6 +10,7 @@
 
 * fixed [#60](https://github.com/csells/flutter_ai_toolkit/issues/60): bug: if an LLM request fails with no text in the response, the progress indicator never stops
 
+* implemented [#31](https://github.com/csells/flutter_ai_toolkit/issues/31): feature: provide a list of initial suggested prompts to display in an empty chat session
 
 ## 0.3.0
 

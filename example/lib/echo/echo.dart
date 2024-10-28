@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 
-void main(List<String> args) async => runApp(App());
+void main() => runApp(App());
 
 class App extends StatefulWidget {
   static const title = 'Example: Echo Test';

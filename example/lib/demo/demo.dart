@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 late final SharedPreferences prefs;
 
-void main(List<String> args) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   runApp(App(prefs: prefs));

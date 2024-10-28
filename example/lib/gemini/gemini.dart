@@ -8,7 +8,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../gemini_api_key.dart';
 
-void main(List<String> args) async => runApp(const App());
+void main() => runApp(const App());
 
 class App extends StatelessWidget {
   static const title = 'Example: Google Gemini AI';

@@ -11,7 +11,7 @@ import '../gemini_api_key.dart';
 void main() => runApp(const App());
 
 class App extends StatelessWidget {
-  static const title = 'Example: Welcome Message';
+  static const title = 'Example: Suggestions';
 
   const App({super.key});
 
@@ -34,12 +34,12 @@ class ChatPage extends StatelessWidget {
               model: 'gemini-1.5-flash',
               apiKey: geminiApiKey,
             ),
-            history: [
-              ChatMessage.llmWelcome(
-                'Hello and welcome to the Flutter AI Toolkit!',
-              )
-            ],
           ),
+          suggestions: const [
+            'Tell me a joke.',
+            'Write me a limerick.',
+            'Perform a haiku.',
+          ],
         ),
       );
 }
