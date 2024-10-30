@@ -11,12 +11,13 @@ import 'message_origin.dart';
 /// including its unique identifier, origin (user or LLM), text content,
 /// and any attachments.
 class ChatMessage {
-  /// Private constructor for creating a ChatMessage instance.
+  /// Constructs a [ChatMessage] instance.
   ///
-  /// [id] is a unique identifier for the message.
-  /// [origin] specifies whether the message is from a user or an LLM.
-  /// [text] is the content of the message.
-  /// [attachments] are any files or media associated with the message.
+  /// The [origin] parameter specifies the origin of the message (user or LLM).
+  /// The [text] parameter is the content of the message. It can be null or empty
+  /// if the message is from an LLM. For user-originated messages, [text] must
+  /// not be null or empty.
+  /// The [attachments] parameter is a list of any files or media attached to the message.
   ChatMessage({
     required this.origin,
     required String? text,
@@ -24,7 +25,6 @@ class ChatMessage {
   })  : _text = text,
         assert(
             origin.isUser && text != null && text.isNotEmpty || origin.isLlm);
-
   String? _text;
 
   /// Factory constructor for creating an LLM-originated message.

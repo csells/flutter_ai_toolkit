@@ -154,15 +154,15 @@ class LlmChatViewStyle {
     );
   }
 
-  /// Resolves the LlmChatViewStyle by combining the provided style with default values.
+  /// Resolves the provided [style] with the [defaultStyle].
   ///
-  /// This method takes an optional [style] and merges it with the [defaultStyle].
-  /// If [defaultStyle] is not provided, it uses [LlmChatViewStyle.defaultStyles].
+  /// This method returns a new [LlmChatViewStyle] instance where each property
+  /// is taken from the provided [style] if it is not null, otherwise from the
+  /// [defaultStyle].
   ///
-  /// [style] - The custom LlmChatViewStyle to apply. Can be null.
-  /// [defaultStyle] - The default LlmChatViewStyle to use as a base. If null, uses [LlmChatViewStyle.defaultStyles].
-  ///
-  /// Returns a new [LlmChatViewStyle] instance with resolved properties.
+  /// - [style]: The style to resolve. If null, the [defaultStyle] will be used.
+  /// - [defaultStyle]: The default style to use for any properties not provided
+  ///   by the [style].
   static LlmChatViewStyle resolve(
     LlmChatViewStyle? style, {
     LlmChatViewStyle? defaultStyle,

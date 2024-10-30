@@ -151,18 +151,15 @@ class ActionButtonStyle {
     );
   }
 
-  /// Resolves the IconButtonStyle by combining the provided style with default
-  /// values.
+  /// Resolves the provided [style] with the [defaultStyle].
   ///
-  /// This method takes an optional [style] and merges it with the
-  /// [defaultStyle]. If [defaultStyle] is not provided, it uses
-  /// [IconButtonStyle.defaultStyle()].
+  /// This method returns a new [ActionButtonStyle] instance where each property
+  /// is taken from the provided [style] if it is not null, otherwise from the
+  /// [defaultStyle].
   ///
-  /// [style] - The custom IconButtonStyle to apply. Can be null. [defaultStyle]
-  /// - The default IconButtonStyle to use as a base. If null, uses
-  /// [IconButtonStyle.defaultStyle()].
-  ///
-  /// Returns a new [ActionButtonStyle] instance with resolved properties.
+  /// - [style]: The style to resolve. If null, the [defaultStyle] will be used.
+  /// - [defaultStyle]: The default style to use for any properties not provided
+  ///   by the [style].
   static ActionButtonStyle resolve(
     ActionButtonStyle? style, {
     required ActionButtonStyle defaultStyle,
