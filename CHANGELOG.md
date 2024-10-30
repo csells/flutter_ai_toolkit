@@ -1,3 +1,9 @@
+## 0.4.2
+
+* upgraded to waveform_recorder 1.3.0
+
+* fix [#69](https://github.com/csells/flutter_ai_toolkit/issues/69): SDK dependency conflict by lowering sdk requirement to 3.4.0
+
 ## 0.4.1
 
 * updated samples, demo and README

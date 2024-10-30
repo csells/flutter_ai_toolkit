@@ -154,7 +154,7 @@ class _ChatPageState extends State<ChatPage>
                 if (_halloweenMode.value) _resetAnimation();
               },
               tooltip: _halloweenMode.value ? 'Normal Mode' : 'Halloween Mode',
-              icon: const Icon(Icons.bedtime),
+              icon: Text('🎃'),
             ),
           ],
         ),

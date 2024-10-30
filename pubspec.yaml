@@ -1,10 +1,10 @@
 name: flutter_ai_toolkit
 description: "A set of AI chat-related widgets for your Flutter app targeting mobile, desktop and web."
-version: 0.4.1
+version: 0.4.2
 homepage: https://github.com/csells/flutter_ai_toolkit
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
@@ -22,7 +22,7 @@ dependencies:
   gap: ^3.0.1
   universal_platform: ^1.1.0
   ollama_dart: ^0.2.1
-  waveform_recorder: ^1.2.2
+  waveform_recorder: ^1.3.0
   flutter_context_menu: ^0.2.0
   
 dev_dependencies:
