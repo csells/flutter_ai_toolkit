@@ -2,15 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
+
 import '../llm_chat_view_controller.dart';
 import '../styles/llm_chat_view_style.dart';
 import '../views/response_builder.dart';
 
-/// A view model class that manages the state and configuration of a chat interface.
+/// A view model class that manages the state and configuration of a chat
+/// interface.
 ///
 /// This class holds the controller and styling information needed to render and
 /// manage a chat view. It works in conjunction with [LlmChatViewController] to
 /// handle the business logic and state management of the chat interface.
+@immutable
 class ChatViewModel {
   /// Creates a [ChatViewModel] with the required controller and style.
   ///
@@ -19,7 +23,7 @@ class ChatViewModel {
   ///
   /// The [style] parameter allows customizing the visual appearance of the chat
   /// interface. If null, default styling will be used.
-  ChatViewModel({
+  const ChatViewModel({
     required this.controller,
     required this.style,
     this.responseBuilder,
@@ -27,8 +31,8 @@ class ChatViewModel {
 
   /// The controller that manages the chat state and interactions.
   ///
-  /// This controller handles operations like sending messages, managing the chat
-  /// history, and processing responses from the LLM provider.
+  /// This controller handles operations like sending messages, managing the
+  /// chat history, and processing responses from the LLM provider.
   final LlmChatViewController controller;
 
   /// The style configuration for the chat view.

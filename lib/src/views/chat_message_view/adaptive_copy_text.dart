@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart'
-    show SelectionArea, DefaultMaterialLocalizations;
+    show DefaultMaterialLocalizations, SelectionArea;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
@@ -10,15 +12,17 @@ import '../../utility.dart';
 
 /// A widget that displays text with adaptive copy functionality.
 ///
-/// This widget provides a context menu for copying text to the clipboard on mobile devices,
-/// and a selection area for mouse-driven selection on desktop and web platforms.
+/// This widget provides a context menu for copying text to the clipboard on
+/// mobile devices, and a selection area for mouse-driven selection on desktop
+/// and web platforms.
 class AdaptiveCopyText extends StatelessWidget {
   /// Creates an [AdaptiveCopyText] widget.
   ///
-  /// The [clipboardText] parameter is required and contains the text to be copied to the clipboard.
-  /// The [child] parameter is required and contains the widget to be displayed.
-  /// The [chatStyle] parameter is required and contains the style information for the chat.
-  /// The [onEdit] parameter is optional and contains the callback to be invoked when the text is edited.
+  /// The [clipboardText] parameter is required and contains the text to be
+  /// copied to the clipboard. The [child] parameter is required and contains
+  /// the widget to be displayed. The [chatStyle] parameter is required and
+  /// contains the style information for the chat. The [onEdit] parameter is
+  /// optional and contains the callback to be invoked when the text is edited.
   const AdaptiveCopyText({
     required this.clipboardText,
     required this.child,
@@ -52,7 +56,7 @@ class AdaptiveCopyText extends StatelessWidget {
         MenuItem(
           label: 'Copy',
           icon: chatStyle.copyButtonStyle!.icon,
-          onSelected: () => _onCopy(context, clipboardText),
+          onSelected: () => unawaited(_onCopy(context, clipboardText)),
         ),
       ],
     );

@@ -3,9 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
-import 'package:flutter_ai_toolkit/src/providers/interface/chat_message.dart';
 
 import '../interface/attachments.dart';
+import '../interface/chat_message.dart';
 import '../interface/llm_provider.dart';
 
 /// A provider class for interacting with Firebase Vertex AI's language model.
@@ -29,8 +29,8 @@ class VertexProvider extends LlmProvider {
   /// [safetySettings] is an optional list of safety settings to apply to the
   /// model's responses.
   ///
-  /// [generationConfig] is an optional configuration for controlling the model's
-  /// generation behavior.
+  /// [generationConfig] is an optional configuration for controlling the
+  /// model's generation behavior.
   VertexProvider({
     GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,
@@ -144,8 +144,8 @@ class VertexProvider extends LlmProvider {
   }
 
   static Part _partFrom(Attachment attachment) => switch (attachment) {
-        (FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
-        (LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
+        (final FileAttachment a) => InlineDataPart(a.mimeType, a.bytes),
+        (final LinkAttachment a) => FileData(a.mimeType, a.url.toString()),
       };
 
   static Content _contentFrom(ChatMessage message) => Content(

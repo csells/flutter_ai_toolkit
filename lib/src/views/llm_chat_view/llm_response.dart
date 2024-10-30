@@ -22,7 +22,7 @@ class LlmResponse {
     required this.onDone,
   }) {
     _subscription = stream.listen(
-      (text) => onUpdate(text),
+      onUpdate,
       onDone: () => onDone(null),
       cancelOnError: true,
       onError: (err) => _close(_exception(err)),
@@ -44,13 +44,13 @@ class LlmResponse {
 
   LlmException _exception(dynamic err) => switch (err) {
         (LlmCancelException _) => const LlmCancelException(),
-        (LlmFailureException ex) => ex,
+        (final LlmFailureException ex) => ex,
         _ => LlmFailureException(err.toString()),
       };
 
   void _close(LlmException error) {
     assert(_subscription != null);
-    _subscription!.cancel();
+    unawaited(_subscription!.cancel());
     _subscription = null;
     onDone.call(error);
   }

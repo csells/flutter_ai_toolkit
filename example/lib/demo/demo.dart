@@ -196,8 +196,8 @@ class _ChatPageState extends State<ChatPage>
   LlmChatViewStyle get style {
     if (!_halloweenMode.value) {
       return App.themeMode.value == ThemeMode.dark
-          ? LlmChatViewStyle.darkStyle
-          : LlmChatViewStyle.lightStyle;
+          ? LlmChatViewStyle.darkStyle()
+          : LlmChatViewStyle.lightStyle();
     }
 
     final TextStyle halloweenTextStyle = GoogleFonts.hennyPenny(

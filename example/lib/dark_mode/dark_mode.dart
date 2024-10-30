@@ -63,8 +63,8 @@ class _ChatPageState extends State<ChatPage> {
         body: LlmChatView(
           provider: _provider,
           style: App.themeMode.value == ThemeMode.dark
-              ? LlmChatViewStyle.darkStyle
-              : LlmChatViewStyle.lightStyle,
+              ? LlmChatViewStyle.darkStyle()
+              : LlmChatViewStyle.lightStyle(),
         ),
       );
 }

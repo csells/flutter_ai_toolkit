@@ -7,12 +7,14 @@ import 'package:flutter/widgets.dart';
 import '../../providers/interface/attachments.dart';
 import 'removable_attachment.dart';
 
-/// A widget that displays a horizontal list of attachments with the ability to remove them.
+/// A widget that displays a horizontal list of attachments with the ability to
+/// remove them.
 class AttachmentsView extends StatelessWidget {
   /// Creates an [AttachmentsView].
   ///
-  /// The [attachments] parameter is required and represents the list of attachments to display.
-  /// The [onRemove] parameter is a callback function that is called when an attachment is removed.
+  /// The [attachments] parameter is required and represents the list of
+  /// attachments to display. The [onRemove] parameter is a callback function
+  /// that is called when an attachment is removed.
   const AttachmentsView({
     required this.attachments,
     required this.onRemove,

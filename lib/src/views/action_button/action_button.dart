@@ -16,15 +16,12 @@ import '../../utility.dart';
 class ActionButton extends StatelessWidget {
   /// Creates an [ActionButton].
   ///
-  /// The [onPressed] callback is required and is called when the button is
-  /// tapped. The [icon] parameter specifies the icon to display in the button.
-  /// The [iconColor] determines the color of the icon. The [iconDecoration]
-  /// defines the decoration of the button. The [size] parameter sets the
-  /// diameter of the circular button, defaulting to 40.
+  /// The [onPressed] and [style] parameters must not be null.
+  /// The [size] parameter defaults to 40 if not provided.
   const ActionButton({
-    super.key,
     required this.onPressed,
     required this.style,
+    super.key,
     this.size = 40,
   });
 

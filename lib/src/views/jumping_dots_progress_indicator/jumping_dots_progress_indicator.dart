@@ -16,6 +16,16 @@ import 'jumping_dot.dart';
 /// One cycle of animation is one complete round of a dot animating up and back
 /// to its original position.
 class JumpingDotsProgressIndicator extends StatefulWidget {
+  /// Creates a jumping dot progress indicator.
+  const JumpingDotsProgressIndicator({
+    required this.color,
+    super.key,
+    this.numberOfDots = 3,
+    this.fontSize = 10.0,
+    this.dotSpacing = 0.0,
+    this.milliseconds = 250,
+  });
+
   /// Number of dots that are added in a horizontal list, default = 3.
   final int numberOfDots;
 
@@ -31,22 +41,6 @@ class JumpingDotsProgressIndicator extends StatefulWidget {
   /// Time of one complete cycle of animation, default 250 milliseconds.
   final int milliseconds;
 
-  /// The starting value for the animation tween.
-  final double beginTweenValue = 0.0;
-
-  /// The ending value for the animation tween.
-  final double endTweenValue = 8.0;
-
-  /// Creates a jumping dot progress indicator.
-  const JumpingDotsProgressIndicator({
-    super.key,
-    this.numberOfDots = 3,
-    this.fontSize = 10.0,
-    required this.color,
-    this.dotSpacing = 0.0,
-    this.milliseconds = 250,
-  });
-
   @override
   _JumpingDotsProgressIndicatorState createState() =>
       _JumpingDotsProgressIndicatorState();
@@ -57,9 +51,11 @@ class _JumpingDotsProgressIndicatorState
   final _controllers = <AnimationController>[];
   final _animations = <Animation<double>>[];
   final _widgets = <Widget>[];
+  static const double _beginTweenValue = 0;
+  static const double _endTweenValue = 8;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
 
     // for each dot...
@@ -72,7 +68,7 @@ class _JumpingDotsProgressIndicatorState
 
       // build an animation for the dot using the controller
       _animations.add(
-        Tween(begin: widget.beginTweenValue, end: widget.endTweenValue)
+        Tween(begin: _beginTweenValue, end: _endTweenValue)
             .animate(_controllers[dot])
           ..addStatusListener((status) => _dotListener(status, dot)),
       );
@@ -103,7 +99,7 @@ class _JumpingDotsProgressIndicatorState
       _controllers[0].forward();
     }
 
-    if (_animations[dot].value > widget.endTweenValue / 2 &&
+    if (_animations[dot].value > _endTweenValue / 2 &&
         dot < widget.numberOfDots - 1) {
       _controllers[dot + 1].forward();
     }
@@ -119,7 +115,7 @@ class _JumpingDotsProgressIndicatorState
       );
 
   @override
-  dispose() {
+  void dispose() {
     for (var i = 0; i < widget.numberOfDots; i++) {
       _controllers[i].dispose();
     }

@@ -15,9 +15,7 @@ class ChatViewModelProvider extends InheritedWidget {
   ///
   /// The [child] and [viewModel] arguments must not be null.
   const ChatViewModelProvider({
-    super.key,
-    required super.child,
-    required this.viewModel,
+    required super.child, required this.viewModel, super.key,
   });
 
   /// The [ChatViewModel] to be made available to descendants.

@@ -16,7 +16,8 @@ import 'adaptive_copy_text.dart';
 class LlmMessageView extends StatelessWidget {
   /// Creates an [LlmMessageView].
   ///
-  /// The [message] parameter is required and represents the LLM chat message to be displayed.
+  /// The [message] parameter is required and represents the LLM chat message to
+  /// be displayed.
   const LlmMessageView(this.message, {super.key});
 
   /// The LLM chat message to be displayed.
@@ -71,7 +72,7 @@ class LlmMessageView extends StatelessWidget {
                                       : MarkdownBody(
                                           data: message.text!,
                                           selectable: false,
-                                          styleSheet: llmStyle.markdownStyle!,
+                                          styleSheet: llmStyle.markdownStyle,
                                         ),
                                 ),
                         ),

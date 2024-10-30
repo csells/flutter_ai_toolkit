@@ -10,7 +10,8 @@ enum InputState {
   /// A prompt is being submitted and the cancel button is enabled.
   canCancelPrompt,
 
-  /// The input is empty and the microphone button for speech-to-text is enabled.
+  /// The input is empty and the microphone button for speech-to-text is
+  /// enabled.
   canStt,
 
   /// Speech is being recorded and the stop button is enabled.

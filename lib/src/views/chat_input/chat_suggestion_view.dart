@@ -30,11 +30,11 @@ class ChatSuggestionsView extends StatelessWidget {
         direction: Axis.vertical,
         alignment: WrapAlignment.spaceEvenly,
         children: [
-          for (var suggestion in suggestions)
+          for (final suggestion in suggestions)
             GestureDetector(
               onTap: () => onSelectSuggestion(suggestion),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(

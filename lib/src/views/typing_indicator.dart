@@ -56,7 +56,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
   final List<Interval> _dotIntervals = const [
     Interval(0.25, 0.8),
     Interval(0.35, 0.9),
-    Interval(0.45, 1.0),
+    Interval(0.45, 1),
   ];
 
   @override
@@ -71,17 +71,17 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
     _indicatorSpaceAnimation = CurvedAnimation(
       parent: _appearanceController,
-      curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
-      reverseCurve: const Interval(0.0, 1.0, curve: Curves.easeOut),
+      curve: const Interval(0, 0.4, curve: Curves.easeOut),
+      reverseCurve: const Interval(0, 1, curve: Curves.easeOut),
     ).drive(Tween<double>(
-      begin: 0.0,
-      end: 60.0,
+      begin: 0,
+      end: 60,
     ));
 
     _smallBubbleAnimation = CurvedAnimation(
       parent: _appearanceController,
-      curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
-      reverseCurve: const Interval(0.0, 0.3, curve: Curves.easeOut),
+      curve: const Interval(0, 0.5, curve: Curves.elasticOut),
+      reverseCurve: const Interval(0, 0.3, curve: Curves.easeOut),
     );
     _mediumBubbleAnimation = CurvedAnimation(
       parent: _appearanceController,
@@ -90,8 +90,8 @@ class _TypingIndicatorState extends State<TypingIndicator>
     );
     _largeBubbleAnimation = CurvedAnimation(
       parent: _appearanceController,
-      curve: const Interval(0.3, 1.0, curve: Curves.elasticOut),
-      reverseCurve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+      curve: const Interval(0.3, 1, curve: Curves.elasticOut),
+      reverseCurve: const Interval(0.5, 1, curve: Curves.easeOut),
     );
 
     _repeatingController = AnimationController(

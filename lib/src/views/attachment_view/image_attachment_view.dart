@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../../dialogs/adaptive_dialog.dart';
@@ -26,11 +28,14 @@ class ImageAttachmentView extends StatelessWidget {
   Widget build(BuildContext context) => Align(
         alignment: Alignment.centerRight,
         child: GestureDetector(
-            onTap: () => AdaptiveAlertDialog.show<void>(
-                  context: context,
-                  barrierDismissible: true,
-                  content: ImagePreviewDialog(attachment),
-                ),
+            onTap: () => unawaited(_showPreviewDialog(context)),
             child: Image.memory(attachment.bytes)),
+      );
+
+  Future<void> _showPreviewDialog(BuildContext context) async =>
+      AdaptiveAlertDialog.show<void>(
+        context: context,
+        barrierDismissible: true,
+        content: ImagePreviewDialog(attachment),
       );
 }

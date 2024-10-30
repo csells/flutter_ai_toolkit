@@ -9,7 +9,8 @@ import '../action_button/action_button.dart';
 import '../adaptive_progress_indicator.dart';
 import 'input_state.dart';
 
-/// A button widget that adapts its appearance and behavior based on the current input state.
+/// A button widget that adapts its appearance and behavior based on the current
+/// input state.
 class InputButton extends StatelessWidget {
   /// Creates an [InputButton].
   ///
@@ -21,13 +22,13 @@ class InputButton extends StatelessWidget {
   /// - [onStartRecording]: Callback function when starting audio recording.
   /// - [onStopRecording]: Callback function when stopping audio recording.
   const InputButton({
-    super.key,
     required this.inputState,
     required this.chatStyle,
     required this.onSubmitPrompt,
     required this.onCancelPrompt,
     required this.onStartRecording,
     required this.onStopRecording,
+    super.key,
   });
 
   /// The current state of the input.

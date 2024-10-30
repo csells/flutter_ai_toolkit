@@ -17,7 +17,6 @@ class ChatTextField extends StatelessWidget {
   /// Many of the parameters are required to ensure consistent behavior
   /// across both Cupertino and Material designs.
   const ChatTextField({
-    super.key,
     required this.minLines,
     required this.maxLines,
     required this.autofocus,
@@ -29,6 +28,7 @@ class ChatTextField extends StatelessWidget {
     required this.hintText,
     required this.hintStyle,
     required this.hintPadding,
+    super.key,
   });
 
   /// The minimum number of lines to show.

@@ -34,9 +34,9 @@ class ChatInput extends StatefulWidget {
   /// [onCancelMessage] and [onCancelStt] are optional callbacks for cancelling
   /// message submission or speech-to-text translation respectively.
   const ChatInput({
-    this.initialMessage,
     required this.onSendMessage,
     required this.onTranslateStt,
+    this.initialMessage,
     this.onCancelMessage,
     this.onCancelStt,
     super.key,
@@ -47,7 +47,8 @@ class ChatInput extends StatefulWidget {
 
   /// Callback function triggered when a message is sent.
   ///
-  /// Takes a [String] for the message text and an [Iterable<Attachment>] for any attachments.
+  /// Takes a [String] for the message text and an [`Iterable<Attachment>`] for
+  /// any attachments.
   final void Function(String, Iterable<Attachment>) onSendMessage;
 
   /// Callback function triggered when speech-to-text translation is requested.
@@ -58,7 +59,8 @@ class ChatInput extends StatefulWidget {
   /// Optional callback function to cancel an ongoing message submission.
   final void Function()? onCancelMessage;
 
-  /// Optional callback function to cancel an ongoing speech-to-text translation.
+  /// Optional callback function to cancel an ongoing speech-to-text
+  /// translation.
   final void Function()? onCancelStt;
 
   /// The initial message to populate the input field, if any.
@@ -151,7 +153,7 @@ class _ChatInputState extends State<ChatInput> {
                             child: DecoratedBox(
                               decoration: inputStyle.decoration!,
                               child: ConstrainedBox(
-                                constraints: BoxConstraints(
+                                constraints: const BoxConstraints(
                                   minHeight: _minInputHeight,
                                 ),
                                 child: _waveController.isRecording

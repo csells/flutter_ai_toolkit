@@ -14,10 +14,10 @@ class ChatMessage {
   /// Constructs a [ChatMessage] instance.
   ///
   /// The [origin] parameter specifies the origin of the message (user or LLM).
-  /// The [text] parameter is the content of the message. It can be null or empty
-  /// if the message is from an LLM. For user-originated messages, [text] must
-  /// not be null or empty.
-  /// The [attachments] parameter is a list of any files or media attached to the message.
+  /// The [text] parameter is the content of the message. It can be null or
+  /// empty if the message is from an LLM. For user-originated messages, [text]
+  /// must not be null or empty. The [attachments] parameter is a list of any
+  /// files or media attached to the message.
   ChatMessage({
     required this.origin,
     required String? text,
@@ -25,7 +25,6 @@ class ChatMessage {
   })  : _text = text,
         assert(
             origin.isUser && text != null && text.isNotEmpty || origin.isLlm);
-  String? _text;
 
   /// Factory constructor for creating an LLM-originated message.
   ///
@@ -55,6 +54,7 @@ class ChatMessage {
         text: text,
         attachments: attachments,
       );
+  String? _text;
 
   /// The origin of the message (user or LLM).
   final MessageOrigin origin;

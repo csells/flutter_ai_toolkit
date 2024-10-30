@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 
 import '../utility.dart';
 
-/// A button that adapts its appearance based on the design language, either Material or Cupertino.
+/// A button that adapts its appearance based on the design language, either
+/// Material or Cupertino.
 ///
-/// The [AdaptiveDialogAction] widget is designed to provide a consistent
-/// user experience across different platforms while adhering to
-/// platform-specific design guidelines.
+/// The [AdaptiveDialogAction] widget is designed to provide a consistent user
+/// experience across different platforms while adhering to platform-specific
+/// design guidelines.
 class AdaptiveDialogAction extends StatelessWidget {
   /// Creates an adaptive dialog action.
   ///

@@ -24,15 +24,16 @@ class ChatViewModelClient extends StatelessWidget {
 
   /// A function that builds a widget tree based on the current [ChatViewModel].
   ///
-  /// This function is called with the current [BuildContext], the [ChatViewModel]
-  /// obtained from the nearest [ChatViewModelProvider] ancestor, and the optional [child].
+  /// This function is called with the current [BuildContext], the
+  /// [ChatViewModel] obtained from the nearest [ChatViewModelProvider]
+  /// ancestor, and the optional [child].
   final Widget Function(
       BuildContext context, ChatViewModel viewModel, Widget? child) builder;
 
   /// An optional child widget that can be passed to the [builder] function.
   ///
-  /// This is useful when part of the widget subtree does not depend on the [ChatViewModel]
-  /// and can be shared across multiple builds.
+  /// This is useful when part of the widget subtree does not depend on the
+  /// [ChatViewModel] and can be shared across multiple builds.
   final Widget? child;
 
   @override

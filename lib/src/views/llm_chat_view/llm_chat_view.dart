@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,11 +25,13 @@ import '../chat_input/chat_suggestion_view.dart';
 import '../response_builder.dart';
 import 'llm_response.dart';
 
-/// A widget that displays a chat interface for interacting with an LLM (Language Model).
+/// A widget that displays a chat interface for interacting with an LLM
+/// (Language Model).
 ///
-/// This widget provides a complete chat interface, including a message history view
-/// and an input area for sending new messages. It can be configured with either
-/// an [LlmProvider] or an [LlmChatViewController] to manage the chat interactions.
+/// This widget provides a complete chat interface, including a message history
+/// view and an input area for sending new messages. It can be configured with
+/// either an [LlmProvider] or an [LlmChatViewController] to manage the chat
+/// interactions.
 ///
 /// Example usage:
 /// ```dart
@@ -42,14 +46,15 @@ import 'llm_response.dart';
 class LlmChatView extends StatefulWidget {
   /// Creates an [LlmChatView] widget.
   ///
-  /// You must provide either a [provider] or a [controller], but not both.
-  /// If [provider] is provided, a new [LlmChatViewController] will be created internally.
+  /// You must provide either a [provider] or a [controller], but not both. If
+  /// [provider] is provided, a new [LlmChatViewController] will be created
+  /// internally.
   ///
-  /// The [style] parameter can be used to customize the appearance of the chat view.
-  /// The [responseBuilder] allows custom rendering of chat responses.
+  /// The [style] parameter can be used to customize the appearance of the chat
+  /// view. The [responseBuilder] allows custom rendering of chat responses.
   ///
-  /// Throws an [ArgumentError] if both [provider] and [controller] are provided,
-  /// or if neither is provided.
+  /// Throws an [ArgumentError] if both [provider] and [controller] are
+  /// provided, or if neither is provided.
   LlmChatView({
     LlmProvider? provider,
     LlmChatViewController? controller,
@@ -76,8 +81,8 @@ class LlmChatView extends StatefulWidget {
   /// The list of suggestions to display in the chat interface.
   ///
   /// This list contains predefined suggestions that can be shown to the user
-  /// when the chat history is empty. The user can select any of these suggestions
-  /// to quickly start a conversation with the LLM.
+  /// when the chat history is empty. The user can select any of these
+  /// suggestions to quickly start a conversation with the LLM.
   final List<String> suggestions;
 
   /// The view model containing the chat state and configuration.
@@ -166,7 +171,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
   void _onPromptDone(LlmException? error) {
     setState(() => _pendingPromptResponse = null);
-    _showLlmException(error);
+    unawaited(_showLlmException(error));
   }
 
   void _onCancelMessage() => _pendingPromptResponse?.cancel();
@@ -195,14 +200,14 @@ class _LlmChatViewState extends State<LlmChatView>
     _initialMessage = null;
 
     // use the LLM to translate the attached audio to text
-    final prompt =
+    const prompt =
         'translate the attached audio to text; provide the result of that '
         'translation as just the text of the translation itself. be careful to '
         'separate the background audio from the foreground audio and only '
         'provide the result of translating the foreground audio.';
     final attachments = [await FileAttachment.fromFile(file)];
 
-    String response = '';
+    var response = '';
     _pendingSttResponse = LlmResponse(
       stream: widget.viewModel.controller.generateStream(
         prompt,
@@ -215,7 +220,8 @@ class _LlmChatViewState extends State<LlmChatView>
     setState(() {});
   }
 
-  void _onSttDone(LlmException? error, String response, XFile file) async {
+  Future<void> _onSttDone(
+      LlmException? error, String response, XFile file) async {
     assert(_pendingSttResponse != null);
     setState(() {
       _initialMessage = ChatMessage.user(response, []);
@@ -223,20 +229,19 @@ class _LlmChatViewState extends State<LlmChatView>
     });
 
     // delete the file now that the LLM has translated it
-    ph.deleteFile(file);
+    unawaited(ph.deleteFile(file));
 
-    _showLlmException(error);
+    unawaited(_showLlmException(error));
   }
 
   void _onCancelStt() => _pendingSttResponse?.cancel();
 
-  void _showLlmException(LlmException? error) {
+  Future<void> _showLlmException(LlmException? error) async {
     if (error == null) return;
 
     switch (error) {
       case LlmCancelException():
         AdaptiveSnackBar.show(context, 'LLM operation canceled by user');
-        break;
       case LlmFailureException():
       case LlmException():
         // stop from the progress from indicating in case there was a failure
@@ -246,7 +251,7 @@ class _LlmChatViewState extends State<LlmChatView>
         final llmMessage = widget.viewModel.controller.history.last;
         if (llmMessage.text == null) llmMessage.append('ERROR');
 
-        AdaptiveAlertDialog.show(
+        await AdaptiveAlertDialog.show(
           context: context,
           content: Text(error.toString()),
           actions: [
@@ -256,7 +261,6 @@ class _LlmChatViewState extends State<LlmChatView>
             ),
           ],
         );
-        break;
     }
   }
 

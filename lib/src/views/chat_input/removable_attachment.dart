@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
+import '../../chat_view_model/chat_view_model_client.dart';
 import '../../dialogs/adaptive_dialog.dart';
 import '../../dialogs/image_preview_dialog.dart';
-import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/attachments.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
@@ -16,8 +18,9 @@ import '../attachment_view/attachment_view.dart';
 class RemovableAttachment extends StatelessWidget {
   /// Creates a [RemovableAttachment].
   ///
-  /// The [attachment] parameter is required and represents the attachment to display.
-  /// The [onRemove] parameter is a callback function that is called when the remove button is pressed.
+  /// The [attachment] parameter is required and represents the attachment to
+  /// display. The [onRemove] parameter is a callback function that is called
+  /// when the remove button is pressed.
   const RemovableAttachment({
     required this.attachment,
     required this.onRemove,
@@ -37,12 +40,7 @@ class RemovableAttachment extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: attachment is ImageFileAttachment
-                ? () => AdaptiveAlertDialog.show<void>(
-                      context: context,
-                      barrierDismissible: true,
-                      content:
-                          ImagePreviewDialog(attachment as ImageFileAttachment),
-                    )
+                ? () => unawaited(_showPreviewDialog(context))
                 : null,
             child: Container(
               padding: const EdgeInsets.only(right: 12),
@@ -64,5 +62,12 @@ class RemovableAttachment extends StatelessWidget {
             ),
           ),
         ],
+      );
+
+  Future<void> _showPreviewDialog(BuildContext context) async =>
+      AdaptiveAlertDialog.show<void>(
+        context: context,
+        barrierDismissible: true,
+        content: ImagePreviewDialog(attachment as ImageFileAttachment),
       );
 }

@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// using dynamic calls to translate to/from JSON
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
@@ -35,8 +38,8 @@ class LlmChatViewController extends ChangeNotifier {
 
   /// Generates a stream of text from the LLM based on a prompt and attachments.
   ///
-  /// [prompt] is the text prompt to send to the LLM.
-  /// [attachments] is a required list of file attachments to include with the prompt.
+  /// [prompt] is the text prompt to send to the LLM. [attachments] is a
+  /// required list of file attachments to include with the prompt.
   ///
   /// Returns a [Stream] of [String] containing the LLM's generated response.
   /// The response is streamed back as it is generated.
@@ -48,11 +51,11 @@ class LlmChatViewController extends ChangeNotifier {
 
   /// Sends a message to the LLM and returns a stream of the response.
   ///
-  /// [prompt] is the message to send to the LLM.
-  /// [attachments] is an optional list of attachments to include with the message.
+  /// [prompt] is the message to send to the LLM. [attachments] is an optional
+  /// list of attachments to include with the message.
   ///
-  /// Notifies listeners when a new message is added to the history and when
-  /// the full LLM response is available.
+  /// Notifies listeners when a new message is added to the history and when the
+  /// full LLM response is available.
   Stream<String> sendMessageStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
@@ -86,7 +89,8 @@ class LlmChatViewController extends ChangeNotifier {
   ///   - 'type': The type of the attachment ('file' or 'link').
   ///   - 'name': The name of the attachment.
   ///   - 'mimeType': The MIME type of the attachment.
-  ///   - 'data': The data of the attachment, either as a base64 encoded string (for files) or a URL (for links).
+  ///   - 'data': The data of the attachment, either as a base64 encoded string
+  ///     (for files) or a URL (for links).
   static Map<String, dynamic> mapFrom(ChatMessage message) => {
         'origin': message.origin.name,
         'text': message.text,
@@ -99,12 +103,12 @@ class LlmChatViewController extends ChangeNotifier {
               },
               'name': attachment.name,
               'mimeType': switch (attachment) {
-                (FileAttachment a) => a.mimeType,
-                (LinkAttachment a) => a.mimeType,
+                (final FileAttachment a) => a.mimeType,
+                (final LinkAttachment a) => a.mimeType,
               },
               'data': switch (attachment) {
-                (FileAttachment a) => base64Encode(a.bytes),
-                (LinkAttachment a) => a.url,
+                (final FileAttachment a) => base64Encode(a.bytes),
+                (final LinkAttachment a) => a.url,
               },
             },
         ],
@@ -119,7 +123,8 @@ class LlmChatViewController extends ChangeNotifier {
   ///   - 'type': The type of the attachment ('file' or 'link').
   ///   - 'name': The name of the attachment.
   ///   - 'mimeType': The MIME type of the attachment.
-  ///   - 'data': The data of the attachment, either as a base64 encoded string (for files) or a URL (for links).
+  ///   - 'data': The data of the attachment, either as a base64 encoded string
+  ///     (for files) or a URL (for links).
   static ChatMessage messageFrom(Map<String, dynamic> map) => ChatMessage(
         origin: MessageOrigin.values.byName(map['origin'] as String),
         text: map['text'] as String,

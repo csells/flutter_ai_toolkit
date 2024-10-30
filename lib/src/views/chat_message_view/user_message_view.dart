@@ -14,11 +14,13 @@ import 'adaptive_copy_text.dart';
 ///
 /// This widget is responsible for rendering the user's message, including any
 /// attachments, in a right-aligned layout. It uses a [Row] and [Column] to
-/// structure the content, with the message text displayed in a styled container.
+/// structure the content, with the message text displayed in a styled
+/// container.
 class UserMessageView extends StatelessWidget {
   /// Creates a [UserMessageView].
   ///
-  /// The [message] parameter is required and contains the [ChatMessage] to be displayed.
+  /// The [message] parameter is required and contains the [ChatMessage] to be
+  /// displayed.
   const UserMessageView(this.message, {super.key, this.onEdit});
 
   /// The chat message to be displayed.
@@ -60,8 +62,8 @@ class UserMessageView extends StatelessWidget {
 
                     return Align(
                       alignment: Alignment.topRight,
-                      child: Container(
-                        decoration: userStyle.decoration,
+                      child: DecoratedBox(
+                        decoration: userStyle.decoration!,
                         child: Padding(
                           padding: const EdgeInsets.only(
                             left: 16,

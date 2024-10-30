@@ -21,29 +21,60 @@ class LlmMessageStyle {
     this.markdownStyle,
   });
 
-  /// The icon to display for the LLM messages.
-  final IconData? icon;
-
-  /// The color of the icon.
-  final Color? iconColor;
-
-  /// The decoration for the icon.
-  final Decoration? iconDecoration;
-
-  /// The decoration for LLM message bubbles.
-  final Decoration? decoration;
-
-  /// The markdown style sheet for LLM messages.
-  final MarkdownStyleSheet? markdownStyle;
+  /// Resolves the provided style with the default style.
+  ///
+  /// This method creates a new [LlmMessageStyle] by combining the provided
+  /// [style] with the [defaultStyle]. If a property is not specified in the
+  /// provided [style], it falls back to the corresponding property in the
+  /// [defaultStyle].
+  ///
+  /// If [defaultStyle] is not provided, it uses [LlmMessageStyle.defaultStyle].
+  ///
+  /// Parameters:
+  ///   - [style]: The custom style to apply. Can be null.
+  ///   - [defaultStyle]: The default style to use as a fallback. If null, uses
+  ///     [LlmMessageStyle.defaultStyle].
+  ///
+  /// Returns: A new [LlmMessageStyle] instance with resolved properties.
+  factory LlmMessageStyle.resolve(
+    LlmMessageStyle? style, {
+    LlmMessageStyle? defaultStyle,
+  }) {
+    defaultStyle ??= LlmMessageStyle.defaultStyle();
+    return LlmMessageStyle(
+      icon: style?.icon ?? defaultStyle.icon,
+      iconColor: style?.iconColor ?? defaultStyle.iconColor,
+      iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
+      markdownStyle: style?.markdownStyle ?? defaultStyle.markdownStyle,
+      decoration: style?.decoration ?? defaultStyle.decoration,
+    );
+  }
 
   /// Provides a default style.
-  static LlmMessageStyle get defaultStyle => lightStyle;
+  factory LlmMessageStyle.defaultStyle() => LlmMessageStyle.lightStyle();
+
+  /// Provides a default dark style.
+  factory LlmMessageStyle.darkStyle() {
+    final style = LlmMessageStyle.lightStyle();
+    return LlmMessageStyle(
+      icon: style.icon,
+      iconColor: sh.invertColor(style.iconColor),
+      // inversion doesn't look great here
+      // iconDecoration: sh.invertDecoration(style.iconDecoration),
+      iconDecoration: const BoxDecoration(
+        color: FatColors.greyBackground,
+        shape: BoxShape.circle,
+      ),
+      markdownStyle: _invertMarkdownStyle(style.markdownStyle),
+      decoration: sh.invertDecoration(style.decoration),
+    );
+  }
 
   /// Provides a default light style.
-  static LlmMessageStyle get lightStyle => LlmMessageStyle(
+  factory LlmMessageStyle.lightStyle() => LlmMessageStyle(
         icon: FatIcons.spark_icon,
         iconColor: FatColors.darkIcon,
-        iconDecoration: BoxDecoration(
+        iconDecoration: const BoxDecoration(
           color: FatColors.llmIconBackground,
           shape: BoxShape.circle,
         ),
@@ -72,7 +103,7 @@ class LlmMessageStyle {
           border: Border.all(
             color: FatColors.llmMessageOutline,
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.zero,
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),
@@ -81,49 +112,20 @@ class LlmMessageStyle {
         ),
       );
 
-  /// Provides a default dark style.
-  static LlmMessageStyle get darkStyle {
-    final style = lightStyle;
-    return LlmMessageStyle(
-      icon: style.icon,
-      iconColor: sh.invertColor(style.iconColor),
-      // iconDecoration: sh.invertDecoration(style.iconDecoration),
-      iconDecoration: BoxDecoration(
-        color: FatColors.greyBackground,
-        shape: BoxShape.circle,
-      ),
-      markdownStyle: _invertMarkdownStyle(style.markdownStyle),
-      decoration: sh.invertDecoration(style.decoration),
-    );
-  }
+  /// The icon to display for the LLM messages.
+  final IconData? icon;
 
-  /// Resolves the provided style with the default style.
-  ///
-  /// This method creates a new [LlmMessageStyle] by combining the provided [style]
-  /// with the [defaultStyle]. If a property is not specified in the provided [style],
-  /// it falls back to the corresponding property in the [defaultStyle].
-  ///
-  /// If [defaultStyle] is not provided, it uses [LlmMessageStyle.defaultStyle].
-  ///
-  /// Parameters:
-  ///   - [style]: The custom style to apply. Can be null.
-  ///   - [defaultStyle]: The default style to use as a fallback. If null, uses [LlmMessageStyle.defaultStyle].
-  ///
-  /// Returns:
-  ///   A new [LlmMessageStyle] instance with resolved properties.
-  static LlmMessageStyle resolve(
-    LlmMessageStyle? style, {
-    LlmMessageStyle? defaultStyle,
-  }) {
-    defaultStyle ??= LlmMessageStyle.defaultStyle;
-    return LlmMessageStyle(
-      icon: style?.icon ?? defaultStyle.icon,
-      iconColor: style?.iconColor ?? defaultStyle.iconColor,
-      iconDecoration: style?.iconDecoration ?? defaultStyle.iconDecoration,
-      markdownStyle: style?.markdownStyle ?? defaultStyle.markdownStyle,
-      decoration: style?.decoration ?? defaultStyle.decoration,
-    );
-  }
+  /// The color of the icon.
+  final Color? iconColor;
+
+  /// The decoration for the icon.
+  final Decoration? iconDecoration;
+
+  /// The decoration for LLM message bubbles.
+  final Decoration? decoration;
+
+  /// The markdown style sheet for LLM messages.
+  final MarkdownStyleSheet? markdownStyle;
 
   static MarkdownStyleSheet? _invertMarkdownStyle(
     MarkdownStyleSheet? markdownStyle,

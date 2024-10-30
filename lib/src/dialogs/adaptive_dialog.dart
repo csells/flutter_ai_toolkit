@@ -8,7 +8,8 @@ import 'package:flutter/widgets.dart';
 
 import '../utility.dart';
 
-/// A utility class for showing adaptive dialogs that match the current platform style.
+/// A utility class for showing adaptive dialogs that match the current platform
+/// style.
 class AdaptiveAlertDialog {
   /// Shows an adaptive dialog with the given [content] widget as content.
   ///
@@ -19,7 +20,8 @@ class AdaptiveAlertDialog {
   ///   * [context]: The build context in which to show the dialog.
   ///   * [child]: The widget to display as the dialog's content.
   ///
-  /// Returns a [Future] that completes with the result value when the dialog is dismissed.
+  /// Returns a [Future] that completes with the result value when the dialog is
+  /// dismissed.
   static Future<T?> show<T>({
     required BuildContext context,
     required Widget content,

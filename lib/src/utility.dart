@@ -9,15 +9,15 @@ bool? _isCupertinoApp;
 
 /// Determines if the current application is a Cupertino-style app.
 ///
-/// This function checks the widget tree for the presence of a [CupertinoApp] widget.
-/// If found, it indicates that the app is using Cupertino (iOS-style) widgets.
+/// This function checks the widget tree for the presence of a [CupertinoApp]
+/// widget. If found, it indicates that the app is using Cupertino (iOS-style)
+/// widgets.
 ///
 /// Parameters:
 ///   * [context]: The [BuildContext] used to search the widget tree.
 ///
-/// Returns:
-///   A [bool] value. `true` if a [CupertinoApp] is found in the widget tree,
-///   `false` otherwise.
+/// Returns: A [bool] value. `true` if a [CupertinoApp] is found in the widget
+///   tree, `false` otherwise.
 bool isCupertinoApp(BuildContext context) {
   // caching the result to avoid recomputing it on every call; it's not likely
   // to change during the lifetime of the app

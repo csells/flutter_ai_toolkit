@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// by convention, using the names of the icons as the constant names
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/widgets.dart';

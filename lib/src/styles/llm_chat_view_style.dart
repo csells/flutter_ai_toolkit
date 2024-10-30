@@ -37,123 +37,6 @@ class LlmChatViewStyle {
     this.fileAttachmentStyle,
   });
 
-  /// Background color of the entire chat widget.
-  final Color? backgroundColor;
-
-  /// The color of the progress indicator.
-  final Color? progressIndicatorColor;
-
-  /// Style for user messages.
-  final UserMessageStyle? userMessageStyle;
-
-  /// Style for LLM messages.
-  final LlmMessageStyle? llmMessageStyle;
-
-  /// Style for the input text box.
-  final ChatInputStyle? chatInputStyle;
-
-  /// Style for the add button.
-  final ActionButtonStyle? addButtonStyle;
-
-  /// Style for the attach file button.
-  final ActionButtonStyle? attachFileButtonStyle;
-
-  /// Style for the camera button.
-  final ActionButtonStyle? cameraButtonStyle;
-
-  /// Style for the stop button.
-  final ActionButtonStyle? stopButtonStyle;
-
-  /// Style for the close button.
-  final ActionButtonStyle? closeButtonStyle;
-
-  /// Style for the copy button.
-  final ActionButtonStyle? copyButtonStyle;
-
-  /// Style for the edit button.
-  final ActionButtonStyle? editButtonStyle;
-
-  /// Style for the gallery button.
-  final ActionButtonStyle? galleryButtonStyle;
-
-  /// Style for the record button.
-  final ActionButtonStyle? recordButtonStyle;
-
-  /// Style for the submit button.
-  final ActionButtonStyle? submitButtonStyle;
-
-  /// Style for the close menu button.
-  final ActionButtonStyle? closeMenuButtonStyle;
-
-  /// Decoration for the action button bar.
-  final Decoration? actionButtonBarDecoration;
-
-  /// Style for file attachments.
-  final FileAttachmentStyle? fileAttachmentStyle;
-
-  /// Provides default style if none is specified.
-  static LlmChatViewStyle get defaultStyle => lightStyle;
-
-  /// Provides a default light style.
-  static LlmChatViewStyle get lightStyle => LlmChatViewStyle(
-        backgroundColor: FatColors.containerBackground,
-        progressIndicatorColor: FatColors.black,
-        userMessageStyle: UserMessageStyle.defaultStyle,
-        llmMessageStyle: LlmMessageStyle.defaultStyle,
-        chatInputStyle: ChatInputStyle.defaultStyle,
-        addButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.add),
-        stopButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.stop),
-        recordButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.record),
-        submitButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.submit),
-        closeMenuButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.closeMenu),
-        attachFileButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.attachFile),
-        galleryButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.gallery),
-        cameraButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.camera),
-        closeButtonStyle:
-            ActionButtonStyle.defaultStyle(ActionButtonType.close),
-        copyButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.copy),
-        editButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.edit),
-        actionButtonBarDecoration: BoxDecoration(
-          color: FatColors.darkButtonBackground,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        fileAttachmentStyle: FileAttachmentStyle.defaultStyle,
-      );
-
-  /// Provides a default dark style.
-  static LlmChatViewStyle get darkStyle {
-    final style = lightStyle;
-    return LlmChatViewStyle(
-      backgroundColor: sh.invertColor(style.backgroundColor),
-      progressIndicatorColor: sh.invertColor(style.progressIndicatorColor),
-      userMessageStyle: UserMessageStyle.darkStyle,
-      llmMessageStyle: LlmMessageStyle.darkStyle,
-      chatInputStyle: ChatInputStyle.darkStyle,
-      addButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.add),
-      attachFileButtonStyle:
-          ActionButtonStyle.darkStyle(ActionButtonType.attachFile),
-      cameraButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.camera),
-      stopButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.stop),
-      recordButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.record),
-      submitButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.submit),
-      closeMenuButtonStyle:
-          ActionButtonStyle.darkStyle(ActionButtonType.closeMenu),
-      actionButtonBarDecoration:
-          sh.invertDecoration(style.actionButtonBarDecoration),
-      fileAttachmentStyle: FileAttachmentStyle.darkStyle,
-      closeButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.close),
-      copyButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.copy),
-      editButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.edit),
-      galleryButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.gallery),
-    );
-  }
-
   /// Resolves the provided [style] with the [defaultStyle].
   ///
   /// This method returns a new [LlmChatViewStyle] instance where each property
@@ -163,11 +46,11 @@ class LlmChatViewStyle {
   /// - [style]: The style to resolve. If null, the [defaultStyle] will be used.
   /// - [defaultStyle]: The default style to use for any properties not provided
   ///   by the [style].
-  static LlmChatViewStyle resolve(
+  factory LlmChatViewStyle.resolve(
     LlmChatViewStyle? style, {
     LlmChatViewStyle? defaultStyle,
   }) {
-    defaultStyle ??= LlmChatViewStyle.defaultStyle;
+    defaultStyle ??= LlmChatViewStyle.defaultStyle();
     return LlmChatViewStyle(
       backgroundColor: style?.backgroundColor ?? defaultStyle.backgroundColor,
       progressIndicatorColor:
@@ -228,4 +111,121 @@ class LlmChatViewStyle {
           defaultStyle.actionButtonBarDecoration,
     );
   }
+
+  /// Provides default style if none is specified.
+  factory LlmChatViewStyle.defaultStyle() => LlmChatViewStyle.lightStyle();
+
+  /// Provides a default dark style.
+  factory LlmChatViewStyle.darkStyle() {
+    final style = LlmChatViewStyle.lightStyle();
+    return LlmChatViewStyle(
+      backgroundColor: sh.invertColor(style.backgroundColor),
+      progressIndicatorColor: sh.invertColor(style.progressIndicatorColor),
+      userMessageStyle: UserMessageStyle.darkStyle(),
+      llmMessageStyle: LlmMessageStyle.darkStyle(),
+      chatInputStyle: ChatInputStyle.darkStyle(),
+      addButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.add),
+      attachFileButtonStyle:
+          ActionButtonStyle.darkStyle(ActionButtonType.attachFile),
+      cameraButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.camera),
+      stopButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.stop),
+      recordButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.record),
+      submitButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.submit),
+      closeMenuButtonStyle:
+          ActionButtonStyle.darkStyle(ActionButtonType.closeMenu),
+      actionButtonBarDecoration:
+          sh.invertDecoration(style.actionButtonBarDecoration),
+      fileAttachmentStyle: FileAttachmentStyle.darkStyle(),
+      closeButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.close),
+      copyButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.copy),
+      editButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.edit),
+      galleryButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.gallery),
+    );
+  }
+
+  /// Provides a default light style.
+  factory LlmChatViewStyle.lightStyle() => LlmChatViewStyle(
+        backgroundColor: FatColors.containerBackground,
+        progressIndicatorColor: FatColors.black,
+        userMessageStyle: UserMessageStyle.defaultStyle(),
+        llmMessageStyle: LlmMessageStyle.defaultStyle(),
+        chatInputStyle: ChatInputStyle.defaultStyle(),
+        addButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.add),
+        stopButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.stop),
+        recordButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.record),
+        submitButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.submit),
+        closeMenuButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.closeMenu),
+        attachFileButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.attachFile),
+        galleryButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.gallery),
+        cameraButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.camera),
+        closeButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.close),
+        copyButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.copy),
+        editButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.edit),
+        actionButtonBarDecoration: BoxDecoration(
+          color: FatColors.darkButtonBackground,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        fileAttachmentStyle: FileAttachmentStyle.defaultStyle(),
+      );
+
+  /// Background color of the entire chat widget.
+  final Color? backgroundColor;
+
+  /// The color of the progress indicator.
+  final Color? progressIndicatorColor;
+
+  /// Style for user messages.
+  final UserMessageStyle? userMessageStyle;
+
+  /// Style for LLM messages.
+  final LlmMessageStyle? llmMessageStyle;
+
+  /// Style for the input text box.
+  final ChatInputStyle? chatInputStyle;
+
+  /// Style for the add button.
+  final ActionButtonStyle? addButtonStyle;
+
+  /// Style for the attach file button.
+  final ActionButtonStyle? attachFileButtonStyle;
+
+  /// Style for the camera button.
+  final ActionButtonStyle? cameraButtonStyle;
+
+  /// Style for the stop button.
+  final ActionButtonStyle? stopButtonStyle;
+
+  /// Style for the close button.
+  final ActionButtonStyle? closeButtonStyle;
+
+  /// Style for the copy button.
+  final ActionButtonStyle? copyButtonStyle;
+
+  /// Style for the edit button.
+  final ActionButtonStyle? editButtonStyle;
+
+  /// Style for the gallery button.
+  final ActionButtonStyle? galleryButtonStyle;
+
+  /// Style for the record button.
+  final ActionButtonStyle? recordButtonStyle;
+
+  /// Style for the submit button.
+  final ActionButtonStyle? submitButtonStyle;
+
+  /// Style for the close menu button.
+  final ActionButtonStyle? closeMenuButtonStyle;
+
+  /// Decoration for the action button bar.
+  final Decoration? actionButtonBarDecoration;
+
+  /// Style for file attachments.
+  final FileAttachmentStyle? fileAttachmentStyle;
 }

@@ -3,9 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_ai_toolkit/src/dialogs/adaptive_snack_bar/cupertino_snack_bar.dart';
 
 import '../../utility.dart';
+import 'cupertino_snack_bar.dart';
 
 /// A utility class for showing adaptive snack bars in Flutter applications.
 ///
@@ -15,8 +15,8 @@ import '../../utility.dart';
 class AdaptiveSnackBar {
   /// Shows an adaptive snack bar with the given message.
   ///
-  /// This method determines whether the app is using Cupertino or Material design
-  /// and displays an appropriate snack bar.
+  /// This method determines whether the app is using Cupertino or Material
+  /// design and displays an appropriate snack bar.
   ///
   /// Parameters:
   ///   * [context]: The build context in which to show the snack bar.

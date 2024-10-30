@@ -2,13 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../chat_view_model/chat_view_model_client.dart';
+import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../providers/interface/attachments.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
@@ -18,7 +20,8 @@ import '../action_button/action_button_bar.dart';
 class AttachmentActionBar extends StatefulWidget {
   /// Creates an [AttachmentActionBar].
   ///
-  /// The [onAttachments] parameter is required and is called when attachments are selected.
+  /// The [onAttachments] parameter is required and is called when attachments
+  /// are selected.
   const AttachmentActionBar({required this.onAttachments, super.key});
 
   /// Callback function that is called when attachments are selected.
@@ -78,10 +81,10 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
       );
 
   void _onToggleMenu() => setState(() => _expanded = !_expanded);
-  void _onCamera() => _pickImage(ImageSource.camera);
-  void _onGallery() => _pickImage(ImageSource.gallery);
+  void _onCamera() => unawaited(_pickImage(ImageSource.camera));
+  void _onGallery() => unawaited(_pickImage(ImageSource.gallery));
 
-  void _pickImage(ImageSource source) async {
+  Future<void> _pickImage(ImageSource source) async {
     _onToggleMenu(); // close the menu
 
     final picker = ImagePicker();
@@ -99,13 +102,14 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
       }
     } on Exception catch (ex) {
       if (context.mounted) {
+        // I just checked this! ^^^
         // ignore: use_build_context_synchronously
         AdaptiveSnackBar.show(context, 'Unable to pick an image: $ex');
       }
     }
   }
 
-  void _onFile() async {
+  Future<void> _onFile() async {
     _onToggleMenu(); // close the menu
 
     try {
@@ -114,6 +118,7 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
       widget.onAttachments(attachments);
     } on Exception catch (ex) {
       if (context.mounted) {
+        // I just checked this! ^^^
         // ignore: use_build_context_synchronously
         AdaptiveSnackBar.show(context, 'Unable to pick a file: $ex');
       }

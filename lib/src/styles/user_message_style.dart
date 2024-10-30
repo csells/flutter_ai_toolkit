@@ -10,23 +10,53 @@ import 'style_helpers.dart' as sh;
 
 /// Style for user messages.
 class UserMessageStyle {
-  /// The text style for user messages.
-  final TextStyle? textStyle;
-
-  /// The decoration for user message bubbles.
-  final Decoration? decoration;
-
   /// Creates a UserMessageStyle.
   const UserMessageStyle({
     this.textStyle,
     this.decoration,
   });
 
+  /// Resolves the UserMessageStyle by combining the provided style with default
+  /// values.
+  ///
+  /// This method takes an optional [style] and merges it with the
+  /// [defaultStyle]. If [defaultStyle] is not provided, it uses
+  /// [UserMessageStyle.defaultStyle].
+  ///
+  /// [style] - The custom UserMessageStyle to apply. Can be null.
+  /// [defaultStyle] - The default UserMessageStyle to use as a base. If null,
+  /// uses [UserMessageStyle.defaultStyle].
+  ///
+  /// Returns a new [UserMessageStyle] instance with resolved properties.
+  factory UserMessageStyle.resolve(
+    UserMessageStyle? style, {
+    UserMessageStyle? defaultStyle,
+  }) {
+    defaultStyle ??= UserMessageStyle.defaultStyle();
+    return UserMessageStyle(
+      textStyle: style?.textStyle ?? defaultStyle.textStyle,
+      decoration: style?.decoration ?? defaultStyle.decoration,
+    );
+  }
+
+  /// Provides a default dark style.
+  factory UserMessageStyle.darkStyle() {
+    final style = UserMessageStyle.lightStyle();
+    return UserMessageStyle(
+      textStyle: sh.invertTextStyle(style.textStyle),
+      // inversion doesn't look great here
+      // decoration: sh.invertDecoration(style.decoration),
+      decoration: (style.decoration! as BoxDecoration).copyWith(
+        color: FatColors.greyBackground,
+      ),
+    );
+  }
+
   /// Provides default style data for user messages.
-  static UserMessageStyle get defaultStyle => lightStyle;
+  factory UserMessageStyle.defaultStyle() => UserMessageStyle.lightStyle();
 
   /// Provides a default light style.
-  static UserMessageStyle get lightStyle => UserMessageStyle(
+  factory UserMessageStyle.lightStyle() => UserMessageStyle(
         textStyle: FatTextStyles.body1,
         decoration: const BoxDecoration(
           color: FatColors.userMessageBackground,
@@ -39,35 +69,9 @@ class UserMessageStyle {
         ),
       );
 
-  /// Provides a default dark style.
-  static UserMessageStyle get darkStyle {
-    final style = lightStyle;
-    return UserMessageStyle(
-      textStyle: sh.invertTextStyle(style.textStyle),
-      // decoration: sh.invertDecoration(style.decoration),
-      decoration: (style.decoration as BoxDecoration).copyWith(
-        color: FatColors.greyBackground,
-      ),
-    );
-  }
+  /// The text style for user messages.
+  final TextStyle? textStyle;
 
-  /// Resolves the UserMessageStyle by combining the provided style with default values.
-  ///
-  /// This method takes an optional [style] and merges it with the
-  /// [defaultStyle]. If [defaultStyle] is not provided, it uses [UserMessageStyle.defaultStyle].
-  ///
-  /// [style] - The custom UserMessageStyle to apply. Can be null.
-  /// [defaultStyle] - The default UserMessageStyle to use as a base. If null, uses [UserMessageStyle.defaultStyle].
-  ///
-  /// Returns a new [UserMessageStyle] instance with resolved properties.
-  static UserMessageStyle resolve(
-    UserMessageStyle? style, {
-    UserMessageStyle? defaultStyle,
-  }) {
-    defaultStyle ??= UserMessageStyle.defaultStyle;
-    return UserMessageStyle(
-      textStyle: style?.textStyle ?? defaultStyle.textStyle,
-      decoration: style?.decoration ?? defaultStyle.decoration,
-    );
-  }
+  /// The decoration for user message bubbles.
+  final Decoration? decoration;
 }

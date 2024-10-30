@@ -32,12 +32,6 @@ sealed class Attachment {
 /// This class extends [Attachment] and provides specific properties and methods
 /// for handling file attachments.
 final class FileAttachment extends Attachment {
-  /// The MIME type of the file attachment.
-  final String mimeType;
-
-  /// The binary content of the file attachment.
-  final Uint8List bytes;
-
   /// Creates a [FileAttachment] with the given name, MIME type, and bytes.
   ///
   /// [name] is the name of the file attachment.
@@ -49,22 +43,15 @@ final class FileAttachment extends Attachment {
     required this.bytes,
   });
 
-  @override
-  String toString() => 'FileAttachment('
-      'name: $name, '
-      'mimeType: $mimeType, '
-      'bytes: ${bytes.length} bytes'
-      ')';
-
-  /// Factory constructor for creating either a [FileAttachment] or an [ImageFileAttachment].
+  /// Factory constructor for creating either a [FileAttachment] or an
+  /// [ImageFileAttachment].
   ///
-  /// This factory method determines the type of attachment based on the MIME type.
-  /// If the MIME type indicates an image, it creates an [ImageFileAttachment].
-  /// Otherwise, it creates a [FileAttachment].
+  /// This factory method determines the type of attachment based on the MIME
+  /// type. If the MIME type indicates an image, it creates an
+  /// [ImageFileAttachment]. Otherwise, it creates a [FileAttachment].
   ///
-  /// [name] is the name of the attachment.
-  /// [mimeType] is the MIME type of the attachment.
-  /// [bytes] is the binary content of the attachment.
+  /// [name] is the name of the attachment. [mimeType] is the MIME type of the
+  /// attachment. [bytes] is the binary content of the attachment.
   ///
   /// Returns an instance of either [FileAttachment] or [ImageFileAttachment].
   factory FileAttachment.fileOrImage({
@@ -83,6 +70,21 @@ final class FileAttachment extends Attachment {
               mimeType: mimeType,
               bytes: bytes,
             );
+
+  /// The MIME type of the file attachment.
+  final String mimeType;
+
+  /// The binary content of the file attachment.
+  final Uint8List bytes;
+
+  @override
+  String toString() => 'FileAttachment('
+      'name: $name, '
+      'mimeType: $mimeType, '
+      // I want to avoid the trailing whitespace here for readability.
+      // ignore: missing_whitespace_between_adjacent_strings
+      'bytes: ${bytes.length} bytes'
+      ')';
 
   /// Creates a [FileAttachment] from an [XFile].
   ///
@@ -105,11 +107,11 @@ final class FileAttachment extends Attachment {
 /// This class extends [Attachment] and provides specific properties and methods
 /// for handling image attachments.
 final class ImageFileAttachment extends FileAttachment {
-  /// Creates an [ImageFileAttachment] with the given name, MIME type, and bytes.
+  /// Creates an [ImageFileAttachment] with the given name, MIME type, and
+  /// bytes.
   ///
-  /// [name] is the name of the image attachment.
-  /// [mimeType] is the MIME type of the image.
-  /// [bytes] is the binary content of the image.
+  /// [name] is the name of the image attachment. [mimeType] is the MIME type of
+  /// the image. [bytes] is the binary content of the image.
   ImageFileAttachment({
     required super.name,
     required super.mimeType,
@@ -120,6 +122,8 @@ final class ImageFileAttachment extends FileAttachment {
   String toString() => 'ImageFileAttachment('
       'name: $name, '
       'mimeType: $mimeType, '
+      // I want to avoid the trailing whitespace here for readability.
+      // ignore: missing_whitespace_between_adjacent_strings
       'bytes: ${bytes.length} bytes'
       ')';
 
@@ -151,15 +155,6 @@ final class ImageFileAttachment extends FileAttachment {
 /// This class extends [Attachment] and provides specific properties for
 /// handling link attachments.
 final class LinkAttachment extends Attachment {
-  /// The URL of the link attachment.
-  final Uri url;
-
-  /// The MIME type of the linked content.
-  ///
-  /// This property specifies the media type of the resource pointed to by the
-  /// [url].
-  final String mimeType;
-
   /// Creates a [LinkAttachment] with the given name and URL.
   ///
   /// [name] is the name of the link attachment.
@@ -168,6 +163,15 @@ final class LinkAttachment extends Attachment {
     required super.name,
     required this.url,
   }) : mimeType = lookupMimeType(url.path) ?? 'application/octet-stream';
+
+  /// The URL of the link attachment.
+  final Uri url;
+
+  /// The MIME type of the linked content.
+  ///
+  /// This property specifies the media type of the resource pointed to by the
+  /// [url].
+  final String mimeType;
 
   @override
   String toString() => 'LinkAttachment('

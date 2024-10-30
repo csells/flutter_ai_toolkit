@@ -30,8 +30,8 @@ class ActionButtonBar extends StatelessWidget {
   final LlmChatViewStyle style;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: style.actionButtonBarDecoration,
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: style.actionButtonBarDecoration!,
         child: OverflowBar(
           children: buttons,
         ),

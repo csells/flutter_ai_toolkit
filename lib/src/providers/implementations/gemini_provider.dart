@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter_ai_toolkit/src/providers/interface/chat_message.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../interface/attachments.dart';
+import '../interface/chat_message.dart';
 import '../interface/llm_provider.dart';
 
 /// A provider class for interacting with Google's Gemini AI language model.
@@ -29,8 +29,8 @@ class GeminiProvider extends LlmProvider {
   /// [safetySettings] is an optional list of safety settings to apply to the
   /// model's responses.
   ///
-  /// [generationConfig] is an optional configuration for controlling the model's
-  /// generation behavior.
+  /// [generationConfig] is an optional configuration for controlling the
+  /// model's generation behavior.
   GeminiProvider({
     GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,
@@ -145,8 +145,8 @@ class GeminiProvider extends LlmProvider {
   }
 
   static Part _partFrom(Attachment attachment) => switch (attachment) {
-        (FileAttachment a) => DataPart(a.mimeType, a.bytes),
-        (LinkAttachment a) => FilePart(a.url),
+        (final FileAttachment a) => DataPart(a.mimeType, a.bytes),
+        (final LinkAttachment a) => FilePart(a.url),
       };
 
   static Content _contentFrom(ChatMessage message) => Content(
