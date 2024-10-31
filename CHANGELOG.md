@@ -1,3 +1,7 @@
+## 0.x.x
+
+* fixed [#67](https://github.com/csells/flutter_ai_toolkit/issues/67): bug: audio recording translation repopulated after history cleared
+
 ## 0.4.2
 
 * upgraded to waveform_recorder 1.3.0

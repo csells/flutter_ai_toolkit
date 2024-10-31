@@ -107,6 +107,18 @@ class _LlmChatViewState extends State<LlmChatView>
   LlmResponse? _pendingSttResponse;
 
   @override
+  void initState() {
+    super.initState();
+    widget.viewModel.controller.addListener(_onHistoryChanged);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.viewModel.controller.removeListener(_onHistoryChanged);
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context); // for AutomaticKeepAliveClientMixin
 
@@ -222,7 +234,10 @@ class _LlmChatViewState extends State<LlmChatView>
   }
 
   Future<void> _onSttDone(
-      LlmException? error, String response, XFile file) async {
+    LlmException? error,
+    String response,
+    XFile file,
+  ) async {
     assert(_pendingSttResponse != null);
     setState(() {
       _initialMessage = ChatMessage.user(response, []);
@@ -232,6 +247,7 @@ class _LlmChatViewState extends State<LlmChatView>
     // delete the file now that the LLM has translated it
     unawaited(ph.deleteFile(file));
 
+    // show any error that occurred
     unawaited(_showLlmException(error));
   }
 
@@ -267,4 +283,11 @@ class _LlmChatViewState extends State<LlmChatView>
 
   void _onSelectSuggestion(String suggestion) =>
       setState(() => _initialMessage = ChatMessage.user(suggestion, []));
+
+  void _onHistoryChanged() {
+    // if the history is cleared, clear the initial message
+    if (widget.viewModel.controller.history.isEmpty) {
+      setState(() => _initialMessage = null);
+    }
+  }
 }
