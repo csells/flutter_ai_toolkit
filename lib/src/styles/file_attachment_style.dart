@@ -10,6 +10,7 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 /// Style for file attachments in the chat view.
+@immutable
 class FileAttachmentStyle {
   /// Creates a FileAttachmentStyle.
   const FileAttachmentStyle({

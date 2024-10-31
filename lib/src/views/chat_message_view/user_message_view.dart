@@ -16,6 +16,7 @@ import 'adaptive_copy_text.dart';
 /// attachments, in a right-aligned layout. It uses a [Row] and [Column] to
 /// structure the content, with the message text displayed in a styled
 /// container.
+@immutable
 class UserMessageView extends StatelessWidget {
   /// Creates a [UserMessageView].
   ///

@@ -11,6 +11,7 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 /// Style for LLM messages.
+@immutable
 class LlmMessageStyle {
   /// Creates an LlmMessageStyle.
   const LlmMessageStyle({

@@ -12,6 +12,7 @@ import 'chat_view_model_provider.dart';
 ///
 /// This widget is typically used in conjunction with [ChatViewModelProvider]
 /// to access the [ChatViewModel] from the widget tree.
+@immutable
 class ChatViewModelClient extends StatelessWidget {
   /// Creates a [ChatViewModelClient].
   ///

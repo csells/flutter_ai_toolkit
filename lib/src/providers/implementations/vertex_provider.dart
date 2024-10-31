@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
+import 'package:flutter/foundation.dart';
 
 import '../interface/attachments.dart';
 import '../interface/chat_message.dart';
@@ -31,6 +32,7 @@ class VertexProvider extends LlmProvider {
   ///
   /// [generationConfig] is an optional configuration for controlling the
   /// model's generation behavior.
+  @immutable
   VertexProvider({
     GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,

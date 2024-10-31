@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 /// back down.
 ///
 /// The snack bar uses Cupertino styling to match iOS design guidelines.
+@immutable
 class CupertinoSnackBar extends StatefulWidget {
   /// Creates a [CupertinoSnackBar].
   ///

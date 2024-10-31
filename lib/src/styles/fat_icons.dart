@@ -17,8 +17,9 @@ import 'package:flutter/widgets.dart';
 ///         License:   Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
 ///         Homepage:  https://design.google.com/icons/
 ///
+@immutable
 class FatIcons {
-  FatIcons._();
+  const FatIcons._();
 
   static const _kFontFam = 'FatIcons';
   static const String _kFontPkg = 'flutter_ai_toolkit';

@@ -15,6 +15,7 @@ import 'jumping_dot.dart';
 /// [milliseconds] as 250.
 /// One cycle of animation is one complete round of a dot animating up and back
 /// to its original position.
+@immutable
 class JumpingDotsProgressIndicator extends StatefulWidget {
   /// Creates a jumping dot progress indicator.
   const JumpingDotsProgressIndicator({

@@ -9,6 +9,7 @@ import '../providers/interface/attachments.dart';
 
 /// Displays a dialog to preview the image when the user taps on an attached
 /// image.
+@immutable
 class ImagePreviewDialog extends StatelessWidget {
   /// Shows the [ImagePreviewDialog] for the given [attachment].
   const ImagePreviewDialog(this.attachment, {super.key});

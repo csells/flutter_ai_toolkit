@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fat_colors.dart';
 
 /// A utility class that defines text styles for the Fat design system.
+@immutable
 abstract final class FatTextStyles {
   /// Large display text style.
   ///

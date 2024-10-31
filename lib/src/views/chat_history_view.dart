@@ -14,6 +14,7 @@ import 'chat_message_view/user_message_view.dart';
 /// This widget renders a scrollable list of chat messages, supporting
 /// selection and editing of messages. It displays messages in reverse
 /// chronological order (newest at the bottom).
+@immutable
 class ChatHistoryView extends StatefulWidget {
   /// Creates a [ChatHistoryView].
   ///

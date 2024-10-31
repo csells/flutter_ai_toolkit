@@ -14,6 +14,7 @@ import '../../providers/interface/attachments.dart';
 ///
 /// This widget aligns the image to the center-right of its parent and
 /// allows the user to tap on the image to open a preview dialog.
+@immutable
 class ImageAttachmentView extends StatelessWidget {
   /// Creates an ImageAttachmentView.
   ///

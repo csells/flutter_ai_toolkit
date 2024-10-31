@@ -54,6 +54,7 @@ class ChatMessage {
         text: text,
         attachments: attachments,
       );
+
   String? _text;
 
   /// The origin of the message (user or LLM).

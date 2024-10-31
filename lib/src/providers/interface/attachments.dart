@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:typed_data';
-
 import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mime/mime.dart';
 
 /// An abstract class representing an attachment in a chat message.
 ///
 /// This class serves as a base for different types of attachments
 /// (e.g., files, images, links) that can be included in a chat message.
+@immutable
 sealed class Attachment {
   /// Creates an [Attachment] with the given name.
   ///
@@ -31,13 +31,14 @@ sealed class Attachment {
 ///
 /// This class extends [Attachment] and provides specific properties and methods
 /// for handling file attachments.
+@immutable
 final class FileAttachment extends Attachment {
   /// Creates a [FileAttachment] with the given name, MIME type, and bytes.
   ///
   /// [name] is the name of the file attachment.
   /// [mimeType] is the MIME type of the file.
   /// [bytes] is the binary content of the file.
-  FileAttachment({
+  const FileAttachment({
     required super.name,
     required this.mimeType,
     required this.bytes,
@@ -106,6 +107,7 @@ final class FileAttachment extends Attachment {
 ///
 /// This class extends [Attachment] and provides specific properties and methods
 /// for handling image attachments.
+@immutable
 final class ImageFileAttachment extends FileAttachment {
   /// Creates an [ImageFileAttachment] with the given name, MIME type, and
   /// bytes.
@@ -154,6 +156,7 @@ final class ImageFileAttachment extends FileAttachment {
 ///
 /// This class extends [Attachment] and provides specific properties for
 /// handling link attachments.
+@immutable
 final class LinkAttachment extends Attachment {
   /// Creates a [LinkAttachment] with the given name and URL.
   ///

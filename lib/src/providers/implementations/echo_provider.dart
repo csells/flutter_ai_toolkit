@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
+
 import '../../llm_exception.dart';
 import '../interface/attachments.dart';
 import '../interface/chat_message.dart';
@@ -11,6 +13,7 @@ import '../interface/llm_provider.dart';
 /// information.
 ///
 /// This provider is primarily used for testing and debugging purposes.
+@immutable
 class EchoProvider extends LlmProvider {
   /// Creates an [EchoProvider] instance with an optional chat history.
   ///

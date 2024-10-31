@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../interface/attachments.dart';
@@ -31,6 +32,7 @@ class GeminiProvider extends LlmProvider {
   ///
   /// [generationConfig] is an optional configuration for controlling the
   /// model's generation behavior.
+  @immutable
   GeminiProvider({
     GenerativeModel? generativeModel,
     GenerativeModel? embeddingModel,

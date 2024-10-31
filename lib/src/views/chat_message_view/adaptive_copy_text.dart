@@ -15,6 +15,7 @@ import '../../utility.dart';
 /// This widget provides a context menu for copying text to the clipboard on
 /// mobile devices, and a selection area for mouse-driven selection on desktop
 /// and web platforms.
+@immutable
 class AdaptiveCopyText extends StatelessWidget {
   /// Creates an [AdaptiveCopyText] widget.
   ///

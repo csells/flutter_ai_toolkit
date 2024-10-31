@@ -9,9 +9,10 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 /// Style for the input text box.
+@immutable
 class ChatInputStyle {
   /// Creates an InputBoxStyle.
-  ChatInputStyle({
+  const ChatInputStyle({
     this.textStyle,
     this.hintStyle,
     this.hintText,

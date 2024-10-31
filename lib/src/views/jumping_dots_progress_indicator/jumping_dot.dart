@@ -5,6 +5,7 @@
 import 'package:flutter/widgets.dart';
 
 /// A widget that represents a single jumping dot in the progress indicator.
+@immutable
 class JumpingDot extends AnimatedWidget {
   /// Creates a [JumpingDot] widget.
   ///

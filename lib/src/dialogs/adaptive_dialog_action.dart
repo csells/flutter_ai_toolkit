@@ -13,6 +13,7 @@ import '../utility.dart';
 /// The [AdaptiveDialogAction] widget is designed to provide a consistent user
 /// experience across different platforms while adhering to platform-specific
 /// design guidelines.
+@immutable
 class AdaptiveDialogAction extends StatelessWidget {
   /// Creates an adaptive dialog action.
   ///

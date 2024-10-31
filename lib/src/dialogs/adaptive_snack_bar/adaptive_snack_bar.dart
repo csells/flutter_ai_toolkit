@@ -12,6 +12,7 @@ import 'cupertino_snack_bar.dart';
 /// This class provides a static method to display snack bars that adapt to the
 /// current application environment, showing either a Material Design snack bar
 /// or a Cupertino-style snack bar based on the app's context.
+@immutable
 class AdaptiveSnackBar {
   /// Shows an adaptive snack bar with the given message.
   ///

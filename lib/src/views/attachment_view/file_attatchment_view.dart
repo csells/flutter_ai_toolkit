@@ -13,6 +13,7 @@ import '../../styles/file_attachment_style.dart';
 ///
 /// This widget creates a container with a file icon and information about the
 /// attached file, such as its name and MIME type.
+@immutable
 class FileAttachmentView extends StatelessWidget {
   /// Creates a FileAttachmentView.
   ///

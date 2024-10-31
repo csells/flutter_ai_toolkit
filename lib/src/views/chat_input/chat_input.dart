@@ -24,6 +24,7 @@ import 'input_state.dart';
 
 /// A widget that provides a chat input interface with support for text input,
 /// speech-to-text, and attachments.
+@immutable
 class ChatInput extends StatefulWidget {
   /// Creates a [ChatInput] widget.
   ///

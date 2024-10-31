@@ -9,6 +9,7 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 /// Style for user messages.
+@immutable
 class UserMessageStyle {
   /// Creates a UserMessageStyle.
   const UserMessageStyle({

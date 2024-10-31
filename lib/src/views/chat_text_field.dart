@@ -11,6 +11,7 @@ import '../utility.dart';
 ///
 /// This widget will render either a [CupertinoTextField] or a [TextField]
 /// depending on whether the app is using Cupertino or Material design.
+@immutable
 class ChatTextField extends StatelessWidget {
   /// Creates an adaptive text field.
   ///

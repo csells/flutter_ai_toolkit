@@ -10,12 +10,15 @@ import 'chat_view_model.dart';
 ///
 /// This widget uses the [InheritedWidget] mechanism to efficiently propagate
 /// the [ChatViewModel] down the widget tree.
+@immutable
 class ChatViewModelProvider extends InheritedWidget {
   /// Creates a [ChatViewModelProvider].
   ///
   /// The [child] and [viewModel] arguments must not be null.
   const ChatViewModelProvider({
-    required super.child, required this.viewModel, super.key,
+    required super.child,
+    required this.viewModel,
+    super.key,
   });
 
   /// The [ChatViewModel] to be made available to descendants.

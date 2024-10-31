@@ -13,6 +13,7 @@ import '../../utility.dart';
 /// This widget creates a button with a customizable icon, size, decoration, and
 /// color. It can be enabled or disabled based on the presence of an [onPressed]
 /// callback.
+@immutable
 class ActionButton extends StatelessWidget {
   /// Creates an [ActionButton].
   ///

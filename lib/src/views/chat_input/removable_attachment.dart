@@ -15,6 +15,7 @@ import '../action_button/action_button.dart';
 import '../attachment_view/attachment_view.dart';
 
 /// A widget that displays an attachment with a remove button.
+@immutable
 class RemovableAttachment extends StatelessWidget {
   /// Creates a [RemovableAttachment].
   ///

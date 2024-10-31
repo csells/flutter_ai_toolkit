@@ -14,6 +14,7 @@ import 'style_helpers.dart' as sh;
 import 'user_message_style.dart';
 
 /// Style for the entire chat widget.
+@immutable
 class LlmChatViewStyle {
   /// Creates a style object for the chat widget.
   const LlmChatViewStyle({

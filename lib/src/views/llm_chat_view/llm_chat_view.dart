@@ -43,6 +43,7 @@ import 'llm_response.dart';
 ///   ),
 /// )
 /// ```
+@immutable
 class LlmChatView extends StatefulWidget {
   /// Creates an [LlmChatView] widget.
   ///

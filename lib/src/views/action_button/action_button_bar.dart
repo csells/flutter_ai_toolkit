@@ -12,6 +12,7 @@ import 'action_button.dart';
 /// This widget creates a container with rounded corners that houses a series of
 /// [ActionButton]s. The buttons are laid out horizontally and can overflow if
 /// there's not enough space.
+@immutable
 class ActionButtonBar extends StatelessWidget {
   /// Creates a [ActionButtonBar].
   ///

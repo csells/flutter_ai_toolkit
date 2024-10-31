@@ -7,6 +7,7 @@ import '../../styles/fat_colors.dart';
 /// This widget takes a list of suggestions and a callback function that is
 /// triggered when a suggestion is selected. Each suggestion is displayed
 /// as a tappable container with padding and a background color.
+@immutable
 class ChatSuggestionsView extends StatelessWidget {
   /// Creates a [ChatSuggestionsView] widget.
   ///

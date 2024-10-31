@@ -11,6 +11,7 @@ import 'input_state.dart';
 
 /// A button widget that adapts its appearance and behavior based on the current
 /// input state.
+@immutable
 class InputButton extends StatelessWidget {
   /// Creates an [InputButton].
   ///

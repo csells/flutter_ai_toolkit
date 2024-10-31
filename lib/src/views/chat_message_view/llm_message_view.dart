@@ -13,6 +13,7 @@ import '../jumping_dots_progress_indicator/jumping_dots_progress_indicator.dart'
 import 'adaptive_copy_text.dart';
 
 /// A widget that displays an LLM (Language Model) message in a chat interface.
+@immutable
 class LlmMessageView extends StatelessWidget {
   /// Creates an [LlmMessageView].
   ///

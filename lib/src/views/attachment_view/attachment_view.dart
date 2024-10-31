@@ -13,6 +13,7 @@ import 'image_attachment_view.dart';
 /// This widget determines the appropriate view for the given [attachment]
 /// and renders it accordingly. It supports file attachments and image
 /// attachments, but throws an exception for link attachments.
+@immutable
 class AttachmentView extends StatelessWidget {
   /// Creates an AttachmentView.
   ///

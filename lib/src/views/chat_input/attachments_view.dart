@@ -9,6 +9,7 @@ import 'removable_attachment.dart';
 
 /// A widget that displays a horizontal list of attachments with the ability to
 /// remove them.
+@immutable
 class AttachmentsView extends StatelessWidget {
   /// Creates an [AttachmentsView].
   ///

@@ -10,6 +10,7 @@ import '../utility.dart';
 
 /// A utility class for showing adaptive dialogs that match the current platform
 /// style.
+@immutable
 class AdaptiveAlertDialog {
   /// Shows an adaptive dialog with the given [content] widget as content.
   ///

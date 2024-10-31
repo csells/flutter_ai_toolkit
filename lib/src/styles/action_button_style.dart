@@ -11,6 +11,7 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 /// Style for icon buttons.
+@immutable
 class ActionButtonStyle {
   /// Creates an IconButtonStyle.
   const ActionButtonStyle({

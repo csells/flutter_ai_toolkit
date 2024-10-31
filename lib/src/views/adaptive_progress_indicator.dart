@@ -9,6 +9,7 @@ import '../utility.dart';
 
 /// A progress indicator that adapts to the current platform.
 ///
+@immutable
 class AdaptiveCircularProgressIndicator extends StatelessWidget {
   /// Creates an adaptive circular progress indicator.
   ///

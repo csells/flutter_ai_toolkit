@@ -17,6 +17,7 @@ import '../action_button/action_button.dart';
 import '../action_button/action_button_bar.dart';
 
 /// A widget that provides an action bar for attaching files or images.
+@immutable
 class AttachmentActionBar extends StatefulWidget {
   /// Creates an [AttachmentActionBar].
   ///
