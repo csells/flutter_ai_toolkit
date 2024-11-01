@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../../styles/fat_colors.dart';
+import '../../chat_view_model/chat_view_model_client.dart';
+import '../../styles/suggestion_style.dart';
 
 /// A widget that displays a list of chat suggestions.
 ///
@@ -27,25 +28,34 @@ class ChatSuggestionsView extends StatelessWidget {
   final void Function(String suggestion) onSelectSuggestion;
 
   @override
-  Widget build(BuildContext context) => Wrap(
-        direction: Axis.vertical,
-        alignment: WrapAlignment.spaceEvenly,
-        children: [
-          for (final suggestion in suggestions)
-            GestureDetector(
-              onTap: () => onSelectSuggestion(suggestion),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: FatColors.lightButtonBackground,
-                    borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) => ChatViewModelClient(
+        builder: (context, viewModel, child) {
+          final suggestionStyle = SuggestionStyle.resolve(
+            viewModel.style?.suggestionStyle,
+          );
+          return Wrap(
+            direction: Axis.vertical,
+            alignment: WrapAlignment.spaceEvenly,
+            children: [
+              for (final suggestion in suggestions)
+                GestureDetector(
+                  onTap: () => onSelectSuggestion(suggestion),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: suggestionStyle.decoration,
+                      child: Wrap(children: [
+                        Text(
+                          suggestion,
+                          style: suggestionStyle.textStyle,
+                        )
+                      ]),
+                    ),
                   ),
-                  child: Wrap(children: [Text(suggestion)]),
                 ),
-              ),
-            ),
-        ],
+            ],
+          );
+        },
       );
 }

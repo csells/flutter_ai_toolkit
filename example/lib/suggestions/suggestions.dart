@@ -12,29 +12,65 @@ void main() => runApp(const App());
 
 class App extends StatelessWidget {
   static const title = 'Example: Suggestions';
+  static final themeMode = ValueNotifier(ThemeMode.light);
 
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-        title: title,
-        home: ChatPage(),
+  Widget build(BuildContext context) => ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeMode,
+        builder: (BuildContext context, ThemeMode mode, Widget? child) =>
+            MaterialApp(
+          title: title,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: mode,
+          home: ChatPage(),
+          debugShowCheckedModeBanner: false,
+        ),
       );
 }
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
   @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final _controller = LlmChatViewController(
+    provider: GeminiProvider(
+      generativeModel: GenerativeModel(
+        model: 'gemini-1.5-flash',
+        apiKey: geminiApiKey,
+      ),
+    ),
+  );
+
+  @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(App.title)),
-        body: LlmChatView(
-          provider: GeminiProvider(
-            generativeModel: GenerativeModel(
-              model: 'gemini-1.5-flash',
-              apiKey: geminiApiKey,
+        appBar: AppBar(
+          title: const Text(App.title),
+          actions: [
+            IconButton(
+              onPressed: _clearHistory,
+              icon: const Icon(Icons.history),
             ),
-          ),
+            IconButton(
+              onPressed: () => App.themeMode.value =
+                  App.themeMode.value == ThemeMode.light
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
+              icon: const Icon(Icons.brightness_4_outlined),
+            ),
+          ],
+        ),
+        body: LlmChatView(
+          controller: _controller,
+          style: App.themeMode.value == ThemeMode.dark
+              ? LlmChatViewStyle.darkStyle()
+              : LlmChatViewStyle.lightStyle(),
           suggestions: const [
             'Tell me a joke.',
             'Write me a limerick.',
@@ -42,4 +78,6 @@ class ChatPage extends StatelessWidget {
           ],
         ),
       );
+
+  void _clearHistory() => _controller.clearHistory();
 }

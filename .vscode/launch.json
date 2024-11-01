@@ -65,6 +65,13 @@
       "program": "lib/history/history.dart",
     },
     {
+      "name": "suggestions",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/suggestions/suggestions.dart",
+    },
+    {
       "name": "recipes",
       "cwd": "example",
       "request": "launch",

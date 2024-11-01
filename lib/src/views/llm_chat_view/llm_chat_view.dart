@@ -123,40 +123,44 @@ class _LlmChatViewState extends State<LlmChatView>
     super.build(context); // for AutomaticKeepAliveClientMixin
 
     final chatStyle = LlmChatViewStyle.resolve(widget.viewModel.style);
-    return ChatViewModelProvider(
-      viewModel: widget.viewModel,
-      child: Container(
-        color: chatStyle.backgroundColor,
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  ChatHistoryView(
-                    onEditMessage:
-                        _pendingPromptResponse == null ? _onEditMessage : null,
-                  ),
-                  if (widget.suggestions.isNotEmpty &&
-                      widget.viewModel.controller.history.isEmpty)
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ChatSuggestionsView(
-                        suggestions: widget.suggestions,
-                        onSelectSuggestion: _onSelectSuggestion,
-                      ),
+    return ListenableBuilder(
+      listenable: widget.viewModel.controller,
+      builder: (context, child) => ChatViewModelProvider(
+        viewModel: widget.viewModel,
+        child: Container(
+          color: chatStyle.backgroundColor,
+          child: Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    ChatHistoryView(
+                      onEditMessage: _pendingPromptResponse == null
+                          ? _onEditMessage
+                          : null,
                     ),
-                ],
+                    if (widget.suggestions.isNotEmpty &&
+                        widget.viewModel.controller.history.isEmpty)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ChatSuggestionsView(
+                          suggestions: widget.suggestions,
+                          onSelectSuggestion: _onSelectSuggestion,
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            ChatInput(
-              initialMessage: _initialMessage,
-              onSendMessage: _onSendMessage,
-              onCancelMessage:
-                  _pendingPromptResponse == null ? null : _onCancelMessage,
-              onTranslateStt: _onTranslateStt,
-              onCancelStt: _pendingSttResponse == null ? null : _onCancelStt,
-            ),
-          ],
+              ChatInput(
+                initialMessage: _initialMessage,
+                onSendMessage: _onSendMessage,
+                onCancelMessage:
+                    _pendingPromptResponse == null ? null : _onCancelMessage,
+                onTranslateStt: _onTranslateStt,
+                onCancelStt: _pendingSttResponse == null ? null : _onCancelStt,
+              ),
+            ],
+          ),
         ),
       ),
     );

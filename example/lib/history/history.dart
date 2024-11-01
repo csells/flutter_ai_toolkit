@@ -36,7 +36,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // final _controller = LlmChatViewController(provider: EchoProvider());
   final _controller = LlmChatViewController(
     provider: GeminiProvider(
       generativeModel: GenerativeModel(

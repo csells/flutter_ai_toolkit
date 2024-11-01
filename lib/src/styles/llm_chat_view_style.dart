@@ -11,6 +11,7 @@ import 'fat_colors.dart';
 import 'file_attachment_style.dart';
 import 'llm_message_style.dart';
 import 'style_helpers.dart' as sh;
+import 'suggestion_style.dart';
 import 'user_message_style.dart';
 
 /// Style for the entire chat widget.
@@ -36,6 +37,7 @@ class LlmChatViewStyle {
     this.closeMenuButtonStyle,
     this.actionButtonBarDecoration,
     this.fileAttachmentStyle,
+    this.suggestionStyle,
   });
 
   /// Resolves the provided [style] with the [defaultStyle].
@@ -110,6 +112,10 @@ class LlmChatViewStyle {
       ),
       actionButtonBarDecoration: style?.actionButtonBarDecoration ??
           defaultStyle.actionButtonBarDecoration,
+      suggestionStyle: SuggestionStyle.resolve(
+        style?.suggestionStyle,
+        defaultStyle: defaultStyle.suggestionStyle,
+      ),
     );
   }
 
@@ -137,6 +143,7 @@ class LlmChatViewStyle {
       actionButtonBarDecoration:
           sh.invertDecoration(style.actionButtonBarDecoration),
       fileAttachmentStyle: FileAttachmentStyle.darkStyle(),
+      suggestionStyle: SuggestionStyle.darkStyle(),
       closeButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.close),
       copyButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.copy),
       editButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.edit),
@@ -174,6 +181,7 @@ class LlmChatViewStyle {
           borderRadius: BorderRadius.circular(20),
         ),
         fileAttachmentStyle: FileAttachmentStyle.defaultStyle(),
+        suggestionStyle: SuggestionStyle.defaultStyle(),
       );
 
   /// Background color of the entire chat widget.
@@ -229,4 +237,7 @@ class LlmChatViewStyle {
 
   /// Style for file attachments.
   final FileAttachmentStyle? fileAttachmentStyle;
+
+  /// Style for suggestions.
+  final SuggestionStyle? suggestionStyle;
 }

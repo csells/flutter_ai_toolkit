@@ -2,6 +2,8 @@
 
 * fixed [#67](https://github.com/csells/flutter_ai_toolkit/issues/67): bug: audio recording translation repopulated after history cleared
 
+* fixed [#68](https://github.com/csells/flutter_ai_toolkit/issues/68): bug: need suggestion styling
+
 ## 0.4.2
 
 * upgraded to waveform_recorder 1.3.0
