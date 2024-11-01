@@ -26,14 +26,12 @@ class EchoProvider extends LlmProvider {
   final List<ChatMessage> _history;
 
   @override
-  Future<List<double>> getDocumentEmbedding(String document) {
-    throw UnimplementedError('EchoProvider.getDocumentEmbedding');
-  }
+  Future<List<double>> getDocumentEmbedding(String document) =>
+      throw UnimplementedError('EchoProvider.getDocumentEmbedding');
 
   @override
-  Future<List<double>> getQueryEmbedding(String query) {
-    throw UnimplementedError('EchoProvider.getQueryEmbedding');
-  }
+  Future<List<double>> getQueryEmbedding(String query) =>
+      throw UnimplementedError('EchoProvider.getQueryEmbedding');
 
   @override
   Stream<String> generateStream(

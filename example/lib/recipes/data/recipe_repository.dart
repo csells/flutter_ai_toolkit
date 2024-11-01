@@ -6,7 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
@@ -66,23 +66,32 @@ class RecipeRepository {
   }
 
   static Future<List<Recipe>> _loadRecipes() async {
-    final recipeFile = await _recipeFile;
-
-    // seed empty recipe file w/ example recipes
-    final contents = await recipeFile.exists()
-        ? await recipeFile.readAsString()
-        : await rootBundle.loadString(_assetFileName);
+    // seed empty recipe file w/ sample recipes; note: we're not loading from a
+    // file on the web; all recipes are in memory for the sessions only
+    late final String contents;
+    if (!kIsWeb) {
+      final recipeFile = await _recipeFile;
+      contents = await recipeFile.exists()
+          ? await recipeFile.readAsString()
+          : await rootBundle.loadString(_assetFileName);
+    } else {
+      contents = await rootBundle.loadString(_assetFileName);
+    }
 
     final jsonList = json.decode(contents) as List;
     return jsonList.map((json) => Recipe.fromJson(json)).toList();
   }
 
   static Future<void> _saveRecipes() async {
-    final file = await _recipeFile;
-    final jsonString = json.encode(recipes.map((r) => r.toJson()).toList());
-    await file.writeAsString(jsonString);
+    // note: we're not saving to a file on the web; all recipes are in memory
+    // for the sessions only
+    if (!kIsWeb) {
+      final file = await _recipeFile;
+      final jsonString = json.encode(recipes.map((r) => r.toJson()).toList());
+      await file.writeAsString(jsonString);
+    }
 
-    // note: this is a hack to get the UI to update
+    // notify listeners that the recipes have changed
     items.value = [];
     items.value = _recipes!;
   }

@@ -37,6 +37,10 @@ class LlmMessageView extends StatelessWidget {
                     final llmStyle = LlmMessageStyle.resolve(
                       viewModel.style?.llmMessageStyle,
                     );
+                    final isWelcomeMessage = identical(
+                      viewModel.controller.history.first,
+                      message,
+                    );
 
                     return Stack(
                       children: [
@@ -65,7 +69,8 @@ class LlmMessageView extends StatelessWidget {
                               : AdaptiveCopyText(
                                   clipboardText: message.text!,
                                   chatStyle: chatStyle,
-                                  child: viewModel.responseBuilder != null
+                                  child: !isWelcomeMessage &&
+                                          viewModel.responseBuilder != null
                                       ? viewModel.responseBuilder!(
                                           context,
                                           message.text!,

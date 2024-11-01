@@ -19,7 +19,7 @@ abstract class LlmProvider {
   ///
   /// [document] is the text content of the document to be embedded.
   ///
-  /// Returns a [Future] that resolves to a [`List<double>`] representing the
+  /// Returns a [Future] that resolves to a [List<double>] representing the
   /// document's embedding.
   Future<List<double>> getDocumentEmbedding(String document);
 
@@ -31,7 +31,7 @@ abstract class LlmProvider {
   ///
   /// [query] is the text content of the query to be embedded.
   ///
-  /// Returns a [Future] that resolves to a [`List<double>`] representing the
+  /// Returns a [Future] that resolves to a [List<double>] representing the
   /// query's embedding.
   Future<List<double>> getQueryEmbedding(String query);
 

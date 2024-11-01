@@ -335,6 +335,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.4"
+  future_builder_ex:
+    dependency: "direct main"
+    description:
+      name: future_builder_ex
+      sha256: a6f1cbccd1ef39a842febf2d09b71da2c5d5f7aa75c0c798646d14c42100e244
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   gap:
     dependency: "direct main"
     description:
@@ -487,6 +495,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   logging:
     dependency: transitive
     description:
@@ -740,6 +756,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  split_view:
+    dependency: "direct main"
+    description:
+      name: split_view
+      sha256: "7ad0e1c40703901aa1175fd465dec5e965b55324f9cc8e51526479a4a96d01a4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   sprintf:
     dependency: transitive
     description:

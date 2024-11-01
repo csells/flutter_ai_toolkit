@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import '../../gemini_api_key.dart';
 import '../data/recipe_data.dart';
 import '../data/recipe_repository.dart';
+import '../data/settings.dart';
 
 class EditRecipePage extends StatefulWidget {
   const EditRecipePage({
@@ -68,13 +69,8 @@ class _EditRecipePageState extends State<EditRecipePage> {
       systemInstruction: Content.system(
         '''
 You are a helpful assistant that generates recipes based on the ingredients and 
-instructions provided. 
-
-My food preferences are:
-- I don't like mushrooms, tomatoes or cilantro.
-- I love garlic and onions.
-- I avoid milk, so I always replace that with oat milk.
-- I try to keep carbs low, so I try to use appropriate substitutions.
+instructions provided:
+${Settings.foodPreferences.isEmpty ? 'I don\'t have any food preferences' : Settings.foodPreferences}
 
 When you generate a recipe, you should generate a JSON object.
 ''',

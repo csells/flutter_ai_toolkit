@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'data/recipe_repository.dart';
+import 'data/settings.dart';
 import 'pages/edit_recipe_page.dart';
 import 'pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Settings.init();
   await RecipeRepository.init();
   runApp(App());
 }
@@ -23,7 +25,7 @@ class App extends StatelessWidget {
       GoRoute(
         name: 'home',
         path: '/',
-        builder: (BuildContext context, _) => const ResponsiveHomePage(),
+        builder: (BuildContext context, _) => const HomePage(),
         routes: [
           GoRoute(
             name: 'edit',

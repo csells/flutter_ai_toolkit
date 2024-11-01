@@ -12,6 +12,7 @@ analyzer:
     # some rules conflict; instead, we're explicitly enabling even conflicting
     # rules and are fixing the conflicts in this file
     included_file_warning: ignore
+    unintended_html_in_doc_comment: ignore
 
 linter:
   rules:

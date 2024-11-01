@@ -9,13 +9,24 @@ import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
 
 @immutable
+
+/// A class that defines the style for suggestions.
 class SuggestionStyle {
-  /// Creates an SuggestionStyle.
+  /// Creates a [SuggestionStyle].
+  ///
+  /// The [textStyle] and [decoration] parameters can be used to customize
+  /// the appearance of the suggestion.
   const SuggestionStyle({
     this.textStyle,
     this.decoration,
   });
 
+  /// Resolves the [SuggestionStyle] by merging the provided [style] with the
+  /// [defaultStyle].
+  ///
+  /// If [style] is null, the [defaultStyle] is used. If [defaultStyle] is not
+  /// provided, the [defaultStyle] is obtained from
+  /// [SuggestionStyle.defaultStyle].
   factory SuggestionStyle.resolve(
     SuggestionStyle? style, {
     SuggestionStyle? defaultStyle,
@@ -28,9 +39,13 @@ class SuggestionStyle {
   }
 
   /// Provides a default style.
+  ///
+  /// This style is typically used as the base style for suggestions.
   factory SuggestionStyle.defaultStyle() => SuggestionStyle.lightStyle();
 
   /// Provides a default dark style.
+  ///
+  /// This style is typically used for suggestions in dark mode.
   factory SuggestionStyle.darkStyle() {
     final style = SuggestionStyle.lightStyle();
     return SuggestionStyle(
@@ -43,6 +58,8 @@ class SuggestionStyle {
   }
 
   /// Provides a default light style.
+  ///
+  /// This style is typically used for suggestions in light mode.
   factory SuggestionStyle.lightStyle() => SuggestionStyle(
         textStyle: FatTextStyles.body1,
         decoration: const BoxDecoration(

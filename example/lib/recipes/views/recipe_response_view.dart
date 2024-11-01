@@ -1,7 +1,3 @@
-// Copyright 2024 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,59 +11,54 @@ import 'recipe_content_view.dart';
 class RecipeResponseView extends StatelessWidget {
   const RecipeResponseView(this.response, {super.key});
 
-  static var re = RegExp(
-    '```json(?<recipe>.*?)```',
-    multiLine: true,
-    dotAll: true,
-  );
-
   final String response;
 
   @override
   Widget build(BuildContext context) {
-    // find all of the chunks of json that represent recipes
-    final matches = re.allMatches(response);
-
-    var end = 0;
     final children = <Widget>[];
-    for (final match in matches) {
-      // extract the text before the json
-      if (match.start > end) {
-        final text = response.substring(end, match.start);
-        children.add(MarkdownBody(data: text));
+
+    try {
+      final map = jsonDecode(response);
+      final recipesWithText = map['recipes'] as List<dynamic>;
+      final finalText = map['text'] as String?;
+
+      for (final recipeWithText in recipesWithText) {
+        // extract the text before the recipe
+        final text = recipeWithText['text'] as String?;
+        if (text != null && text.isNotEmpty) {
+          children.add(MarkdownBody(data: text));
+        }
+
+        // extract the recipe
+        final json = recipeWithText['recipe'] as Map<String, dynamic>;
+        final recipe = Recipe.fromJson(json);
+        children.add(const Gap(16));
+        children.add(Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(recipe.title, style: Theme.of(context).textTheme.titleLarge),
+            Text(recipe.description),
+            RecipeContentView(recipe: recipe),
+          ],
+        ));
+
+        // add a button to add the recipe to the list
+        children.add(const Gap(16));
+        children.add(OutlinedButton(
+          onPressed: () => RecipeRepository.addNewRecipe(recipe),
+          child: const Text('Add Recipe'),
+        ));
+        children.add(const Gap(16));
       }
 
-      // extract the json
-      final json = match.namedGroup('recipe')!;
-      final recipe = Recipe.fromJson(jsonDecode(json));
-      children.add(const Gap(16));
-      children.add(Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(recipe.title, style: Theme.of(context).textTheme.titleLarge),
-          Text(recipe.description),
-          RecipeContentView(recipe: recipe),
-        ],
-      ));
-
-      // add a button to add the recipe to the list
-      children.add(const Gap(16));
-      children.add(OutlinedButton(
-        onPressed: () => RecipeRepository.addNewRecipe(recipe),
-        child: const Text('Add Recipe'),
-      ));
-      children.add(const Gap(16));
-
-      // exclude the raw json output
-      end = match.end;
+      // add the remaining text
+      if (finalText != null && finalText.isNotEmpty) {
+        children.add(MarkdownBody(data: finalText));
+      }
+    } catch (e) {
+      children.add(Text('Error: $e'));
     }
 
-    // add the remaining text
-    if (end < response.length) {
-      children.add(MarkdownBody(data: response.substring(end)));
-    }
-
-    // return the children as rows in a column
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
