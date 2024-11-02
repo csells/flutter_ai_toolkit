@@ -1,1 +1,0 @@
-dart doc --dry-run
