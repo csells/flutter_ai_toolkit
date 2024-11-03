@@ -19,10 +19,17 @@ class LlmMessageView extends StatelessWidget {
   ///
   /// The [message] parameter is required and represents the LLM chat message to
   /// be displayed.
-  const LlmMessageView(this.message, {super.key});
+  const LlmMessageView(
+    this.message, {
+    this.isWelcomeMessage = false,
+    super.key,
+  });
 
   /// The LLM chat message to be displayed.
   final ChatMessage message;
+
+  /// Whether the message is the welcome message.
+  final bool isWelcomeMessage;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -37,21 +44,20 @@ class LlmMessageView extends StatelessWidget {
                     final llmStyle = LlmMessageStyle.resolve(
                       viewModel.style?.llmMessageStyle,
                     );
-                    final isWelcomeMessage = identical(
-                      viewModel.controller.history.first,
-                      message,
-                    );
 
                     return Stack(
                       children: [
-                        Container(
-                          height: 20,
-                          width: 20,
-                          decoration: llmStyle.iconDecoration,
-                          child: Icon(
-                            llmStyle.icon,
-                            color: llmStyle.iconColor,
-                            size: 12,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: llmStyle.iconDecoration,
+                            child: Icon(
+                              llmStyle.icon,
+                              color: llmStyle.iconColor,
+                              size: 12,
+                            ),
                           ),
                         ),
                         Container(
@@ -69,16 +75,16 @@ class LlmMessageView extends StatelessWidget {
                               : AdaptiveCopyText(
                                   clipboardText: message.text!,
                                   chatStyle: chatStyle,
-                                  child: !isWelcomeMessage &&
-                                          viewModel.responseBuilder != null
-                                      ? viewModel.responseBuilder!(
-                                          context,
-                                          message.text!,
-                                        )
-                                      : MarkdownBody(
+                                  child: isWelcomeMessage ||
+                                          viewModel.responseBuilder == null
+                                      ? MarkdownBody(
                                           data: message.text!,
                                           selectable: false,
                                           styleSheet: llmStyle.markdownStyle,
+                                        )
+                                      : viewModel.responseBuilder!(
+                                          context,
+                                          message.text!,
                                         ),
                                 ),
                         ),

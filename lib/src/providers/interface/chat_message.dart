@@ -35,15 +35,6 @@ class ChatMessage {
         attachments: [],
       );
 
-  /// Factory constructor for creating an LLM-originated greeting message.
-  ///
-  /// [welcomeMessage] is the content of the greeting message.
-  factory ChatMessage.llmWelcome(String welcomeMessage) => ChatMessage(
-        origin: MessageOrigin.llm,
-        text: welcomeMessage,
-        attachments: [],
-      );
-
   /// Factory constructor for creating a user-originated message.
   ///
   /// [text] is the content of the user's message.

@@ -69,21 +69,24 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ],
         ),
-        body: LlmChatView(controller: _controller),
+        body: LlmChatView(
+          controller: _controller,
+          welcomeMessage: _welcomeMessage,
+        ),
       );
 
   io.Directory? _historyDir;
 
-  final _welcomeMessage = ChatMessage.llmWelcome(
-    '# Welcome\n'
-    'Hello and welcome to the chat! This sample shows off a simple way to use '
-    'the Flutter AI Toolkit to create a chat history that is saved to disk '
-    'and restored the next time the app is launched.\n\n'
-    '# Note\n'
-    '**Since this sample depends on the availability of a file system and '
-    'the ability to save and restore files, it will not work in an environment '
-    'that does not support these capabilities, such as a web browser.**',
-  );
+  final _welcomeMessage = '# Welcome\n'
+      'Hello and welcome to the chat! This sample shows off a simple way to '
+      'use the Flutter AI Toolkit to create a chat history that is saved to '
+      'disk and restored the next time the app is launched.\n\n'
+      '# Note\n'
+      '**Since this sample depends on the availability of a file system and '
+      'the ability to save and restore files, it will not work in an '
+      'environment that does not support these capabilities, such as a web '
+      'browser.**'
+      '';
 
   Future<io.Directory> _getHistoryDir() async {
     if (_historyDir == null) {
@@ -113,9 +116,6 @@ class _ChatPageState extends State<ChatPage> {
       final map = jsonDecode(await file.readAsString());
       history.add(LlmChatViewController.messageFrom(map));
     }
-
-    // put in a welcome message
-    if (history.isEmpty) history.add(_welcomeMessage);
 
     // set the history on the controller
     _controller.history = history;
@@ -167,6 +167,6 @@ class _ChatPageState extends State<ChatPage> {
       await file.delete();
     }
 
-    _controller.history = [_welcomeMessage];
+    _controller.clearHistory();
   }
 }

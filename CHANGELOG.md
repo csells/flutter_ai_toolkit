@@ -4,6 +4,8 @@
 
 * fixed [#68](https://github.com/csells/flutter_ai_toolkit/issues/68): bug: need suggestion styling
 
+* implemented [#72](https://github.com/csells/flutter_ai_toolkit/issues/72): feature: move welcome message to the LlmChatView
+
 ## 0.4.2
 
 * upgraded to waveform_recorder 1.3.0

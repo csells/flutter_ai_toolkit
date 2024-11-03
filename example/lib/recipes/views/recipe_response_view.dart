@@ -17,10 +17,12 @@ class RecipeResponseView extends StatelessWidget {
   Widget build(BuildContext context) {
     final children = <Widget>[];
 
+    String? finalText;
+
     try {
       final map = jsonDecode(response);
       final recipesWithText = map['recipes'] as List<dynamic>;
-      final finalText = map['text'] as String?;
+      finalText = map['text'] as String?;
 
       for (final recipeWithText in recipesWithText) {
         // extract the text before the recipe
@@ -50,13 +52,23 @@ class RecipeResponseView extends StatelessWidget {
         ));
         children.add(const Gap(16));
       }
-
-      // add the remaining text
-      if (finalText != null && finalText.isNotEmpty) {
-        children.add(MarkdownBody(data: finalText));
-      }
     } catch (e) {
-      children.add(Text('Error: $e'));
+      debugPrint('Error parsing response: $e');
+    }
+
+    if (children.isEmpty) {
+      try {
+        final map = jsonDecode(response);
+        finalText = map['text'] as String?;
+      } catch (e) {
+        debugPrint('Error parsing response: $e');
+        finalText = response;
+      }
+    }
+
+    // add the remaining text
+    if (finalText != null && finalText.isNotEmpty) {
+      children.add(MarkdownBody(data: finalText));
     }
 
     return Column(

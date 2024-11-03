@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import '../chat_view_model/chat_view_model_client.dart';
 import '../providers/interface/chat_message.dart';
+import '../providers/interface/message_origin.dart';
 import 'chat_message_view/llm_message_view.dart';
 import 'chat_message_view/user_message_view.dart';
 
@@ -46,7 +47,15 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           builder: (context, viewModel, child) => ListenableBuilder(
             listenable: viewModel.controller,
             builder: (context, child) {
-              final history = viewModel.controller.history.toList();
+              final history = [
+                if (viewModel.welcomeMessage != null)
+                  ChatMessage(
+                    origin: MessageOrigin.llm,
+                    text: viewModel.welcomeMessage,
+                    attachments: [],
+                  ),
+                ...viewModel.controller.history,
+              ];
               return ListView.builder(
                 reverse: true,
                 itemCount: history.length,
@@ -68,7 +77,10 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                                 ? () => widget.onEditMessage?.call(message)
                                 : null,
                           )
-                        : LlmMessageView(message),
+                        : LlmMessageView(
+                            message,
+                            isWelcomeMessage: messageIndex == 0,
+                          ),
                   );
                 },
               );

@@ -176,9 +176,12 @@ class _ChatPageState extends State<ChatPage>
                 LlmChatView(
                   controller: _chatController,
                   style: style,
+                  welcomeMessage:
+                      'Hello and welcome to the Flutter AI Toolkit!',
                   suggestions: [
                     'I\'m a Star Wars fan. What should I wear for Halloween?',
-                    'I\'m allergic to peanuts. What candy should I avoid at Halloween?',
+                    'I\'m allergic to peanuts. What candy should I avoid at '
+                        'Halloween?',
                     'What\'s the difference between a pumpkin and a squash?',
                   ],
                 ),
@@ -227,6 +230,13 @@ class _ChatPageState extends State<ChatPage>
     return LlmChatViewStyle(
       backgroundColor: Colors.transparent,
       progressIndicatorColor: Colors.purple,
+      suggestionStyle: SuggestionStyle(
+        textStyle: halloweenTextStyle.copyWith(color: Colors.black),
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          border: Border.all(color: Colors.orange),
+        ),
+      ),
       chatInputStyle: ChatInputStyle(
         backgroundColor: _animationController.isAnimating
             ? Colors.transparent

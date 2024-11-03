@@ -34,8 +34,6 @@ class ChatSuggestionsView extends StatelessWidget {
             viewModel.style?.suggestionStyle,
           );
           return Wrap(
-            direction: Axis.vertical,
-            alignment: WrapAlignment.spaceEvenly,
             children: [
               for (final suggestion in suggestions)
                 GestureDetector(
@@ -45,12 +43,12 @@ class ChatSuggestionsView extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: suggestionStyle.decoration,
-                      child: Wrap(children: [
-                        Text(
-                          suggestion,
-                          style: suggestionStyle.textStyle,
-                        )
-                      ]),
+                      child: Text(
+                        suggestion,
+                        softWrap: true,
+                        maxLines: 3,
+                        style: suggestionStyle.textStyle,
+                      ),
                     ),
                   ),
                 ),

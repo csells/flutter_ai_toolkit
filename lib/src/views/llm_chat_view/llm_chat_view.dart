@@ -62,6 +62,7 @@ class LlmChatView extends StatefulWidget {
     LlmChatViewStyle? style,
     ResponseBuilder? responseBuilder,
     this.suggestions = const [],
+    String? welcomeMessage,
     super.key,
   }) {
     if (provider != null && controller != null) {
@@ -76,6 +77,7 @@ class LlmChatView extends StatefulWidget {
       controller: controller ?? LlmChatViewController(provider: provider!),
       responseBuilder: responseBuilder,
       style: style,
+      welcomeMessage: welcomeMessage,
     );
   }
 
@@ -142,7 +144,7 @@ class _LlmChatViewState extends State<LlmChatView>
                     if (widget.suggestions.isNotEmpty &&
                         widget.viewModel.controller.history.isEmpty)
                       Align(
-                        alignment: Alignment.bottomCenter,
+                        alignment: Alignment.topCenter,
                         child: ChatSuggestionsView(
                           suggestions: widget.suggestions,
                           onSelectSuggestion: _onSelectSuggestion,

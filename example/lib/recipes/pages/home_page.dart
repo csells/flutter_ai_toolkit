@@ -73,15 +73,13 @@ a single response, but only if asked. Generate each response in JSON format.
 ''',
       ),
     ),
-    history: [
-      ChatMessage.llmWelcome(
-        'Hello and welcome to the Recipes sample app! In this app, you can '
-        'generate recipes based on the ingredients and instructions provided '
-        'as well as your food preferences. It demonstrates several real-world '
-        'use cases for the Flutter AI Toolkit. Enjoy!',
-      )
-    ],
   );
+
+  final _welcomeMessage =
+      'Hello and welcome to the Recipes sample app!\n\nIn this app, you can '
+      'generate recipes based on the ingredients and instructions provided '
+      'as well as your food preferences.\n\nIt also demonstrates several '
+      'real-world use cases for the Flutter AI Toolkit.\n\nEnjoy!';
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -114,6 +112,7 @@ a single response, but only if asked. Generate each response in JSON format.
             ),
             LlmChatView(
               provider: _provider,
+              welcomeMessage: _welcomeMessage,
               responseBuilder: (context, response) => RecipeResponseView(
                 response,
               ),

@@ -98,6 +98,16 @@ class _ChatPageState extends State<ChatPage>
             ),
             LlmChatView(
               controller: _chatController,
+              welcomeMessage: 'Welcome to the Custom Styles Example! Use the '
+                  'butons on the action bar at the top right of the app to '
+                  'explore light and dark styles in combination with normal '
+                  'and Halloween-themed styles. Enjoy!',
+              suggestions: [
+                'I\'m a Star Wars fan. What should I wear for Halloween?',
+                'I\'m allergic to peanuts. What candy should I avoid at '
+                    'Halloween?',
+                'What\'s the difference between a pumpkin and a squash?',
+              ],
               style: style,
             ),
           ],
@@ -134,6 +144,13 @@ class _ChatPageState extends State<ChatPage>
     return LlmChatViewStyle(
       backgroundColor: Colors.transparent,
       progressIndicatorColor: Colors.purple,
+      suggestionStyle: SuggestionStyle(
+        textStyle: halloweenTextStyle.copyWith(color: Colors.black),
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          border: Border.all(color: Colors.orange),
+        ),
+      ),
       chatInputStyle: ChatInputStyle(
         backgroundColor: _animationController.isAnimating
             ? Colors.transparent

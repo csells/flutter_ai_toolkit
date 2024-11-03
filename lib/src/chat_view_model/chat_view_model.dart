@@ -26,7 +26,8 @@ class ChatViewModel {
   const ChatViewModel({
     required this.controller,
     required this.style,
-    this.responseBuilder,
+    required this.welcomeMessage,
+    required this.responseBuilder,
   });
 
   /// The controller that manages the chat state and interactions.
@@ -40,6 +41,9 @@ class ChatViewModel {
   /// Defines visual properties like colors, decorations, and layout parameters
   /// for the chat interface. If null, default styling will be applied.
   final LlmChatViewStyle? style;
+
+  /// The welcome message to display in the chat interface.
+  final String? welcomeMessage;
 
   /// The builder for the chat response.
   final ResponseBuilder? responseBuilder;
