@@ -16,11 +16,13 @@ class RecipeResponseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final children = <Widget>[];
-
     String? finalText;
 
+    // created with the response from the LLM as the response streams in, so
+    // many not be a complete response yet
     try {
       final map = jsonDecode(response);
+      debugPrint('map: $map');
       final recipesWithText = map['recipes'] as List<dynamic>;
       finalText = map['text'] as String?;
 

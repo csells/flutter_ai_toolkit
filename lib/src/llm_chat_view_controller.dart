@@ -33,8 +33,14 @@ class LlmChatViewController extends ChangeNotifier {
   })  : _provider = provider,
         _messageSender = messageSender;
 
-  final LlmProvider _provider;
+  LlmProvider _provider;
   final LlmStreamGenerator? _messageSender;
+
+  LlmProvider get provider => _provider;
+  set provider(LlmProvider provider) {
+    _provider = provider;
+    notifyListeners();
+  }
 
   /// Generates a stream of text from the LLM based on a prompt and attachments.
   ///

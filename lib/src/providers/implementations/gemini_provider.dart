@@ -114,6 +114,7 @@ class GeminiProvider extends LlmProvider {
     );
 
     await for (final chunk in chunks) {
+      debugPrint('gemini chunk: $chunk');
       llmMessage.append(chunk);
       yield chunk;
     }
