@@ -43,12 +43,10 @@ class _ChatPageState extends State<ChatPage>
     upperBound: 1.0,
   );
 
-  final _chatController = LlmChatViewController(
-    provider: GeminiProvider(
-      generativeModel: GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: geminiApiKey,
-      ),
+  final _provider = GeminiProvider(
+    generativeModel: GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: geminiApiKey,
     ),
   );
 
@@ -59,7 +57,7 @@ class _ChatPageState extends State<ChatPage>
   }
 
   void _reset() {
-    _chatController.clearHistory();
+    _provider.history = [];
     _animationController.value = 1.0;
     _animationController.reverse();
   }
@@ -67,7 +65,6 @@ class _ChatPageState extends State<ChatPage>
   @override
   void dispose() {
     _animationController.dispose();
-    _chatController.dispose();
     super.dispose();
   }
 
@@ -97,7 +94,7 @@ class _ChatPageState extends State<ChatPage>
               ),
             ),
             LlmChatView(
-              controller: _chatController,
+              provider: _provider,
               welcomeMessage: 'Welcome to the Custom Styles Example! Use the '
                   'butons on the action bar at the top right of the app to '
                   'explore light and dark styles in combination with normal '

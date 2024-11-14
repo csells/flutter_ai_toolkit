@@ -21,11 +21,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _searchText = '';
-  late final _controller = LlmChatViewController(provider: _provider);
-  Iterable<ChatMessage>? _history;
 
-  LlmProvider get _provider => GeminiProvider(
-        history: _history,
+  late LlmProvider _provider = _createProvider();
+
+  // create a new provider with the given history and the current settings
+  LlmProvider _createProvider([List<ChatMessage>? history]) => GeminiProvider(
+        history: history,
         generativeModel: GenerativeModel(
           model: 'gemini-1.5-flash', //'gemini-1.5-pro',
           apiKey: geminiApiKey,
@@ -112,18 +113,6 @@ well as any trailing text commentary you care to provide:
       'real-world use cases for the Flutter AI Toolkit.\n\nEnjoy!';
 
   @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_onHistoryChanged);
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_onHistoryChanged);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Example: Recipes'),
@@ -151,7 +140,7 @@ well as any trailing text commentary you care to provide:
               ],
             ),
             LlmChatView(
-              controller: _controller,
+              provider: _provider,
               welcomeMessage: _welcomeMessage,
               responseBuilder: (context, response) => RecipeResponseView(
                 response,
@@ -168,6 +157,9 @@ well as any trailing text commentary you care to provide:
         pathParameters: {'recipe': RecipeRepository.newRecipeID},
       );
 
-  void _onSettingsSave() => setState(() => _controller.provider = _provider);
-  void _onHistoryChanged() => setState(() => _history = _controller.history);
+  void _onSettingsSave() => setState(() {
+        // move the history over from the old provider to the new one
+        final history = _provider.history.toList();
+        _provider = _createProvider(history);
+      });
 }

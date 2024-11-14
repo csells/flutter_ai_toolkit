@@ -6,6 +6,8 @@
 
 * implemented [#72](https://github.com/csells/flutter_ai_toolkit/issues/72): feature: move welcome message to the LlmChatView
 
+* updated recipes sample to use required properties in the JSON schema, which improved LLM responses a great deal
+
 ## 0.4.2
 
 * upgraded to waveform_recorder 1.3.0

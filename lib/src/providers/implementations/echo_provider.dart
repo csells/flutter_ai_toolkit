@@ -13,8 +13,7 @@ import '../interface/llm_provider.dart';
 /// information.
 ///
 /// This provider is primarily used for testing and debugging purposes.
-@immutable
-class EchoProvider extends LlmProvider {
+class EchoProvider extends LlmProvider with ChangeNotifier {
   /// Creates an [EchoProvider] instance with an optional chat history.
   ///
   /// The [history] parameter is an optional iterable of [ChatMessage] objects
@@ -53,6 +52,7 @@ class EchoProvider extends LlmProvider {
       llmMessage.append(chunk);
       yield chunk;
     }
+    notifyListeners();
   }
 
   Stream<String> _generateStream(
@@ -86,5 +86,6 @@ class EchoProvider extends LlmProvider {
   set history(Iterable<ChatMessage> history) {
     _history.clear();
     _history.addAll(history);
+    notifyListeners();
   }
 }

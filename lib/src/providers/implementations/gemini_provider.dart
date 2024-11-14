@@ -13,7 +13,7 @@ import '../interface/llm_provider.dart';
 ///
 /// This class extends [LlmProvider] and implements the necessary methods to
 /// generate text using the Gemini AI model.
-class GeminiProvider extends LlmProvider {
+class GeminiProvider extends LlmProvider with ChangeNotifier {
   /// Creates a new instance of [GeminiProvider].
   ///
   /// [generativeModel] is an optional [GenerativeModel] instance for text
@@ -44,22 +44,15 @@ class GeminiProvider extends LlmProvider {
         _history = history?.toList() ?? [],
         _safetySettings = safetySettings,
         _generationConfig = generationConfig {
-    _chat = _startChat(history?.map(_contentFrom).toList());
+    _chat = _startChat(history);
   }
 
   final GenerativeModel? _generativeModel;
   final GenerativeModel? _embeddingModel;
   final List<SafetySetting>? _safetySettings;
   final GenerationConfig? _generationConfig;
-  List<ChatMessage>? _history;
+  final List<ChatMessage> _history;
   ChatSession? _chat;
-
-  ChatSession? _startChat(List<Content>? history) =>
-      _generativeModel?.startChat(
-        history: history,
-        safetySettings: _safetySettings,
-        generationConfig: _generationConfig,
-      );
 
   @override
   Future<List<double>> getDocumentEmbedding(String document) =>
@@ -105,7 +98,7 @@ class GeminiProvider extends LlmProvider {
     _checkModel('generativeModel', _generativeModel);
     final userMessage = ChatMessage.user(prompt, attachments);
     final llmMessage = ChatMessage.llm();
-    _history!.addAll([userMessage, llmMessage]);
+    _history.addAll([userMessage, llmMessage]);
 
     final chunks = _generateStream(
       prompt: prompt,
@@ -114,10 +107,12 @@ class GeminiProvider extends LlmProvider {
     );
 
     await for (final chunk in chunks) {
-      debugPrint('gemini chunk: $chunk');
       llmMessage.append(chunk);
       yield chunk;
     }
+
+    // notify listeners that the history has changed when response is complete
+    notifyListeners();
   }
 
   Stream<String> _generateStream({
@@ -139,13 +134,22 @@ class GeminiProvider extends LlmProvider {
   }
 
   @override
-  Iterable<ChatMessage> get history => _history ?? [];
+  Iterable<ChatMessage> get history => _history;
 
   @override
   set history(Iterable<ChatMessage> history) {
-    _history = history.toList();
-    _chat = _startChat(history.map(_contentFrom).toList());
+    _history.clear();
+    _history.addAll(history);
+    _chat = _startChat(history);
+    notifyListeners();
   }
+
+  ChatSession? _startChat(Iterable<ChatMessage>? history) =>
+      _generativeModel?.startChat(
+        history: history?.map(_contentFrom).toList(),
+        safetySettings: _safetySettings,
+        generationConfig: _generationConfig,
+      );
 
   static Part _partFrom(Attachment attachment) => switch (attachment) {
         (final FileAttachment a) => DataPart(a.mimeType, a.bytes),

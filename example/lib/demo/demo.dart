@@ -94,12 +94,10 @@ class _ChatPageState extends State<ChatPage>
     upperBound: 1.0,
   );
 
-  late final _chatController = LlmChatViewController(
-    provider: GeminiProvider(
-      generativeModel: GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: widget.geminiApiKey,
-      ),
+  late final _provider = GeminiProvider(
+    generativeModel: GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: widget.geminiApiKey,
     ),
   );
 
@@ -119,7 +117,6 @@ class _ChatPageState extends State<ChatPage>
   @override
   void dispose() {
     _animationController.dispose();
-    _chatController.dispose();
     super.dispose();
   }
 
@@ -174,7 +171,7 @@ class _ChatPageState extends State<ChatPage>
                   ),
                 ),
                 LlmChatView(
-                  controller: _chatController,
+                  provider: _provider,
                   style: style,
                   welcomeMessage:
                       'Hello and welcome to the Flutter AI Toolkit!',
@@ -192,7 +189,7 @@ class _ChatPageState extends State<ChatPage>
       );
 
   void _clearHistory() {
-    _chatController.clearHistory();
+    _provider.history = [];
     _resetAnimation();
   }
 

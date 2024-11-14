@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
+
 import 'attachments.dart';
 import 'chat_message.dart';
 
@@ -10,7 +12,7 @@ import 'chat_message.dart';
 /// This class defines the interface for interacting with different LLM
 /// services. Implementations of this class should provide the logic for
 /// generating text responses based on input prompts and optional attachments.
-abstract class LlmProvider {
+abstract class LlmProvider implements Listenable {
   /// Generates an embedding for a given document.
   ///
   /// This method should be implemented to create a numerical representation

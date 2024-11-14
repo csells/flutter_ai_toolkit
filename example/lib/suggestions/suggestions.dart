@@ -39,12 +39,10 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _controller = LlmChatViewController(
-    provider: GeminiProvider(
-      generativeModel: GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: geminiApiKey,
-      ),
+  final _provider = GeminiProvider(
+    generativeModel: GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: geminiApiKey,
     ),
   );
 
@@ -67,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
           ],
         ),
         body: LlmChatView(
-          controller: _controller,
+          provider: _provider,
           style: App.themeMode.value == ThemeMode.dark
               ? LlmChatViewStyle.darkStyle()
               : LlmChatViewStyle.lightStyle(),
@@ -79,5 +77,5 @@ class _ChatPageState extends State<ChatPage> {
         ),
       );
 
-  void _clearHistory() => _controller.clearHistory();
+  void _clearHistory() => _provider.history = [];
 }

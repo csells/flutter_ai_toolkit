@@ -36,25 +36,23 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _controller = LlmChatViewController(
-    provider: GeminiProvider(
-      generativeModel: GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: geminiApiKey,
-      ),
+  late final _provider = GeminiProvider(
+    generativeModel: GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: geminiApiKey,
     ),
   );
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_saveHistory);
+    _provider.addListener(_saveHistory);
     _loadHistory();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_saveHistory);
+    _provider.removeListener(_saveHistory);
     super.dispose();
   }
 
@@ -70,7 +68,7 @@ class _ChatPageState extends State<ChatPage> {
           ],
         ),
         body: LlmChatView(
-          controller: _controller,
+          provider: _provider,
           welcomeMessage: _welcomeMessage,
         ),
       );
@@ -114,16 +112,16 @@ class _ChatPageState extends State<ChatPage> {
 
       debugPrint('Loading: ${file.path}');
       final map = jsonDecode(await file.readAsString());
-      history.add(LlmChatViewController.messageFrom(map));
+      history.add(ChatMessage.fromJson(map));
     }
 
     // set the history on the controller
-    _controller.history = history;
+    _provider.history = history;
   }
 
   Future<void> _saveHistory() async {
     // get the latest history
-    final history = _controller.history.toList();
+    final history = _provider.history.toList();
 
     // write the new messages
     for (var i = 0; i != history.length; ++i) {
@@ -133,7 +131,7 @@ class _ChatPageState extends State<ChatPage> {
 
       // write the new message to disk
       debugPrint('Saving: ${file.path}');
-      final map = LlmChatViewController.mapFrom(history[i]);
+      final map = history[i].toJson();
       final json = JsonEncoder.withIndent('  ').convert(map);
       await file.writeAsString(json);
     }
@@ -167,6 +165,6 @@ class _ChatPageState extends State<ChatPage> {
       await file.delete();
     }
 
-    _controller.clearHistory();
+    _provider.history = [];
   }
 }

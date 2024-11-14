@@ -12,7 +12,6 @@ import '../../chat_view_model/chat_view_model_provider.dart';
 import '../../dialogs/adaptive_dialog.dart';
 import '../../dialogs/adaptive_dialog_action.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
-import '../../llm_chat_view_controller.dart';
 import '../../llm_exception.dart';
 import '../../platform_helper/platform_helper.dart' as ph;
 import '../../providers/interface/attachments.dart';
@@ -29,9 +28,8 @@ import 'llm_response.dart';
 /// (Language Model).
 ///
 /// This widget provides a complete chat interface, including a message history
-/// view and an input area for sending new messages. It can be configured with
-/// either an [LlmProvider] or an [LlmChatViewController] to manage the chat
-/// interactions.
+/// view and an input area for sending new messages. It is configured with an
+/// [LlmProvider] to manage the chat interactions.
 ///
 /// Example usage:
 /// ```dart
@@ -47,39 +45,25 @@ import 'llm_response.dart';
 class LlmChatView extends StatefulWidget {
   /// Creates an [LlmChatView] widget.
   ///
-  /// You must provide either a [provider] or a [controller], but not both. If
-  /// [provider] is provided, a new [LlmChatViewController] will be created
-  /// internally.
+  /// You must provide a [provider].
   ///
   /// The [style] parameter can be used to customize the appearance of the chat
   /// view. The [responseBuilder] allows custom rendering of chat responses.
-  ///
-  /// Throws an [ArgumentError] if both [provider] and [controller] are
-  /// provided, or if neither is provided.
   LlmChatView({
-    LlmProvider? provider,
-    LlmChatViewController? controller,
+    required LlmProvider provider,
     LlmChatViewStyle? style,
     ResponseBuilder? responseBuilder,
+    LlmStreamGenerator? messageSender,
     this.suggestions = const [],
     String? welcomeMessage,
     super.key,
-  }) {
-    if (provider != null && controller != null) {
-      throw ArgumentError('Cannot provide both provider and controller');
-    }
-
-    if (provider == null && controller == null) {
-      throw ArgumentError('Must provide either provider or controller');
-    }
-
-    viewModel = ChatViewModel(
-      controller: controller ?? LlmChatViewController(provider: provider!),
-      responseBuilder: responseBuilder,
-      style: style,
-      welcomeMessage: welcomeMessage,
-    );
-  }
+  }) : viewModel = ChatViewModel(
+          provider: provider,
+          responseBuilder: responseBuilder,
+          messageSender: messageSender,
+          style: style,
+          welcomeMessage: welcomeMessage,
+        );
 
   /// The list of suggestions to display in the chat interface.
   ///
@@ -111,13 +95,13 @@ class _LlmChatViewState extends State<LlmChatView>
   @override
   void initState() {
     super.initState();
-    widget.viewModel.controller.addListener(_onHistoryChanged);
+    widget.viewModel.provider.addListener(_onHistoryChanged);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.viewModel.controller.removeListener(_onHistoryChanged);
+    widget.viewModel.provider.removeListener(_onHistoryChanged);
   }
 
   @override
@@ -126,7 +110,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
     final chatStyle = LlmChatViewStyle.resolve(widget.viewModel.style);
     return ListenableBuilder(
-      listenable: widget.viewModel.controller,
+      listenable: widget.viewModel.provider,
       builder: (context, child) => ChatViewModelProvider(
         viewModel: widget.viewModel,
         child: Container(
@@ -142,7 +126,7 @@ class _LlmChatViewState extends State<LlmChatView>
                           : null,
                     ),
                     if (widget.suggestions.isNotEmpty &&
-                        widget.viewModel.controller.history.isEmpty)
+                        widget.viewModel.provider.history.isEmpty)
                       Align(
                         alignment: Alignment.topCenter,
                         child: ChatSuggestionsView(
@@ -174,8 +158,9 @@ class _LlmChatViewState extends State<LlmChatView>
   ) async {
     _initialMessage = null;
 
+    // TODO: check the viewmodel for a message sender and use that instead
     _pendingPromptResponse = LlmResponse(
-      stream: widget.viewModel.controller.sendMessageStream(
+      stream: widget.viewModel.provider.sendMessageStream(
         prompt,
         attachments: attachments,
       ),
@@ -199,7 +184,7 @@ class _LlmChatViewState extends State<LlmChatView>
     assert(_pendingPromptResponse == null);
 
     // remove the last llm message
-    final history = widget.viewModel.controller.history.toList();
+    final history = widget.viewModel.provider.history.toList();
     assert(history.last.origin.isLlm);
     history.removeLast();
 
@@ -208,7 +193,7 @@ class _LlmChatViewState extends State<LlmChatView>
     final userMessage = history.removeLast();
 
     // set the history to the new history
-    widget.viewModel.controller.history = history;
+    widget.viewModel.provider.history = history;
 
     //set the text of the controller to the last userMessage to provide initial
     //prompt and attachments for the user to edit
@@ -228,7 +213,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
     var response = '';
     _pendingSttResponse = LlmResponse(
-      stream: widget.viewModel.controller.generateStream(
+      stream: widget.viewModel.provider.generateStream(
         prompt,
         attachments: attachments,
       ),
@@ -271,7 +256,7 @@ class _LlmChatViewState extends State<LlmChatView>
         // before any text response happened; the progress indicator uses a null
         // text message to keep progressing. plus we don't want to just show an
         // empty LLM message.
-        final llmMessage = widget.viewModel.controller.history.last;
+        final llmMessage = widget.viewModel.provider.history.last;
         if (llmMessage.text == null) llmMessage.append('ERROR');
 
         await AdaptiveAlertDialog.show(
@@ -292,7 +277,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
   void _onHistoryChanged() {
     // if the history is cleared, clear the initial message
-    if (widget.viewModel.controller.history.isEmpty) {
+    if (widget.viewModel.provider.history.isEmpty) {
       setState(() => _initialMessage = null);
     }
   }

@@ -4,37 +4,39 @@
 
 import 'package:flutter/foundation.dart';
 
-import '../llm_chat_view_controller.dart';
+import '../providers/interface/llm_provider.dart';
 import '../styles/llm_chat_view_style.dart';
 import '../views/response_builder.dart';
 
-/// A view model class that manages the state and configuration of a chat
-/// interface.
-///
-/// This class holds the controller and styling information needed to render and
-/// manage a chat view. It works in conjunction with [LlmChatViewController] to
-/// handle the business logic and state management of the chat interface.
 @immutable
+
+/// A view model class for managing chat interactions and configurations.
+///
+/// This class encapsulates the core data and functionality needed for the chat
+/// interface, including the LLM provider, style configuration, welcome message,
+/// response builder, and message sender.
 class ChatViewModel {
-  /// Creates a [ChatViewModel] with the required controller and style.
+  /// Creates a new [ChatViewModel] instance.
   ///
-  /// The [controller] parameter must not be null and manages the chat state and
-  /// interactions.
-  ///
-  /// The [style] parameter allows customizing the visual appearance of the chat
-  /// interface. If null, default styling will be used.
+  /// [provider] is the required [LlmProvider] for handling LLM interactions.
+  /// [style] is the optional [LlmChatViewStyle] for customizing the chat view's
+  /// appearance. [welcomeMessage] is an optional message displayed when the
+  /// chat interface is first opened. [responseBuilder] is an optional builder
+  /// for customizing chat responses. [messageSender] is an optional
+  /// [LlmStreamGenerator] for sending messages.
   const ChatViewModel({
-    required this.controller,
+    required this.provider,
     required this.style,
     required this.welcomeMessage,
     required this.responseBuilder,
+    required this.messageSender,
   });
 
-  /// The controller that manages the chat state and interactions.
+  /// The LLM provider for the chat interface.
   ///
-  /// This controller handles operations like sending messages, managing the
-  /// chat history, and processing responses from the LLM provider.
-  final LlmChatViewController controller;
+  /// This provider is responsible for managing interactions with the language
+  /// model, including sending and receiving messages.
+  final LlmProvider provider;
 
   /// The style configuration for the chat view.
   ///
@@ -43,21 +45,40 @@ class ChatViewModel {
   final LlmChatViewStyle? style;
 
   /// The welcome message to display in the chat interface.
+  ///
+  /// This message is shown to users when they first open the chat interface,
+  /// providing a friendly introduction or prompt.
   final String? welcomeMessage;
 
   /// The builder for the chat response.
+  ///
+  /// This builder allows for customization of how chat responses are rendered
+  /// in the interface, enabling tailored presentation of messages.
   final ResponseBuilder? responseBuilder;
 
+  /// The message sender for the chat interface.
+  ///
+  /// This optional generator is used to send messages to the LLM, allowing for
+  /// asynchronous communication and response handling.
+  final LlmStreamGenerator? messageSender;
+
+  // TODO: figure out who calls this (if anyone)
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChatViewModel &&
-          other.controller == controller &&
-          other.style == style);
+          other.provider == provider &&
+          other.style == style &&
+          other.welcomeMessage == welcomeMessage &&
+          other.responseBuilder == responseBuilder &&
+          other.messageSender == messageSender);
 
   @override
   int get hashCode => Object.hash(
-        controller,
+        provider,
         style,
+        welcomeMessage,
+        responseBuilder,
+        messageSender,
       );
 }
