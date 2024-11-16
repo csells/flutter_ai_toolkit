@@ -56,6 +56,9 @@ class _ChatPageState extends State<ChatPage> {
                   App.themeMode.value == ThemeMode.light
                       ? ThemeMode.dark
                       : ThemeMode.light,
+              tooltip: App.themeMode.value == ThemeMode.light
+                  ? 'Dark Mode'
+                  : 'Light Mode',
               icon: const Icon(Icons.brightness_4_outlined),
             ),
           ],

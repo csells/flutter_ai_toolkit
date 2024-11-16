@@ -121,43 +121,44 @@ class _ChatPageState extends State<ChatPage>
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text(App.title),
-          actions: [
-            IconButton(
-              onPressed: widget.onResetApiKey,
-              tooltip: 'Reset API Key',
-              icon: const Icon(Icons.key),
-            ),
-            IconButton(
-              onPressed: _clearHistory,
-              tooltip: 'Clear History',
-              icon: const Icon(Icons.history),
-            ),
-            IconButton(
-              onPressed: () => App.themeMode.value =
-                  App.themeMode.value == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-              tooltip: App.themeMode.value == ThemeMode.light
-                  ? 'Dark Mode'
-                  : 'Light Mode',
-              icon: const Icon(Icons.brightness_4_outlined),
-            ),
-            IconButton(
-              onPressed: () {
-                _halloweenMode.value = !_halloweenMode.value;
-                if (_halloweenMode.value) _resetAnimation();
-              },
-              tooltip: _halloweenMode.value ? 'Normal Mode' : 'Halloween Mode',
-              icon: Text('🎃'),
-            ),
-          ],
-        ),
-        body: ValueListenableBuilder<bool>(
-          valueListenable: _halloweenMode,
-          builder: (context, halloween, child) => AnimatedBuilder(
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: _halloweenMode,
+        builder: (context, halloween, child) => Scaffold(
+          appBar: AppBar(
+            title: const Text(App.title),
+            actions: [
+              IconButton(
+                onPressed: widget.onResetApiKey,
+                tooltip: 'Reset API Key',
+                icon: const Icon(Icons.key),
+              ),
+              IconButton(
+                onPressed: _clearHistory,
+                tooltip: 'Clear History',
+                icon: const Icon(Icons.history),
+              ),
+              IconButton(
+                onPressed: () => App.themeMode.value =
+                    App.themeMode.value == ThemeMode.light
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                tooltip: App.themeMode.value == ThemeMode.light
+                    ? 'Dark Mode'
+                    : 'Light Mode',
+                icon: const Icon(Icons.brightness_4_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  _halloweenMode.value = !_halloweenMode.value;
+                  if (_halloweenMode.value) _resetAnimation();
+                },
+                tooltip:
+                    _halloweenMode.value ? 'Normal Mode' : 'Halloween Mode',
+                icon: Text('🎃'),
+              ),
+            ],
+          ),
+          body: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) => Stack(
               children: [
@@ -200,6 +201,7 @@ class _ChatPageState extends State<ChatPage>
           : LlmChatViewStyle.lightStyle();
     }
 
+    // Halloween mode
     final TextStyle halloweenTextStyle = GoogleFonts.hennyPenny(
       color: Colors.white,
       fontSize: 24,

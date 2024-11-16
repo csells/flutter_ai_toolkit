@@ -12,22 +12,14 @@ void main() => runApp(const App());
 
 class App extends StatelessWidget {
   static const title = 'Example: Suggestions';
-  static final themeMode = ValueNotifier(ThemeMode.light);
 
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeMode,
-        builder: (BuildContext context, ThemeMode mode, Widget? child) =>
-            MaterialApp(
-          title: title,
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          themeMode: mode,
-          home: ChatPage(),
-          debugShowCheckedModeBanner: false,
-        ),
+  Widget build(BuildContext context) => MaterialApp(
+        title: title,
+        home: ChatPage(),
+        debugShowCheckedModeBanner: false,
       );
 }
 
@@ -55,20 +47,10 @@ class _ChatPageState extends State<ChatPage> {
               onPressed: _clearHistory,
               icon: const Icon(Icons.history),
             ),
-            IconButton(
-              onPressed: () => App.themeMode.value =
-                  App.themeMode.value == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-              icon: const Icon(Icons.brightness_4_outlined),
-            ),
           ],
         ),
         body: LlmChatView(
           provider: _provider,
-          style: App.themeMode.value == ThemeMode.dark
-              ? LlmChatViewStyle.darkStyle()
-              : LlmChatViewStyle.lightStyle(),
           suggestions: const [
             'Tell me a joke.',
             'Write me a limerick.',

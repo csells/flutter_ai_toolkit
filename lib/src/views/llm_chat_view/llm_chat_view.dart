@@ -158,14 +158,14 @@ class _LlmChatViewState extends State<LlmChatView>
   ) async {
     _initialMessage = null;
 
-    // TODO: check the viewmodel for a message sender and use that instead
+    // check the viewmodel for a user-provided message sender to use instead
+    final sendMessageStream = widget.viewModel.messageSender ??
+        widget.viewModel.provider.sendMessageStream;
+
     _pendingPromptResponse = LlmResponse(
-      stream: widget.viewModel.provider.sendMessageStream(
-        prompt,
-        attachments: attachments,
-      ),
-      // update during the streaming response input; the controller will notify
-      // listeners only when the response is complete
+      stream: sendMessageStream(prompt, attachments: attachments),
+      // update during the streaming response input so that the end-user can see
+      // the response as it streams in
       onUpdate: (_) => setState(() {}),
       onDone: _onPromptDone,
     );
@@ -195,8 +195,8 @@ class _LlmChatViewState extends State<LlmChatView>
     // set the history to the new history
     widget.viewModel.provider.history = history;
 
-    //set the text of the controller to the last userMessage to provide initial
-    //prompt and attachments for the user to edit
+    // set the text  to the last userMessage to provide initial prompt and
+    // attachments for the user to edit
     setState(() => _initialMessage = userMessage);
   }
 
@@ -247,18 +247,20 @@ class _LlmChatViewState extends State<LlmChatView>
   Future<void> _showLlmException(LlmException? error) async {
     if (error == null) return;
 
+    // stop from the progress from indicating in case there was a failure
+    // before any text response happened; the progress indicator uses a null
+    // text message to keep progressing. plus we don't want to just show an
+    // empty LLM message.
+    final llmMessage = widget.viewModel.provider.history.last;
+    if (llmMessage.text == null) {
+      llmMessage.append(error is LlmCancelException ? 'CANCEL' : 'ERROR');
+    }
+
     switch (error) {
       case LlmCancelException():
         AdaptiveSnackBar.show(context, 'LLM operation canceled by user');
       case LlmFailureException():
       case LlmException():
-        // stop from the progress from indicating in case there was a failure
-        // before any text response happened; the progress indicator uses a null
-        // text message to keep progressing. plus we don't want to just show an
-        // empty LLM message.
-        final llmMessage = widget.viewModel.provider.history.last;
-        if (llmMessage.text == null) llmMessage.append('ERROR');
-
         await AdaptiveAlertDialog.show(
           context: context,
           content: Text(error.toString()),

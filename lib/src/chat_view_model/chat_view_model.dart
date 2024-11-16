@@ -62,7 +62,8 @@ class ChatViewModel {
   /// asynchronous communication and response handling.
   final LlmStreamGenerator? messageSender;
 
-  // TODO: figure out who calls this (if anyone)
+  // The following is needed to support the
+  // ChatViewModelProvider.updateShouldNotify implementation
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -73,6 +74,7 @@ class ChatViewModel {
           other.responseBuilder == responseBuilder &&
           other.messageSender == messageSender);
 
+  // the following is best practices when overriding operator ==
   @override
   int get hashCode => Object.hash(
         provider,

@@ -53,10 +53,10 @@ class _ChatPageState extends State<ChatPage>
   @override
   void initState() {
     super.initState();
-    _reset();
+    _clearHistory();
   }
 
-  void _reset() {
+  void _clearHistory() {
     _provider.history = [];
     _animationController.value = 1.0;
     _animationController.reverse();
@@ -75,8 +75,9 @@ class _ChatPageState extends State<ChatPage>
         title: const Text(App.title),
         actions: [
           IconButton(
-            onPressed: _reset,
-            icon: const Icon(Icons.edit_note),
+            onPressed: _clearHistory,
+            tooltip: 'Clear History',
+            icon: const Icon(Icons.history),
           ),
         ],
       ),

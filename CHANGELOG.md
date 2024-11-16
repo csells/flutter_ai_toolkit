@@ -1,4 +1,4 @@
-## 0.x.x
+## 0.5.0
 
 * fixed [#67](https://github.com/csells/flutter_ai_toolkit/issues/67): bug: audio recording translation repopulated after history cleared
 
@@ -7,6 +7,11 @@
 * implemented [#72](https://github.com/csells/flutter_ai_toolkit/issues/72): feature: move welcome message to the LlmChatView
 
 * updated recipes sample to use required properties in the JSON schema, which improved LLM responses a great deal
+
+* implemented [#74](https://github.com/csells/flutter_ai_toolkit/issues/74): remove controllers as an unnecessary abstraction
+
+* fixed an issue where canceling an operation w/ no response yet will continue showing the progress indicator.
+
 
 ## 0.4.2
 

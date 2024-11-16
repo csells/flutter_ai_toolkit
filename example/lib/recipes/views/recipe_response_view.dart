@@ -22,7 +22,6 @@ class RecipeResponseView extends StatelessWidget {
     // many not be a complete response yet
     try {
       final map = jsonDecode(response);
-      debugPrint('map: $map');
       final recipesWithText = map['recipes'] as List<dynamic>;
       finalText = map['text'] as String?;
 
