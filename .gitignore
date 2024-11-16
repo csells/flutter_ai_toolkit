@@ -35,3 +35,5 @@ example/android/app/google-services.json
 example/ios/Runner/GoogleService-Info.plist
 example/macos/Runner/GoogleService-Info.plist
 example/lib/echo.dart
+.flutter-plugins
+.flutter-plugins-dependencies
