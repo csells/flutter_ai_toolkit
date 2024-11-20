@@ -25,37 +25,7 @@ class EchoProvider extends LlmProvider with ChangeNotifier {
   final List<ChatMessage> _history;
 
   @override
-  Future<List<double>> getDocumentEmbedding(String document) =>
-      throw UnimplementedError('EchoProvider.getDocumentEmbedding');
-
-  @override
-  Future<List<double>> getQueryEmbedding(String query) =>
-      throw UnimplementedError('EchoProvider.getQueryEmbedding');
-
-  @override
   Stream<String> generateStream(
-    String prompt, {
-    Iterable<Attachment> attachments = const [],
-  }) =>
-      _generateStream(prompt, attachments: attachments);
-
-  @override
-  Stream<String> sendMessageStream(
-    String prompt, {
-    Iterable<Attachment> attachments = const [],
-  }) async* {
-    final userMessage = ChatMessage.user(prompt, attachments);
-    final llmMessage = ChatMessage.llm();
-    _history.addAll([userMessage, llmMessage]);
-    final chunks = _generateStream(prompt, attachments: attachments);
-    await for (final chunk in chunks) {
-      llmMessage.append(chunk);
-      yield chunk;
-    }
-    notifyListeners();
-  }
-
-  Stream<String> _generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
@@ -75,6 +45,22 @@ class EchoProvider extends LlmProvider with ChangeNotifier {
     yield prompt;
 
     yield '\n\n# Attachments\n${attachments.map(_stringFrom)}';
+  }
+
+  @override
+  Stream<String> sendMessageStream(
+    String prompt, {
+    Iterable<Attachment> attachments = const [],
+  }) async* {
+    final userMessage = ChatMessage.user(prompt, attachments);
+    final llmMessage = ChatMessage.llm();
+    _history.addAll([userMessage, llmMessage]);
+    final chunks = generateStream(prompt, attachments: attachments);
+    await for (final chunk in chunks) {
+      llmMessage.append(chunk);
+      yield chunk;
+    }
+    notifyListeners();
   }
 
   String _stringFrom(Attachment attachment) => attachment.toString();

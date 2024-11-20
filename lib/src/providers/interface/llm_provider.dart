@@ -13,30 +13,6 @@ import 'chat_message.dart';
 /// services. Implementations of this class should provide the logic for
 /// generating text responses based on input prompts and optional attachments.
 abstract class LlmProvider implements Listenable {
-  /// Generates an embedding for a given document.
-  ///
-  /// This method should be implemented to create a numerical representation
-  /// (embedding) of the input document, which can be used for tasks like
-  /// semantic search or document comparison.
-  ///
-  /// [document] is the text content of the document to be embedded.
-  ///
-  /// Returns a [Future] that resolves to a [List<double>] representing the
-  /// document's embedding.
-  Future<List<double>> getDocumentEmbedding(String document);
-
-  /// Generates an embedding for a given query.
-  ///
-  /// This method should be implemented to create a numerical representation
-  /// (embedding) of the input query, which can be used for tasks like
-  /// semantic search or query-document matching.
-  ///
-  /// [query] is the text content of the query to be embedded.
-  ///
-  /// Returns a [Future] that resolves to a [List<double>] representing the
-  /// query's embedding.
-  Future<List<double>> getQueryEmbedding(String query);
-
   /// Generates a stream of text based on the given prompt and attachments.
   /// This method does not interact with a chat or build on any chat history.
   ///

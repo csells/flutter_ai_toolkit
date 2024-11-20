@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   // create a new provider with the given history and the current settings
   LlmProvider _createProvider([List<ChatMessage>? history]) => GeminiProvider(
         history: history,
-        generativeModel: GenerativeModel(
+        model: GenerativeModel(
           model: 'gemini-1.5-flash', //'gemini-1.5-pro',
           apiKey: geminiApiKey,
           generationConfig: GenerationConfig(

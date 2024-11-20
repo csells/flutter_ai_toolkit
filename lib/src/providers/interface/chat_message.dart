@@ -25,11 +25,9 @@ class ChatMessage {
   /// files or media attached to the message.
   ChatMessage({
     required this.origin,
-    required String? text,
+    required this.text,
     required this.attachments,
-  })  : _text = text,
-        assert(
-            origin.isUser && text != null && text.isNotEmpty || origin.isLlm);
+  }) : assert(origin.isUser && text != null && text.isNotEmpty || origin.isLlm);
 
   /// Converts a JSON map representation to a [ChatMessage].
   ///
@@ -82,7 +80,8 @@ class ChatMessage {
         attachments: attachments,
       );
 
-  String? _text;
+  /// Text content of the message.
+  String? text;
 
   /// The origin of the message (user or LLM).
   final MessageOrigin origin;
@@ -90,13 +89,10 @@ class ChatMessage {
   /// Any attachments associated with the message.
   final Iterable<Attachment> attachments;
 
-  /// Getter for the text content of the message.
-  String? get text => _text?.trim();
-
   /// Appends additional text to the existing message content.
   ///
   /// This is typically used for LLM messages that are streamed in parts.
-  void append(String text) => _text = (_text ?? '') + text;
+  void append(String text) => this.text = (this.text ?? '') + text;
 
   @override
   String toString() => 'ChatMessage('

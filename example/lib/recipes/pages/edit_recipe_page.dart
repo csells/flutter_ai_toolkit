@@ -36,7 +36,7 @@ class _EditRecipePageState extends State<EditRecipePage> {
   late final TextEditingController _instructionsController;
 
   final _provider = GeminiProvider(
-    generativeModel: GenerativeModel(
+    model: GenerativeModel(
       model: "gemini-1.5-flash",
       apiKey: geminiApiKey,
       generationConfig: GenerationConfig(

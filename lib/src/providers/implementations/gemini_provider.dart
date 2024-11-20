@@ -16,77 +16,47 @@ import '../interface/llm_provider.dart';
 class GeminiProvider extends LlmProvider with ChangeNotifier {
   /// Creates a new instance of [GeminiProvider].
   ///
-  /// [generativeModel] is an optional [GenerativeModel] instance for text
-  /// generation. If provided, it will be used for chat-based interactions and
-  /// text generation.
-  ///
-  /// [embeddingModel] is an optional [GenerativeModel] instance for creating
-  /// embeddings. If provided, it will be used for document and query embedding
-  /// operations.
+  /// [model] is an optional [GenerativeModel] instance for text generation. If
+  /// provided, it will be used for chat-based interactions and text generation.
   ///
   /// [history] is an optional list of previous chat messages to initialize the
   /// chat session with.
   ///
-  /// [safetySettings] is an optional list of safety settings to apply to the
-  /// model's responses.
+  /// [chatSafetySettings] is an optional list of safety settings to apply to
+  /// the model's responses.
   ///
   /// [generationConfig] is an optional configuration for controlling the
   /// model's generation behavior.
   @immutable
   GeminiProvider({
-    GenerativeModel? generativeModel,
-    GenerativeModel? embeddingModel,
+    GenerativeModel? model,
     Iterable<ChatMessage>? history,
-    List<SafetySetting>? safetySettings,
+    List<SafetySetting>? chatSafetySettings,
     GenerationConfig? generationConfig,
-  })  : _generativeModel = generativeModel,
-        _embeddingModel = embeddingModel,
+  })  : _model = model,
         _history = history?.toList() ?? [],
-        _safetySettings = safetySettings,
+        _chatSafetySettings = chatSafetySettings,
         _generationConfig = generationConfig {
     _chat = _startChat(history);
   }
 
-  final GenerativeModel? _generativeModel;
-  final GenerativeModel? _embeddingModel;
-  final List<SafetySetting>? _safetySettings;
+  final GenerativeModel? _model;
+  final List<SafetySetting>? _chatSafetySettings;
   final GenerationConfig? _generationConfig;
   final List<ChatMessage> _history;
   ChatSession? _chat;
-
-  @override
-  Future<List<double>> getDocumentEmbedding(String document) =>
-      _getEmbedding(document, TaskType.retrievalDocument);
-
-  @override
-  Future<List<double>> getQueryEmbedding(String query) =>
-      _getEmbedding(query, TaskType.retrievalQuery);
-
-  Future<List<double>> _getEmbedding(String s, TaskType embeddingTask) async {
-    _checkModel('embeddingModel', _embeddingModel);
-    assert(embeddingTask == TaskType.retrievalDocument ||
-        embeddingTask == TaskType.retrievalQuery);
-
-    final content = Content.text(s);
-    final result = await _embeddingModel!.embedContent(
-      content,
-      taskType: embeddingTask,
-    );
-
-    return result.embedding.values;
-  }
 
   @override
   Stream<String> generateStream(
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) {
-    _checkModel('generativeModel', _generativeModel);
+    if (_model == null) throw Exception('model is not initialized');
+
     return _generateStream(
       prompt: prompt,
       attachments: attachments,
-      contentStreamGenerator: (c) =>
-          _generativeModel!.generateContentStream([c]),
+      contentStreamGenerator: (c) => _model.generateContentStream([c]),
     );
   }
 
@@ -95,7 +65,8 @@ class GeminiProvider extends LlmProvider with ChangeNotifier {
     String prompt, {
     Iterable<Attachment> attachments = const [],
   }) async* {
-    _checkModel('generativeModel', _generativeModel);
+    if (_model == null) throw Exception('model is not initialized');
+
     final userMessage = ChatMessage.user(prompt, attachments);
     final llmMessage = ChatMessage.llm();
     _history.addAll([userMessage, llmMessage]);
@@ -144,10 +115,9 @@ class GeminiProvider extends LlmProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  ChatSession? _startChat(Iterable<ChatMessage>? history) =>
-      _generativeModel?.startChat(
+  ChatSession? _startChat(Iterable<ChatMessage>? history) => _model?.startChat(
         history: history?.map(_contentFrom).toList(),
-        safetySettings: _safetySettings,
+        safetySettings: _chatSafetySettings,
         generationConfig: _generationConfig,
       );
 
@@ -163,8 +133,4 @@ class GeminiProvider extends LlmProvider with ChangeNotifier {
           ...message.attachments.map(_partFrom),
         ],
       );
-
-  void _checkModel(String name, GenerativeModel? model) {
-    if (model == null) throw Exception('$name is not initialized');
-  }
 }

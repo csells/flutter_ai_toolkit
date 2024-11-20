@@ -95,7 +95,7 @@ class _ChatPageState extends State<ChatPage>
   );
 
   late final _provider = GeminiProvider(
-    generativeModel: GenerativeModel(
+    model: GenerativeModel(
       model: 'gemini-1.5-flash',
       apiKey: widget.geminiApiKey,
     ),

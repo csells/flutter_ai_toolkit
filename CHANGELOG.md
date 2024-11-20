@@ -1,3 +1,7 @@
+## 0.6.0
+
+* simplifying the `LlmProvider` interface for implementors
+
 ## 0.5.0
 
 * fixed [#67](https://github.com/csells/flutter_ai_toolkit/issues/67): bug: audio recording translation repopulated after history cleared
