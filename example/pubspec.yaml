@@ -1,7 +1,7 @@
 name: flutter_ai_toolkit_example
 description: "Sample apps showing off various features of the Flutter AI Toolkit."
 publish_to: 'none'
-version: 0.6.1
+version: 0.6.2
 
 environment:
   sdk: ^3.4.4

@@ -63,15 +63,15 @@ Here we're creating an instance of the `GeminiProvider`, configuring it as appro
 
 ## Gemini LLM Usage
 To configure the `GeminiProvider` you two things:
-1. model string, which you can ready about in [the Gemini models docs](https://ai.google.dev/gemini-api/docs/models/gemini), and 
-1. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
+1. a model created using a model string, which you can ready about in [the Gemini models docs](https://ai.google.dev/gemini-api/docs/models/gemini), and 
+2. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
 
 With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini/gemini.dart">gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
 
 Note: Be careful not to check your API key into a git repo or share it with anyone.
 
 ## Vertex LLM Usage
-While Gemini AI is useful for quick prototyping, the recommended solution for production apps is Firebase Vertext AI. And the reason for that is that there's no good way to keep your Gemini API key safe -- if you ship your Flutter app with the API key in there, someone can figure out how to dig it out.
+While Gemini AI is useful for quick prototyping, the recommended solution for production apps is Vertex AI in Firebase. And the reason for that is that there's no good way to keep your Gemini API key safe -- if you ship your Flutter app with the API key in there, someone can figure out how to dig it out.
 
 To solve this problem as well as many others that you're going to have in a real-world production app, the model for initializing an instance of the Vertex AI LLM provider doesn't have an API key. Instead, it relies on a Firebase project, which you then initialize in your app. You can do that with the steps described in [the Get started with the Gemini API using the Vertex AI in Firebase SDKs docs](https://firebase.google.com/docs/vertex-ai/get-started?platform=flutter).
 

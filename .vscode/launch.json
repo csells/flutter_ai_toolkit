@@ -72,6 +72,13 @@
       "program": "lib/suggestions/suggestions.dart",
     },
     {
+      "name": "logging",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/logging/logging.dart",
+    },
+    {
       "name": "recipes",
       "cwd": "example",
       "request": "launch",

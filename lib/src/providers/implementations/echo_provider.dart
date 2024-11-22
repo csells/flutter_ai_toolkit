@@ -44,7 +44,7 @@ class EchoProvider extends LlmProvider with ChangeNotifier {
     await Future.delayed(const Duration(milliseconds: 1000));
     yield prompt;
 
-    yield '\n\n# Attachments\n${attachments.map(_stringFrom)}';
+    yield '\n\n# Attachments\n${attachments.map((a) => a.toString())}';
   }
 
   @override
@@ -62,8 +62,6 @@ class EchoProvider extends LlmProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  String _stringFrom(Attachment attachment) => attachment.toString();
 
   @override
   Iterable<ChatMessage> get history => _history;
