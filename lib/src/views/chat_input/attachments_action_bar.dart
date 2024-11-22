@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
+import '../../platform_helper/platform_helper.dart';
 import '../../providers/interface/attachments.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../action_button/action_button.dart';
@@ -42,7 +43,8 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
   @override
   void initState() {
     super.initState();
-    _canCamera = ImagePicker().supportsImageSource(ImageSource.camera);
+
+    _canCamera = canTakePhoto();
 
     // _canFile is a temporary work around for this bug:
     // https://github.com/csells/flutter_ai_toolkit/issues/18
@@ -88,6 +90,11 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
   Future<void> _pickImage(ImageSource source) async {
     _onToggleMenu(); // close the menu
 
+    assert(
+      source == ImageSource.camera || source == ImageSource.gallery,
+      'Unsupported image source: $source',
+    );
+
     final picker = ImagePicker();
     try {
       if (source == ImageSource.gallery) {
@@ -97,7 +104,7 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
         ));
         widget.onAttachments(attachments);
       } else {
-        final pic = await picker.pickImage(source: source);
+        final pic = await takePhoto(context);
         if (pic == null) return;
         widget.onAttachments([await ImageFileAttachment.fromFile(pic)]);
       }

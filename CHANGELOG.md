@@ -1,3 +1,7 @@
+## 0.6.1
+
+* implemented [#16](https://github.com/csells/flutter_ai_toolkit/issues/16): feature: ensure pressing the camera button on desktop web brings up the camera
+
 ## 0.6.0
 
 * simplifying the `LlmProvider` interface for implementors
