@@ -2,29 +2,24 @@ Hello and welcome to the Flutter AI Toolkit!
 
 The AI Toolkit is a set of AI chat-related widgets to make it easy to add an AI chat window to your Flutter app. The AI Toolkit is organized around an abstract LLM provider API to make it easy to swap out the LLM provider that you'd like your chat provider to use. Out of the box, it comes with support for two LLM provider integrations: Google Gemini AI and Firebase Vertex AI.
 
-## Current Alpha Features
-The AI Toolkit is currently under active development and at the alpha stage, with the following features currently available:
-
+## Features
 - multi-turn chat (remembering context along the way)
 - streaming responses
-- multi-line chat text input (via Alt/Opt+Enter on web/desktop)
+- multi-line chat text input
 - cancel in-progress request
-- edit the last prompt (starting with long-press as the UI gesture)
+- edit the last prompt
 - rich text response display
 - chat microphone speech-to-tech prompt input
-- copy any response (starting with long-press as the UI gesture)
-- multi-media attachments ([the web currently doesn't like file attachments](https://github.com/csells/flutter_ai_toolkit/issues/18), so they're disabled)
-- handling structured LLM responses
+- copy any response
+- multi-media attachments
+- handling structured LLM responses to show app-specific Flutter widgets
 - app-provided prompt suggestions
-- pre-processing prompts to add prompt engineering, etc.
-- pre-processing requests to enrich the output, e.g. host Flutter widgets
-- updated UX based on Google design guidelines
+- pre-processing prompts to add logging, prompt engineering, etc.
 - custom styling support
-- dev-configured chatbot label + icon
 - support for Cupertino as well as Material
 - chat session serialization/deserialization
 - swappable support for LLM providers; oob support for Gemini and Vertex
-- support for all Flutter platforms, focusing initially on mobile and web
+- support for all Flutter platforms
 
 Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/demo/demo.dart) hosting the AI Tookit running on the web:
 
@@ -119,14 +114,20 @@ class ChatPage extends StatelessWidget {
       );
 }
 ```
-If you like, use your Firebase project with the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/vertex/vertex.dart">vertex.dart</a> sample. This sample has also been tested on Android, iOS, the web and macOS.
+If you like, use your Firebase project with the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/vertex/vertex.dart">vertex.dart</a> sample. This sample is supported on Android, iOS, the web and macOS.
 
 Note: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check), which is beyond the scope of the sample code in this project.
 
-## More Features Coming Soon!
-As I mentioned, the AI Toolkit is just in the alpha phase of it's lifetime and it's under active development. Coming soon, you should expect the following features:
-- stand-alone chatbot app sample with multi-session support
-- thoroughly tested multi-platform support, including Windows and Linux
+## Device Access Permissions
+To enable the microphone feature, configure your app according to [the record package's permission setup instructions](https://pub.dev/packages/record#setup-permissions-and-others).
+
+To enable the user to select a file on their device to upload to the LLM, configure your app according to [the file_selector plugin's usage instructions](https://pub.dev/packages/file_selector#usage).
+
+To enable the user to select an image file on their device, configure your app according to [the image_picker plugin's installation instructions](https://pub.dev/packages/image_picker#installation).
+
+To enable the user to take a picture on their device, configurate your app according to [the image_picker plugin's installation instructions](https://pub.dev/packages/image_picker#installation).
+
+To enable the user to take a picture on the web, configure your app according to [the camera plugin's setup instructions](https://pub.dev/packages/camera#setup).
 
 ## Feedback!
 Along the way, as you use this package, please [log issues and feature requests](https://github.com/csells/flutter_ai_toolkit/issues) as well as any [code you'd like to contribute](https://github.com/csells/flutter_ai_toolkit/pulls). I want your feedback and your contributions to ensure that the AI Toolkit is just as robust and useful as it can be for your real apps.
