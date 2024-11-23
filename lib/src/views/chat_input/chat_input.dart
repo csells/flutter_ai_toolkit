@@ -101,6 +101,7 @@ class _ChatInputState extends State<ChatInput> {
   final _waveController = WaveformRecorderController();
   final _attachments = <Attachment>[];
   static const _minInputHeight = 48.0;
+  static const _maxInputHeight = 144.0;
 
   @override
   void didUpdateWidget(covariant ChatInput oldWidget) {
@@ -156,6 +157,7 @@ class _ChatInputState extends State<ChatInput> {
                               child: ConstrainedBox(
                                 constraints: const BoxConstraints(
                                   minHeight: _minInputHeight,
+                                  maxHeight: _maxInputHeight,
                                 ),
                                 child: _waveController.isRecording
                                     ? WaveformRecorder(
@@ -163,25 +165,29 @@ class _ChatInputState extends State<ChatInput> {
                                         height: _minInputHeight,
                                         onRecordingStopped: onRecordingStopped,
                                       )
-                                    : ChatTextField(
-                                        minLines: 1,
-                                        maxLines: 1024,
-                                        controller: _textController,
-                                        autofocus: true,
-                                        focusNode: _focusNode,
-                                        textInputAction: isMobile
-                                            ? TextInputAction.newline
-                                            : TextInputAction.done,
-                                        onSubmitted: _inputState ==
-                                                InputState.canSubmitPrompt
-                                            ? (_) => onSubmitPrompt()
-                                            : (_) => _focusNode.requestFocus(),
-                                        style: inputStyle.textStyle!,
-                                        hintText: inputStyle.hintText!,
-                                        hintStyle: inputStyle.hintStyle!,
-                                        hintPadding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 8,
+                                    : SingleChildScrollView(
+                                        child: ChatTextField(
+                                          minLines: 1,
+                                          maxLines: 1024,
+                                          controller: _textController,
+                                          autofocus: true,
+                                          focusNode: _focusNode,
+                                          textInputAction: isMobile
+                                              ? TextInputAction.newline
+                                              : TextInputAction.done,
+                                          onSubmitted: _inputState ==
+                                                  InputState.canSubmitPrompt
+                                              ? (_) => onSubmitPrompt()
+                                              : (_) =>
+                                                  _focusNode.requestFocus(),
+                                          style: inputStyle.textStyle!,
+                                          hintText: inputStyle.hintText!,
+                                          hintStyle: inputStyle.hintStyle!,
+                                          hintPadding:
+                                              const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 8,
+                                          ),
                                         ),
                                       ),
                               ),
