@@ -1,3 +1,7 @@
+## 0.x.y
+
+* fixed [#62](https://github.com/csells/flutter_ai_toolkit/issues/62): bug: getting an image back from the LLM that doesn't exist throws an exception
+
 ## 0.6.3
 
 * fixed [#55](https://github.com/csells/flutter_ai_toolkit/issues/55): TextField overflow error for large inputs

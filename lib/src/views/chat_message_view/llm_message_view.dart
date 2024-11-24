@@ -81,6 +81,7 @@ class LlmMessageView extends StatelessWidget {
                                           data: message.text!,
                                           selectable: false,
                                           styleSheet: llmStyle.markdownStyle,
+                                          imageBuilder: _markdownImageBuilder,
                                         )
                                       : viewModel.responseBuilder!(
                                           context,
@@ -97,5 +98,15 @@ class LlmMessageView extends StatelessWidget {
           ),
           const Flexible(flex: 2, child: SizedBox()),
         ],
+      );
+
+  Widget _markdownImageBuilder(Uri uri, String? title, String? alt) =>
+      Image.network(
+        uri.toString(),
+        // use an error builder to avoid the unhandled exception
+        errorBuilder: (context, error, stack) => Placeholder(
+          color: Colors.red,
+          child: Text(error.toString()),
+        ),
       );
 }
