@@ -66,16 +66,22 @@ class VertexProvider extends LlmProvider with ChangeNotifier {
     final llmMessage = ChatMessage.llm();
     _history.addAll([userMessage, llmMessage]);
 
-    final chunks = _generateStream(
+    final response = _generateStream(
       prompt: prompt,
       attachments: attachments,
       contentStreamGenerator: _chat!.sendMessageStream,
     );
 
-    await for (final chunk in chunks) {
+    // don't write this code if you're targeting the web until this is fixed:
+    // https://github.com/dart-lang/sdk/issues/47764
+    // await for (final chunk in response) {
+    //   llmMessage.append(chunk);
+    //   yield chunk;
+    // }
+    yield* response.map((chunk) {
       llmMessage.append(chunk);
-      yield chunk;
-    }
+      return chunk;
+    });
 
     // notify listeners that the history has changed when response is complete
     notifyListeners();
@@ -93,10 +99,16 @@ class VertexProvider extends LlmProvider with ChangeNotifier {
     ]);
 
     final response = contentStreamGenerator(content);
-    await for (final chunk in response) {
-      final text = chunk.text;
-      if (text != null) yield text;
-    }
+    // don't write this code if you're targeting the web until this is fixed:
+    // https://github.com/dart-lang/sdk/issues/47764
+    // await for (final chunk in response) {
+    //   final text = chunk.text;
+    //   if (text != null) yield text;
+    // }
+    yield* response
+        .map((chunk) => chunk.text)
+        .where((text) => text != null)
+        .cast<String>();
   }
 
   @override

@@ -5,7 +5,6 @@
 import 'dart:async';
 
 import 'package:file_selector/file_selector.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -38,17 +37,11 @@ class AttachmentActionBar extends StatefulWidget {
 class _AttachmentActionBarState extends State<AttachmentActionBar> {
   var _expanded = false;
   late final bool _canCamera;
-  late final bool _canFile;
 
   @override
   void initState() {
     super.initState();
-
     _canCamera = canTakePhoto();
-
-    // _canFile is a temporary work around for this bug:
-    // https://github.com/csells/flutter_ai_toolkit/issues/18
-    _canFile = !kIsWeb;
   }
 
   @override
@@ -70,11 +63,10 @@ class _AttachmentActionBarState extends State<AttachmentActionBar> {
                     onPressed: _onGallery,
                     style: chatStyle.galleryButtonStyle!,
                   ),
-                  if (_canFile)
-                    ActionButton(
-                      onPressed: _onFile,
-                      style: chatStyle.attachFileButtonStyle!,
-                    ),
+                  ActionButton(
+                    onPressed: _onFile,
+                    style: chatStyle.attachFileButtonStyle!,
+                  ),
                 ])
               : ActionButton(
                   onPressed: _onToggleMenu,

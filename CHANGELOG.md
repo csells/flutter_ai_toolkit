@@ -2,6 +2,10 @@
 
 * fixed [#55](https://github.com/csells/flutter_ai_toolkit/issues/55): TextField overflow error for large inputs
 
+* fixed [#39](https://github.com/csells/flutter_ai_toolkit/issues/39): bug: notify developer of invalid API key on the web
+
+* fixed [#18](https://github.com/csells/flutter_ai_toolkit/issues/18): Gemini or Vertex + the web + a file attachment == hang
+
 ## 0.6.2
 
 * minor API and README updates based on review feedback

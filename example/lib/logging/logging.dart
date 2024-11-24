@@ -52,19 +52,13 @@ class ChatPage extends StatelessWidget {
     debugPrint('## Attachments\n${attachments.map((a) => a.toString())}');
 
     // forward the message on to the provider
-    final chunks = _provider.sendMessageStream(
+    final response = _provider.sendMessageStream(
       prompt,
       attachments: attachments,
     );
 
-    // capture the response as it comes in
-    var response = '';
-    await for (final chunk in chunks) {
-      response += chunk;
-      yield chunk;
-    }
-
     // log the response
-    debugPrint('## Response\n$response');
+    final text = response.join();
+    debugPrint('## Response\n$text');
   }
 }

@@ -21,7 +21,7 @@ sealed class Attachment {
   final String name;
 
   static String _mimeType(XFile file) =>
-      file.mimeType ?? lookupMimeType(file.path) ?? 'application/octet-stream';
+      file.mimeType ?? lookupMimeType(file.name) ?? 'application/octet-stream';
 
   static bool _isImage(String mimeType) =>
       mimeType.toLowerCase().startsWith('image/');
