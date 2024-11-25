@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart'
     show DefaultMaterialLocalizations, SelectionArea;
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 
-import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../utility.dart';
 
@@ -57,7 +55,7 @@ class AdaptiveCopyText extends StatelessWidget {
         MenuItem(
           label: 'Copy',
           icon: chatStyle.copyButtonStyle!.icon,
-          onSelected: () => unawaited(_onCopy(context, clipboardText)),
+          onSelected: () => unawaited(copyToClipboard(context, clipboardText)),
         ),
       ],
     );
@@ -74,12 +72,5 @@ class AdaptiveCopyText extends StatelessWidget {
             ],
             child: SelectionArea(child: child),
           );
-  }
-
-  Future<void> _onCopy(BuildContext context, String text) async {
-    await Clipboard.setData(ClipboardData(text: text));
-    if (context.mounted) {
-      AdaptiveSnackBar.show(context, 'Message copied to clipboard');
-    }
   }
 }

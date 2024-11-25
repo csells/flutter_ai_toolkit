@@ -1,0 +1,99 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+import 'package:gap/gap.dart';
+
+import '../../styles/llm_chat_view_style.dart';
+import '../../styles/style_helpers.dart';
+import '../../utility.dart';
+
+/// A widget that displays hovering buttons for editing and copying.
+///
+/// This widget is a [StatefulWidget] that shows buttons for editing and copying
+/// when the user hovers over the child widget. The buttons are displayed at the
+/// bottom right of the child widget.
+class HoveringButtons extends StatelessWidget {
+  /// Creates a [HoveringButtons] widget.
+  ///
+  /// The [onEdit] callback is invoked when the edit button is pressed. The
+  /// [child] widget is the content over which the buttons will hover.
+  HoveringButtons({
+    required this.chatStyle,
+    required this.isUserMessage,
+    required this.clipboardText,
+    required this.child,
+    this.onEdit,
+    super.key,
+  });
+
+  /// The style information for the chat.
+  final LlmChatViewStyle chatStyle;
+
+  /// Whether the message is a user message.
+  final bool isUserMessage;
+
+  /// The text to be copied to the clipboard.
+  final String? clipboardText;
+
+  /// The child widget over which the buttons will hover.
+  final Widget child;
+
+  /// The callback to be invoked when the edit button is pressed.
+  final VoidCallback? onEdit;
+
+  final _hovering = ValueNotifier(false);
+
+  @override
+  Widget build(BuildContext context) => clipboardText == null
+      ? child
+      : Stack(
+          children: [
+            MouseRegion(
+              onEnter: (_) => _hovering.value = true,
+              onExit: (_) => _hovering.value = false,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: child,
+              ),
+            ),
+            ListenableBuilder(
+              listenable: _hovering,
+              builder: (context, child) => _hovering.value
+                  ? Positioned(
+                      bottom: 0,
+                      right: isUserMessage ? 0 : null,
+                      left: isUserMessage ? null : 32,
+                      child: Row(
+                        children: [
+                          if (onEdit != null)
+                            GestureDetector(
+                              onTap: onEdit,
+                              child: Icon(
+                                chatStyle.editButtonStyle!.icon,
+                                size: 12,
+                                color: invertColor(
+                                  chatStyle.editButtonStyle!.iconColor,
+                                ),
+                              ),
+                            ),
+                          const Gap(6),
+                          GestureDetector(
+                            onTap: () => unawaited(
+                              copyToClipboard(context, clipboardText!),
+                            ),
+                            child: Icon(
+                              chatStyle.copyButtonStyle!.icon,
+                              size: 12,
+                              color: invertColor(
+                                chatStyle.copyButtonStyle!.iconColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+            ),
+          ],
+        );
+}

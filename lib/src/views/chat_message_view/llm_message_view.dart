@@ -11,6 +11,7 @@ import '../../styles/llm_chat_view_style.dart';
 import '../../styles/llm_message_style.dart';
 import '../jumping_dots_progress_indicator/jumping_dots_progress_indicator.dart';
 import 'adaptive_copy_text.dart';
+import 'hovering_buttons.dart';
 
 /// A widget that displays an LLM (Language Model) message in a chat interface.
 @immutable
@@ -40,9 +41,10 @@ class LlmMessageView extends StatelessWidget {
               children: [
                 ChatViewModelClient(
                   builder: (context, viewModel, child) {
+                    final text = message.text;
                     final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
                     final llmStyle = LlmMessageStyle.resolve(
-                      viewModel.style?.llmMessageStyle,
+                      chatStyle.llmMessageStyle,
                     );
 
                     return Stack(
@@ -60,34 +62,39 @@ class LlmMessageView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: llmStyle.decoration,
-                          margin: const EdgeInsets.only(left: 28),
-                          padding: const EdgeInsets.all(8),
-                          child: message.text == null
-                              ? SizedBox(
-                                  width: 24,
-                                  child: JumpingDotsProgressIndicator(
-                                    fontSize: 24,
-                                    color: chatStyle.progressIndicatorColor!,
+                        HoveringButtons(
+                          isUserMessage: false,
+                          chatStyle: chatStyle,
+                          clipboardText: text,
+                          child: Container(
+                            decoration: llmStyle.decoration,
+                            margin: const EdgeInsets.only(left: 28),
+                            padding: const EdgeInsets.all(8),
+                            child: text == null
+                                ? SizedBox(
+                                    width: 24,
+                                    child: JumpingDotsProgressIndicator(
+                                      fontSize: 24,
+                                      color: chatStyle.progressIndicatorColor!,
+                                    ),
+                                  )
+                                : AdaptiveCopyText(
+                                    clipboardText: text,
+                                    chatStyle: chatStyle,
+                                    child: isWelcomeMessage ||
+                                            viewModel.responseBuilder == null
+                                        ? MarkdownBody(
+                                            data: text,
+                                            selectable: false,
+                                            styleSheet: llmStyle.markdownStyle,
+                                            imageBuilder: _markdownImageBuilder,
+                                          )
+                                        : viewModel.responseBuilder!(
+                                            context,
+                                            text,
+                                          ),
                                   ),
-                                )
-                              : AdaptiveCopyText(
-                                  clipboardText: message.text!,
-                                  chatStyle: chatStyle,
-                                  child: isWelcomeMessage ||
-                                          viewModel.responseBuilder == null
-                                      ? MarkdownBody(
-                                          data: message.text!,
-                                          selectable: false,
-                                          styleSheet: llmStyle.markdownStyle,
-                                          imageBuilder: _markdownImageBuilder,
-                                        )
-                                      : viewModel.responseBuilder!(
-                                          context,
-                                          message.text!,
-                                        ),
-                                ),
+                          ),
                         ),
                       ],
                     );

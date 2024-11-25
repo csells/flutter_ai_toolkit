@@ -9,6 +9,7 @@ import '../../providers/interface/chat_message.dart';
 import '../../styles/styles.dart';
 import '../attachment_view/attachment_view.dart';
 import 'adaptive_copy_text.dart';
+import 'hovering_buttons.dart';
 
 /// A widget that displays a user's message in a chat interface.
 ///
@@ -31,60 +32,60 @@ class UserMessageView extends StatelessWidget {
   final VoidCallback? onEdit;
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+  Widget build(BuildContext context) => Column(
         children: [
-          const Flexible(flex: 2, child: SizedBox()),
-          Flexible(
-            flex: 6,
-            child: Column(
-              children: [
-                ...[
-                  for (final attachment in message.attachments)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: SizedBox(
-                          height: 80,
-                          width: 200,
-                          child: AttachmentView(attachment),
+          ...[
+            for (final attachment in message.attachments)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    height: 80,
+                    width: 200,
+                    child: AttachmentView(attachment),
+                  ),
+                ),
+              ),
+          ],
+          ChatViewModelClient(
+            builder: (context, viewModel, child) {
+              final text = message.text!;
+              final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+              final userStyle = UserMessageStyle.resolve(
+                chatStyle.userMessageStyle,
+              );
+
+              return Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: HoveringButtons(
+                    isUserMessage: true,
+                    chatStyle: chatStyle,
+                    clipboardText: text,
+                    onEdit: onEdit,
+                    child: DecoratedBox(
+                      decoration: userStyle.decoration!,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          top: 12,
+                          bottom: 12,
+                        ),
+                        child: AdaptiveCopyText(
+                          chatStyle: chatStyle,
+                          clipboardText: text,
+                          onEdit: onEdit,
+                          child: Text(text, style: userStyle.textStyle),
                         ),
                       ),
                     ),
-                ],
-                ChatViewModelClient(
-                  builder: (context, viewModel, child) {
-                    final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
-                    final userStyle = UserMessageStyle.resolve(
-                      viewModel.style?.userMessageStyle,
-                    );
-                    final text = message.text ?? '';
-
-                    return Align(
-                      alignment: Alignment.topRight,
-                      child: DecoratedBox(
-                        decoration: userStyle.decoration!,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 12,
-                            bottom: 12,
-                          ),
-                          child: AdaptiveCopyText(
-                            chatStyle: chatStyle,
-                            clipboardText: text,
-                            onEdit: onEdit,
-                            child: Text(text, style: userStyle.textStyle),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       );

@@ -3,7 +3,10 @@
 // found in the LICENSE file.
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:universal_platform/universal_platform.dart';
+
+import 'dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 
 bool? _isCupertinoApp;
 
@@ -34,3 +37,22 @@ bool isCupertinoApp(BuildContext context) {
 ///   A [bool] value. `true` if the platform is either Android or iOS,
 ///   `false` otherwise.
 final isMobile = UniversalPlatform.isAndroid || UniversalPlatform.isIOS;
+
+/// Copies the given text to the clipboard and shows a confirmation message.
+///
+/// This function uses the [Clipboard] API to copy the provided [text] to the
+/// system clipboard. After copying, it displays a confirmation message using
+/// [AdaptiveSnackBar] if the [context] is still mounted.
+///
+/// Parameters:
+///   * [context]: The [BuildContext] used to show the confirmation message.
+///   * [text]: The text to be copied to the clipboard.
+///
+/// Returns: A [Future] that completes when the text has been copied to the
+///   clipboard and the confirmation message has been shown.
+Future<void> copyToClipboard(BuildContext context, String text) async {
+  await Clipboard.setData(ClipboardData(text: text));
+  if (context.mounted) {
+    AdaptiveSnackBar.show(context, 'Message copied to clipboard');
+  }
+}

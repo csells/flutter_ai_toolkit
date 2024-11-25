@@ -54,6 +54,7 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
                 ),
               ...viewModel.provider.history,
             ];
+
             return ListView.builder(
               reverse: true,
               itemCount: history.length,
