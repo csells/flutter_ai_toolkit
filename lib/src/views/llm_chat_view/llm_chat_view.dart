@@ -45,10 +45,27 @@ import 'llm_response.dart';
 class LlmChatView extends StatefulWidget {
   /// Creates an [LlmChatView] widget.
   ///
-  /// You must provide a [provider].
+  /// This widget provides a chat interface for interacting with an LLM
+  /// (Language Model). It requires an [LlmProvider] to manage the chat
+  /// interactions and can be customized with various style and configuration
+  /// options.
   ///
-  /// The [style] parameter can be used to customize the appearance of the chat
-  /// view. The [responseBuilder] allows custom rendering of chat responses.
+  /// - [provider]: The [LlmProvider] that manages the chat interactions.
+  /// - [style]: Optional. The [LlmChatViewStyle] to customize the appearance of
+  ///   the chat interface.
+  /// - [responseBuilder]: Optional. A custom [ResponseBuilder] to handle the
+  ///   display of LLM responses.
+  /// - [messageSender]: Optional. A custom [LlmStreamGenerator] to handle the
+  ///   sending of messages. If provided, this is used instead of the
+  ///   `sendMessageStream` method of the provider. It's the responsibility of
+  ///   the caller to ensure that the [messageSender] properly streams the
+  ///   response. This is useful for augmenting the user's prompt with
+  ///   additional information, in the case of prompt engineering or RAG. It's
+  ///   also useful for simple logging.
+  /// - [suggestions]: Optional. A list of predefined suggestions to display
+  ///   when the chat history is empty. Defaults to an empty list.
+  /// - [welcomeMessage]: Optional. A welcome message to display when the chat
+  ///   is first opened.
   LlmChatView({
     required LlmProvider provider,
     LlmChatViewStyle? style,
