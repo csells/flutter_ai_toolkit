@@ -4,7 +4,6 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'style_helpers.dart' as sh;
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
 
@@ -40,24 +39,11 @@ class UserMessageStyle {
     );
   }
 
-  /// Provides a default dark style.
-  factory UserMessageStyle.darkStyle() {
-    final style = UserMessageStyle.lightStyle();
-    return UserMessageStyle(
-      textStyle: sh.invertTextStyle(style.textStyle),
-      // inversion doesn't look great here
-      // decoration: sh.invertDecoration(style.decoration),
-      decoration: (style.decoration! as BoxDecoration).copyWith(
-        color: ToolkitColors.greyBackground,
-      ),
-    );
-  }
-
   /// Provides default style data for user messages.
-  factory UserMessageStyle.defaultStyle() => UserMessageStyle.lightStyle();
+  factory UserMessageStyle.defaultStyle() => UserMessageStyle._lightStyle();
 
   /// Provides a default light style.
-  factory UserMessageStyle.lightStyle() => UserMessageStyle(
+  factory UserMessageStyle._lightStyle() => UserMessageStyle(
         textStyle: ToolkitTextStyles.body1,
         decoration: const BoxDecoration(
           color: ToolkitColors.userMessageBackground,

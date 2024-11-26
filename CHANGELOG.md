@@ -6,6 +6,8 @@
 
 * renamed FatXxx to ToolkitXxx e.g. FatColors => ToolkitColors
 
+* fixed [#77](https://github.com/csells/flutter_ai_toolkit/issues/77): move dark theming to the samples and out of the toolkit, since it has no designer input
+
 ## 0.6.3
 
 * fixed [#55](https://github.com/csells/flutter_ai_toolkit/issues/55): TextField overflow error for large inputs

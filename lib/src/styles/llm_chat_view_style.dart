@@ -9,7 +9,6 @@ import 'action_button_type.dart';
 import 'chat_input_style.dart';
 import 'file_attachment_style.dart';
 import 'llm_message_style.dart';
-import 'style_helpers.dart' as sh;
 import 'suggestion_style.dart';
 import 'toolkit_colors.dart';
 import 'user_message_style.dart';
@@ -120,39 +119,10 @@ class LlmChatViewStyle {
   }
 
   /// Provides default style if none is specified.
-  factory LlmChatViewStyle.defaultStyle() => LlmChatViewStyle.lightStyle();
-
-  /// Provides a default dark style.
-  factory LlmChatViewStyle.darkStyle() {
-    final style = LlmChatViewStyle.lightStyle();
-    return LlmChatViewStyle(
-      backgroundColor: sh.invertColor(style.backgroundColor),
-      progressIndicatorColor: sh.invertColor(style.progressIndicatorColor),
-      userMessageStyle: UserMessageStyle.darkStyle(),
-      llmMessageStyle: LlmMessageStyle.darkStyle(),
-      chatInputStyle: ChatInputStyle.darkStyle(),
-      addButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.add),
-      attachFileButtonStyle:
-          ActionButtonStyle.darkStyle(ActionButtonType.attachFile),
-      cameraButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.camera),
-      stopButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.stop),
-      recordButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.record),
-      submitButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.submit),
-      closeMenuButtonStyle:
-          ActionButtonStyle.darkStyle(ActionButtonType.closeMenu),
-      actionButtonBarDecoration:
-          sh.invertDecoration(style.actionButtonBarDecoration),
-      fileAttachmentStyle: FileAttachmentStyle.darkStyle(),
-      suggestionStyle: SuggestionStyle.darkStyle(),
-      closeButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.close),
-      copyButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.copy),
-      editButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.edit),
-      galleryButtonStyle: ActionButtonStyle.darkStyle(ActionButtonType.gallery),
-    );
-  }
+  factory LlmChatViewStyle.defaultStyle() => LlmChatViewStyle._lightStyle();
 
   /// Provides a default light style.
-  factory LlmChatViewStyle.lightStyle() => LlmChatViewStyle(
+  factory LlmChatViewStyle._lightStyle() => LlmChatViewStyle(
         backgroundColor: ToolkitColors.containerBackground,
         progressIndicatorColor: ToolkitColors.black,
         userMessageStyle: UserMessageStyle.defaultStyle(),

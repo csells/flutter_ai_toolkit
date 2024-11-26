@@ -5,7 +5,6 @@
 import 'package:flutter/widgets.dart';
 
 import 'action_button_type.dart';
-import 'style_helpers.dart' as sh;
 import 'tookit_icons.dart';
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
@@ -49,32 +48,10 @@ class ActionButtonStyle {
 
   /// Provides default style for icon buttons.
   factory ActionButtonStyle.defaultStyle(ActionButtonType type) =>
-      ActionButtonStyle.lightStyle(type);
-
-  /// Provides a default dark style.
-  factory ActionButtonStyle.darkStyle(ActionButtonType type) {
-    final style = ActionButtonStyle.lightStyle(type);
-    return ActionButtonStyle(
-      icon: style.icon,
-      iconColor: sh.invertColor(style.iconColor),
-      iconDecoration: switch (type) {
-        ActionButtonType.add ||
-        ActionButtonType.record ||
-        ActionButtonType.stop =>
-          const BoxDecoration(
-            color: ToolkitColors.greyBackground,
-            shape: BoxShape.circle,
-          ),
-        _ => sh.invertDecoration(style.iconDecoration),
-      },
-      tooltip: style.tooltip,
-      tooltipTextStyle: sh.invertTextStyle(style.tooltipTextStyle),
-      tooltipDecoration: sh.invertDecoration(style.tooltipDecoration),
-    );
-  }
+      ActionButtonStyle._lightStyle(type);
 
   /// Provides default light style for icon buttons.
-  factory ActionButtonStyle.lightStyle(ActionButtonType type) {
+  factory ActionButtonStyle._lightStyle(ActionButtonType type) {
     IconData icon;
     var color = ToolkitColors.darkIcon;
     var bgColor = ToolkitColors.lightButtonBackground;

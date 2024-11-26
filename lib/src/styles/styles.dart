@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 export 'action_button_style.dart';
+export 'action_button_type.dart';
 export 'chat_input_style.dart';
 export 'file_attachment_style.dart';
 export 'llm_chat_view_style.dart';

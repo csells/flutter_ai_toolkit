@@ -4,7 +4,6 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'style_helpers.dart' as sh;
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
 
@@ -35,27 +34,11 @@ class ChatInputStyle {
     );
   }
 
-  /// Provides a default dark style.
-  factory ChatInputStyle.darkStyle() {
-    final style = ChatInputStyle.lightStyle();
-    return ChatInputStyle(
-      decoration: sh.invertDecoration(style.decoration),
-      textStyle: sh.invertTextStyle(style.textStyle),
-      // inversion doesn't look great here
-      // hintStyle: sh.invertTextStyle(style.hintStyle),
-      hintStyle: ToolkitTextStyles.body2.copyWith(
-        color: ToolkitColors.greyBackground,
-      ),
-      hintText: style.hintText,
-      backgroundColor: sh.invertColor(style.backgroundColor),
-    );
-  }
-
   /// Provides a default style.
-  factory ChatInputStyle.defaultStyle() => ChatInputStyle.lightStyle();
+  factory ChatInputStyle.defaultStyle() => ChatInputStyle._lightStyle();
 
   /// Provides a default light style.
-  factory ChatInputStyle.lightStyle() => ChatInputStyle(
+  factory ChatInputStyle._lightStyle() => ChatInputStyle(
         textStyle: ToolkitTextStyles.body2,
         hintStyle:
             ToolkitTextStyles.body2.copyWith(color: ToolkitColors.hintText),

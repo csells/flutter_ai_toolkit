@@ -4,7 +4,6 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'style_helpers.dart' as sh;
 import 'tookit_icons.dart';
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
@@ -49,34 +48,12 @@ class FileAttachmentStyle {
     );
   }
 
-  /// Provides a default dark style.
-  factory FileAttachmentStyle.darkStyle() {
-    final style = FileAttachmentStyle.lightStyle();
-    return FileAttachmentStyle(
-      // inversion doesn't look great here
-      // decoration: sh.invertDecoration(style.decoration),
-      decoration: ShapeDecoration(
-        color: ToolkitColors.greyBackground,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      icon: style.icon,
-      iconColor: sh.invertColor(style.iconColor),
-      iconDecoration: sh.invertDecoration(style.iconDecoration),
-      filenameStyle: sh.invertTextStyle(style.filenameStyle),
-      // inversion doesn't look great here
-      // filetypeStyle: sh.invertTextStyle(style.filetypeStyle),
-      filetypeStyle: style.filetypeStyle!.copyWith(color: ToolkitColors.black),
-    );
-  }
-
   /// Provides a default style.
   factory FileAttachmentStyle.defaultStyle() =>
-      FileAttachmentStyle.lightStyle();
+      FileAttachmentStyle._lightStyle();
 
   /// Provides a default light style.
-  factory FileAttachmentStyle.lightStyle() => FileAttachmentStyle(
+  factory FileAttachmentStyle._lightStyle() => FileAttachmentStyle(
         decoration: ShapeDecoration(
           color: ToolkitColors.fileContainerBackground,
           shape: RoundedRectangleBorder(

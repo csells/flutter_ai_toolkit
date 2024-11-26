@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import 'style_helpers.dart' as sh;
 import 'tookit_icons.dart';
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
@@ -52,27 +51,10 @@ class LlmMessageStyle {
   }
 
   /// Provides a default style.
-  factory LlmMessageStyle.defaultStyle() => LlmMessageStyle.lightStyle();
-
-  /// Provides a default dark style.
-  factory LlmMessageStyle.darkStyle() {
-    final style = LlmMessageStyle.lightStyle();
-    return LlmMessageStyle(
-      icon: style.icon,
-      iconColor: sh.invertColor(style.iconColor),
-      // inversion doesn't look great here
-      // iconDecoration: sh.invertDecoration(style.iconDecoration),
-      iconDecoration: const BoxDecoration(
-        color: ToolkitColors.greyBackground,
-        shape: BoxShape.circle,
-      ),
-      markdownStyle: _invertMarkdownStyle(style.markdownStyle),
-      decoration: sh.invertDecoration(style.decoration),
-    );
-  }
+  factory LlmMessageStyle.defaultStyle() => LlmMessageStyle._lightStyle();
 
   /// Provides a default light style.
-  factory LlmMessageStyle.lightStyle() => LlmMessageStyle(
+  factory LlmMessageStyle._lightStyle() => LlmMessageStyle(
         icon: ToolkitIcons.spark_icon,
         iconColor: ToolkitColors.darkIcon,
         iconDecoration: const BoxDecoration(
@@ -127,28 +109,4 @@ class LlmMessageStyle {
 
   /// The markdown style sheet for LLM messages.
   final MarkdownStyleSheet? markdownStyle;
-
-  static MarkdownStyleSheet? _invertMarkdownStyle(
-    MarkdownStyleSheet? markdownStyle,
-  ) =>
-      markdownStyle?.copyWith(
-        a: sh.invertTextStyle(markdownStyle.a),
-        blockquote: sh.invertTextStyle(markdownStyle.blockquote),
-        checkbox: sh.invertTextStyle(markdownStyle.checkbox),
-        code: sh.invertTextStyle(markdownStyle.code),
-        del: sh.invertTextStyle(markdownStyle.del),
-        em: sh.invertTextStyle(markdownStyle.em),
-        strong: sh.invertTextStyle(markdownStyle.strong),
-        p: sh.invertTextStyle(markdownStyle.p),
-        tableBody: sh.invertTextStyle(markdownStyle.tableBody),
-        tableHead: sh.invertTextStyle(markdownStyle.tableHead),
-        h1: sh.invertTextStyle(markdownStyle.h1),
-        h2: sh.invertTextStyle(markdownStyle.h2),
-        h3: sh.invertTextStyle(markdownStyle.h3),
-        h4: sh.invertTextStyle(markdownStyle.h4),
-        h5: sh.invertTextStyle(markdownStyle.h5),
-        h6: sh.invertTextStyle(markdownStyle.h6),
-        listBullet: sh.invertTextStyle(markdownStyle.listBullet),
-        img: sh.invertTextStyle(markdownStyle.img),
-      );
 }

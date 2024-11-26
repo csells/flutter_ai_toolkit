@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../dark_style.dart';
 import 'api_key_page.dart';
 
 late final SharedPreferences prefs;
@@ -197,8 +198,8 @@ class _ChatPageState extends State<ChatPage>
   LlmChatViewStyle get style {
     if (!_halloweenMode.value) {
       return App.themeMode.value == ThemeMode.dark
-          ? LlmChatViewStyle.darkStyle()
-          : LlmChatViewStyle.lightStyle();
+          ? darkChatViewStyle()
+          : LlmChatViewStyle.defaultStyle();
     }
 
     // Halloween mode

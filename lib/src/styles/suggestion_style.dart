@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'style_helpers.dart' as sh;
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
 
@@ -41,26 +40,12 @@ class SuggestionStyle {
   /// Provides a default style.
   ///
   /// This style is typically used as the base style for suggestions.
-  factory SuggestionStyle.defaultStyle() => SuggestionStyle.lightStyle();
-
-  /// Provides a default dark style.
-  ///
-  /// This style is typically used for suggestions in dark mode.
-  factory SuggestionStyle.darkStyle() {
-    final style = SuggestionStyle.lightStyle();
-    return SuggestionStyle(
-      textStyle: sh.invertTextStyle(style.textStyle),
-      decoration: const BoxDecoration(
-        color: ToolkitColors.greyBackground,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-    );
-  }
+  factory SuggestionStyle.defaultStyle() => SuggestionStyle._lightStyle();
 
   /// Provides a default light style.
   ///
   /// This style is typically used for suggestions in light mode.
-  factory SuggestionStyle.lightStyle() => SuggestionStyle(
+  factory SuggestionStyle._lightStyle() => SuggestionStyle(
         textStyle: ToolkitTextStyles.body1,
         decoration: const BoxDecoration(
           color: ToolkitColors.userMessageBackground,

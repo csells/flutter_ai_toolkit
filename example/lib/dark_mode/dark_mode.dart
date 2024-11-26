@@ -7,6 +7,7 @@ import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../gemini_api_key.dart';
+import '../dark_style.dart';
 
 void main() => runApp(const App());
 
@@ -19,7 +20,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<ThemeMode>(
         valueListenable: themeMode,
-        builder: (BuildContext context, ThemeMode mode, Widget? child) =>
+        builder: (
+          BuildContext context,
+          ThemeMode mode,
+          Widget? child,
+        ) =>
             MaterialApp(
           title: title,
           theme: ThemeData.light(),
@@ -46,6 +51,9 @@ class _ChatPageState extends State<ChatPage> {
     ),
   );
 
+  final _lightStyle = LlmChatViewStyle.defaultStyle();
+  final _darkStyle = darkChatViewStyle();
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -65,9 +73,8 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: LlmChatView(
           provider: _provider,
-          style: App.themeMode.value == ThemeMode.dark
-              ? LlmChatViewStyle.darkStyle()
-              : LlmChatViewStyle.lightStyle(),
+          style:
+              App.themeMode.value == ThemeMode.dark ? _darkStyle : _lightStyle,
         ),
       );
 }
