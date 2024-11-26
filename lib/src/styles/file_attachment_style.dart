@@ -4,10 +4,10 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'fat_colors.dart';
-import 'fat_icons.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'tookit_icons.dart';
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 /// Style for file attachments in the chat view.
 @immutable
@@ -56,7 +56,7 @@ class FileAttachmentStyle {
       // inversion doesn't look great here
       // decoration: sh.invertDecoration(style.decoration),
       decoration: ShapeDecoration(
-        color: FatColors.greyBackground,
+        color: ToolkitColors.greyBackground,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -67,7 +67,7 @@ class FileAttachmentStyle {
       filenameStyle: sh.invertTextStyle(style.filenameStyle),
       // inversion doesn't look great here
       // filetypeStyle: sh.invertTextStyle(style.filetypeStyle),
-      filetypeStyle: style.filetypeStyle!.copyWith(color: FatColors.black),
+      filetypeStyle: style.filetypeStyle!.copyWith(color: ToolkitColors.black),
     );
   }
 
@@ -78,21 +78,21 @@ class FileAttachmentStyle {
   /// Provides a default light style.
   factory FileAttachmentStyle.lightStyle() => FileAttachmentStyle(
         decoration: ShapeDecoration(
-          color: FatColors.fileContainerBackground,
+          color: ToolkitColors.fileContainerBackground,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        icon: FatIcons.attach_file,
-        iconColor: FatColors.darkIcon,
+        icon: ToolkitIcons.attach_file,
+        iconColor: ToolkitColors.darkIcon,
         iconDecoration: ShapeDecoration(
-          color: FatColors.fileAttachmentIconBackground,
+          color: ToolkitColors.fileAttachmentIconBackground,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        filenameStyle: FatTextStyles.filename,
-        filetypeStyle: FatTextStyles.filetype,
+        filenameStyle: ToolkitTextStyles.filename,
+        filetypeStyle: ToolkitTextStyles.filetype,
       );
 
   /// The decoration for the file attachment container.

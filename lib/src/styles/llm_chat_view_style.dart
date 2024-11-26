@@ -7,11 +7,11 @@ import 'package:flutter/widgets.dart';
 import 'action_button_style.dart';
 import 'action_button_type.dart';
 import 'chat_input_style.dart';
-import 'fat_colors.dart';
 import 'file_attachment_style.dart';
 import 'llm_message_style.dart';
 import 'style_helpers.dart' as sh;
 import 'suggestion_style.dart';
+import 'toolkit_colors.dart';
 import 'user_message_style.dart';
 
 /// Style for the entire chat widget.
@@ -153,8 +153,8 @@ class LlmChatViewStyle {
 
   /// Provides a default light style.
   factory LlmChatViewStyle.lightStyle() => LlmChatViewStyle(
-        backgroundColor: FatColors.containerBackground,
-        progressIndicatorColor: FatColors.black,
+        backgroundColor: ToolkitColors.containerBackground,
+        progressIndicatorColor: ToolkitColors.black,
         userMessageStyle: UserMessageStyle.defaultStyle(),
         llmMessageStyle: LlmMessageStyle.defaultStyle(),
         chatInputStyle: ChatInputStyle.defaultStyle(),
@@ -177,7 +177,7 @@ class LlmChatViewStyle {
         copyButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.copy),
         editButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.edit),
         actionButtonBarDecoration: BoxDecoration(
-          color: FatColors.darkButtonBackground,
+          color: ToolkitColors.darkButtonBackground,
           borderRadius: BorderRadius.circular(20),
         ),
         fileAttachmentStyle: FileAttachmentStyle.defaultStyle(),

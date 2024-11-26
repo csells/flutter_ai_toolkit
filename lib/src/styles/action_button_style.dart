@@ -5,10 +5,10 @@
 import 'package:flutter/widgets.dart';
 
 import 'action_button_type.dart';
-import 'fat_colors.dart';
-import 'fat_icons.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'tookit_icons.dart';
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 /// Style for icon buttons.
 @immutable
@@ -62,7 +62,7 @@ class ActionButtonStyle {
         ActionButtonType.record ||
         ActionButtonType.stop =>
           const BoxDecoration(
-            color: FatColors.greyBackground,
+            color: ToolkitColors.greyBackground,
             shape: BoxShape.circle,
           ),
         _ => sh.invertDecoration(style.iconDecoration),
@@ -76,64 +76,64 @@ class ActionButtonStyle {
   /// Provides default light style for icon buttons.
   factory ActionButtonStyle.lightStyle(ActionButtonType type) {
     IconData icon;
-    var color = FatColors.darkIcon;
-    var bgColor = FatColors.lightButtonBackground;
+    var color = ToolkitColors.darkIcon;
+    var bgColor = ToolkitColors.lightButtonBackground;
     String tooltip;
-    final tooltipTextStyle = FatTextStyles.tooltip;
+    final tooltipTextStyle = ToolkitTextStyles.tooltip;
     const tooltipDecoration = BoxDecoration(
-      color: FatColors.tooltipBackground,
+      color: ToolkitColors.tooltipBackground,
       borderRadius: BorderRadius.all(Radius.circular(4)),
     );
 
     switch (type) {
       case ActionButtonType.add:
-        icon = FatIcons.add;
+        icon = ToolkitIcons.add;
         tooltip = 'Add Attachment';
       case ActionButtonType.attachFile:
-        icon = FatIcons.attach_file;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.attach_file;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Attach File';
       case ActionButtonType.camera:
-        icon = FatIcons.camera_alt;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.camera_alt;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Take Photo';
       case ActionButtonType.stop:
-        icon = FatIcons.stop;
+        icon = ToolkitIcons.stop;
         tooltip = 'Stop';
       case ActionButtonType.close:
-        icon = FatIcons.close;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.close;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Close';
       case ActionButtonType.copy:
-        icon = FatIcons.content_copy;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.content_copy;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Copy to Clipboard';
       case ActionButtonType.edit:
-        icon = FatIcons.edit;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.edit;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Edit Message';
       case ActionButtonType.gallery:
-        icon = FatIcons.image;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.image;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Image Gallery';
       case ActionButtonType.record:
-        icon = FatIcons.mic;
+        icon = ToolkitIcons.mic;
         tooltip = 'Record Audio';
       case ActionButtonType.submit:
-        icon = FatIcons.submit_icon;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.darkButtonBackground;
+        icon = ToolkitIcons.submit_icon;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Submit Message';
       case ActionButtonType.closeMenu:
-        icon = FatIcons.close;
-        color = FatColors.whiteIcon;
-        bgColor = FatColors.greyBackground;
+        icon = ToolkitIcons.close;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.greyBackground;
         tooltip = 'Close Menu';
     }
 

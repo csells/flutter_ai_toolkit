@@ -4,9 +4,9 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'fat_colors.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 /// Style for user messages.
 @immutable
@@ -48,7 +48,7 @@ class UserMessageStyle {
       // inversion doesn't look great here
       // decoration: sh.invertDecoration(style.decoration),
       decoration: (style.decoration! as BoxDecoration).copyWith(
-        color: FatColors.greyBackground,
+        color: ToolkitColors.greyBackground,
       ),
     );
   }
@@ -58,9 +58,9 @@ class UserMessageStyle {
 
   /// Provides a default light style.
   factory UserMessageStyle.lightStyle() => UserMessageStyle(
-        textStyle: FatTextStyles.body1,
+        textStyle: ToolkitTextStyles.body1,
         decoration: const BoxDecoration(
-          color: FatColors.userMessageBackground,
+          color: ToolkitColors.userMessageBackground,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.zero,

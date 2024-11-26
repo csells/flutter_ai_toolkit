@@ -18,8 +18,8 @@ import 'package:flutter/widgets.dart';
 ///         Homepage:  https://design.google.com/icons/
 ///
 @immutable
-class FatIcons {
-  const FatIcons._();
+class ToolkitIcons {
+  const ToolkitIcons._();
 
   static const _kFontFam = 'FatIcons';
   static const String _kFontPkg = 'flutter_ai_toolkit';

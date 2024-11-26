@@ -5,10 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import 'fat_colors.dart';
-import 'fat_icons.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'tookit_icons.dart';
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 /// Style for LLM messages.
 @immutable
@@ -63,7 +63,7 @@ class LlmMessageStyle {
       // inversion doesn't look great here
       // iconDecoration: sh.invertDecoration(style.iconDecoration),
       iconDecoration: const BoxDecoration(
-        color: FatColors.greyBackground,
+        color: ToolkitColors.greyBackground,
         shape: BoxShape.circle,
       ),
       markdownStyle: _invertMarkdownStyle(style.markdownStyle),
@@ -73,36 +73,36 @@ class LlmMessageStyle {
 
   /// Provides a default light style.
   factory LlmMessageStyle.lightStyle() => LlmMessageStyle(
-        icon: FatIcons.spark_icon,
-        iconColor: FatColors.darkIcon,
+        icon: ToolkitIcons.spark_icon,
+        iconColor: ToolkitColors.darkIcon,
         iconDecoration: const BoxDecoration(
-          color: FatColors.llmIconBackground,
+          color: ToolkitColors.llmIconBackground,
           shape: BoxShape.circle,
         ),
         markdownStyle: MarkdownStyleSheet(
-          a: FatTextStyles.body1,
-          blockquote: FatTextStyles.body1,
-          checkbox: FatTextStyles.body1,
-          code: FatTextStyles.code,
-          del: FatTextStyles.body1,
-          em: FatTextStyles.body1.copyWith(fontStyle: FontStyle.italic),
-          h1: FatTextStyles.heading1,
-          h2: FatTextStyles.heading2,
-          h3: FatTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
-          h4: FatTextStyles.body1,
-          h5: FatTextStyles.body1,
-          h6: FatTextStyles.body1,
-          listBullet: FatTextStyles.body1,
-          img: FatTextStyles.body1,
-          strong: FatTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
-          p: FatTextStyles.body1,
-          tableBody: FatTextStyles.body1,
-          tableHead: FatTextStyles.body1,
+          a: ToolkitTextStyles.body1,
+          blockquote: ToolkitTextStyles.body1,
+          checkbox: ToolkitTextStyles.body1,
+          code: ToolkitTextStyles.code,
+          del: ToolkitTextStyles.body1,
+          em: ToolkitTextStyles.body1.copyWith(fontStyle: FontStyle.italic),
+          h1: ToolkitTextStyles.heading1,
+          h2: ToolkitTextStyles.heading2,
+          h3: ToolkitTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
+          h4: ToolkitTextStyles.body1,
+          h5: ToolkitTextStyles.body1,
+          h6: ToolkitTextStyles.body1,
+          listBullet: ToolkitTextStyles.body1,
+          img: ToolkitTextStyles.body1,
+          strong: ToolkitTextStyles.body1.copyWith(fontWeight: FontWeight.bold),
+          p: ToolkitTextStyles.body1,
+          tableBody: ToolkitTextStyles.body1,
+          tableHead: ToolkitTextStyles.body1,
         ),
         decoration: BoxDecoration(
-          color: FatColors.llmMessageBackground,
+          color: ToolkitColors.llmMessageBackground,
           border: Border.all(
-            color: FatColors.llmMessageOutline,
+            color: ToolkitColors.llmMessageOutline,
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.zero,

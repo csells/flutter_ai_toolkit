@@ -4,9 +4,9 @@
 
 import 'package:flutter/material.dart';
 
-import 'fat_colors.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 @immutable
 
@@ -51,7 +51,7 @@ class SuggestionStyle {
     return SuggestionStyle(
       textStyle: sh.invertTextStyle(style.textStyle),
       decoration: const BoxDecoration(
-        color: FatColors.greyBackground,
+        color: ToolkitColors.greyBackground,
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
     );
@@ -61,9 +61,9 @@ class SuggestionStyle {
   ///
   /// This style is typically used for suggestions in light mode.
   factory SuggestionStyle.lightStyle() => SuggestionStyle(
-        textStyle: FatTextStyles.body1,
+        textStyle: ToolkitTextStyles.body1,
         decoration: const BoxDecoration(
-          color: FatColors.userMessageBackground,
+          color: ToolkitColors.userMessageBackground,
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       );

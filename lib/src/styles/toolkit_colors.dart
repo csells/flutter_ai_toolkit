@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 /// A collection of color constants used throughout the application.
 @immutable
-abstract final class FatColors {
+abstract final class ToolkitColors {
   /// Fully transparent color.
   static const Color transparent = Color(0x00000000);
 

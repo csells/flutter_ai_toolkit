@@ -5,16 +5,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'fat_colors.dart';
+import 'toolkit_colors.dart';
 
 /// A utility class that defines text styles for the Fat design system.
 @immutable
-abstract final class FatTextStyles {
+abstract final class ToolkitTextStyles {
   /// Large display text style.
   ///
   /// Used for the most prominent text elements, typically headers or titles.
   static final TextStyle display = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 32,
     fontWeight: FontWeight.w400,
   );
@@ -23,7 +23,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for main section headings or important subheadings.
   static final TextStyle heading1 = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 24,
     fontWeight: FontWeight.w400,
   );
@@ -32,7 +32,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for subsection headings or less prominent titles.
   static final TextStyle heading2 = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 20,
     fontWeight: FontWeight.w400,
   );
@@ -41,7 +41,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for the main content text in the application.
   static final TextStyle body1 = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
@@ -50,7 +50,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for displaying code snippets or monospaced text.
   static final TextStyle code = GoogleFonts.robotoMono(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
@@ -59,7 +59,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for less prominent body text or supporting information.
   static final TextStyle body2 = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
@@ -68,7 +68,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for the text of tooltips.
   static final TextStyle tooltip = GoogleFonts.roboto(
-    color: FatColors.tooltipText.withOpacity(0.9),
+    color: ToolkitColors.tooltipText.withOpacity(0.9),
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
@@ -77,7 +77,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for the text of file attachments.
   static final TextStyle filename = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
@@ -86,7 +86,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for displaying the file type or MIME type of attachments.
   static final TextStyle filetype = GoogleFonts.roboto(
-    color: FatColors.hintText,
+    color: ToolkitColors.hintText,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
@@ -95,7 +95,7 @@ abstract final class FatTextStyles {
   ///
   /// Used for small labels, captions, or helper text.
   static final TextStyle label = GoogleFonts.roboto(
-    color: FatColors.enabledText,
+    color: ToolkitColors.enabledText,
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );

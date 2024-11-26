@@ -4,9 +4,9 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'fat_colors.dart';
-import 'fat_text_styles.dart';
 import 'style_helpers.dart' as sh;
+import 'toolkit_colors.dart';
+import 'toolkit_text_styles.dart';
 
 /// Style for the input text box.
 @immutable
@@ -43,8 +43,8 @@ class ChatInputStyle {
       textStyle: sh.invertTextStyle(style.textStyle),
       // inversion doesn't look great here
       // hintStyle: sh.invertTextStyle(style.hintStyle),
-      hintStyle: FatTextStyles.body2.copyWith(
-        color: FatColors.greyBackground,
+      hintStyle: ToolkitTextStyles.body2.copyWith(
+        color: ToolkitColors.greyBackground,
       ),
       hintText: style.hintText,
       backgroundColor: sh.invertColor(style.backgroundColor),
@@ -56,13 +56,14 @@ class ChatInputStyle {
 
   /// Provides a default light style.
   factory ChatInputStyle.lightStyle() => ChatInputStyle(
-        textStyle: FatTextStyles.body2,
-        hintStyle: FatTextStyles.body2.copyWith(color: FatColors.hintText),
+        textStyle: ToolkitTextStyles.body2,
+        hintStyle:
+            ToolkitTextStyles.body2.copyWith(color: ToolkitColors.hintText),
         hintText: 'Ask me anything...',
-        backgroundColor: FatColors.containerBackground,
+        backgroundColor: ToolkitColors.containerBackground,
         decoration: BoxDecoration(
-          color: FatColors.containerBackground,
-          border: Border.all(width: 1, color: FatColors.outline),
+          color: ToolkitColors.containerBackground,
+          border: Border.all(width: 1, color: ToolkitColors.outline),
           borderRadius: BorderRadius.circular(24),
         ),
       );
