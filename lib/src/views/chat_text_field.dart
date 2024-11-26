@@ -2,9 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoTextField;
+import 'package:flutter/material.dart'
+    show InputBorder, InputDecoration, TextField, TextInputAction;
+import 'package:flutter/widgets.dart';
 
+import '../styles/toolkit_colors.dart';
 import '../utility.dart';
 
 /// A text field that adapts to the current app style (Material or Cupertino).
@@ -79,7 +82,7 @@ class ChatTextField extends StatelessWidget {
           placeholderStyle: hintStyle,
           padding: hintPadding ?? EdgeInsets.zero,
           decoration: BoxDecoration(
-            border: Border.all(width: 0, color: Colors.transparent),
+            border: Border.all(width: 0, color: ToolkitColors.transparent),
           ),
           textInputAction: textInputAction,
         )

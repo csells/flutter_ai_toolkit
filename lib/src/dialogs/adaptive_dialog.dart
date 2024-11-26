@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/cupertino.dart' as cup;
-import 'package:flutter/material.dart' as mat;
+import 'package:flutter/cupertino.dart'
+    show CupertinoAlertDialog, showCupertinoDialog;
+import 'package:flutter/material.dart' show AlertDialog, showDialog;
 import 'package:flutter/widgets.dart';
 
 import '../utility.dart';
@@ -30,19 +31,18 @@ class AdaptiveAlertDialog {
     List<Widget> actions = const [],
   }) =>
       isCupertinoApp(context)
-          ? cup.showCupertinoDialog<T>(
+          ? showCupertinoDialog<T>(
               context: context,
               barrierDismissible: barrierDismissible,
-              builder: (context) => cup.CupertinoAlertDialog(
+              builder: (context) => CupertinoAlertDialog(
                 content: content,
                 actions: actions,
               ),
             )
-          : mat.showDialog<T>(
+          : showDialog<T>(
               context: context,
               barrierDismissible: barrierDismissible,
-              builder: (context) => mat.AlertDialog(
-                // insetPadding: const EdgeInsets.all(48),
+              builder: (context) => AlertDialog(
                 content: content,
                 actions: actions,
               ),

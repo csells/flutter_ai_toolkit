@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'toolkit_colors.dart';
 import 'toolkit_text_styles.dart';
 
-@immutable
-
 /// A class that defines the style for suggestions.
+@immutable
 class SuggestionStyle {
   /// Creates a [SuggestionStyle].
   ///

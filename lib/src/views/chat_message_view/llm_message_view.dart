@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../styles/llm_message_style.dart';
+import '../../styles/toolkit_colors.dart';
 import '../jumping_dots_progress_indicator/jumping_dots_progress_indicator.dart';
 import 'adaptive_copy_text.dart';
 import 'hovering_buttons.dart';
@@ -112,7 +113,7 @@ class LlmMessageView extends StatelessWidget {
         uri.toString(),
         // use an error builder to avoid the unhandled exception
         errorBuilder: (context, error, stack) => Placeholder(
-          color: Colors.red,
+          color: ToolkitColors.red,
           child: Text(error.toString()),
         ),
       );

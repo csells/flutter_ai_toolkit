@@ -13,6 +13,8 @@ abstract final class ToolkitColors {
   /// Pure black color.
   static const Color black = Color(0xFF000000);
 
+  /// Pure red color.
+  static const Color red = Color(0xFFFF0000);
   // Color 0 (#FFFFFF)
   /// White color used for button backgrounds.
   static const Color whiteButtonBackground = Color(0xFFFFFFFF);
