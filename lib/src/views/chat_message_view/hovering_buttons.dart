@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 import '../../styles/llm_chat_view_style.dart';
-import '../../styles/style_helpers.dart';
 import '../../utility.dart';
 
 /// A widget that displays hovering buttons for editing and copying.
@@ -71,7 +70,7 @@ class HoveringButtons extends StatelessWidget {
                               child: Icon(
                                 chatStyle.editButtonStyle!.icon,
                                 size: 12,
-                                color: invertColor(
+                                color: _invertColor(
                                   chatStyle.editButtonStyle!.iconColor,
                                 ),
                               ),
@@ -84,7 +83,7 @@ class HoveringButtons extends StatelessWidget {
                             child: Icon(
                               chatStyle.copyButtonStyle!.icon,
                               size: 12,
-                              color: invertColor(
+                              color: _invertColor(
                                 chatStyle.copyButtonStyle!.iconColor,
                               ),
                             ),
@@ -96,4 +95,11 @@ class HoveringButtons extends StatelessWidget {
             ),
           ],
         );
+
+  Color _invertColor(Color? color) => Color.fromARGB(
+        color!.alpha,
+        255 - color.red,
+        255 - color.green,
+        255 - color.blue,
+      );
 }
