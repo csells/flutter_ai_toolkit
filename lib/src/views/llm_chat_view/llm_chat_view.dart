@@ -107,6 +107,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
   LlmResponse? _pendingPromptResponse;
   ChatMessage? _initialMessage;
+  var _isEditing = false;
   LlmResponse? _pendingSttResponse;
 
   @override
@@ -156,6 +157,7 @@ class _LlmChatViewState extends State<LlmChatView>
               ),
               ChatInput(
                 initialMessage: _initialMessage,
+                onCancelEdit: _isEditing ? _onCancelEdit : null,
                 onSendMessage: _onSendMessage,
                 onCancelMessage:
                     _pendingPromptResponse == null ? null : _onCancelMessage,
@@ -174,6 +176,7 @@ class _LlmChatViewState extends State<LlmChatView>
     Iterable<Attachment> attachments,
   ) async {
     _initialMessage = null;
+    _isEditing = false;
 
     // check the viewmodel for a user-provided message sender to use instead
     final sendMessageStream = widget.viewModel.messageSender ??
@@ -214,11 +217,15 @@ class _LlmChatViewState extends State<LlmChatView>
 
     // set the text  to the last userMessage to provide initial prompt and
     // attachments for the user to edit
-    setState(() => _initialMessage = userMessage);
+    setState(() {
+      _initialMessage = userMessage;
+      _isEditing = true;
+    });
   }
 
   Future<void> _onTranslateStt(XFile file) async {
     _initialMessage = null;
+    _isEditing = false;
 
     // use the LLM to translate the attached audio to text
     const prompt =
@@ -297,7 +304,15 @@ class _LlmChatViewState extends State<LlmChatView>
   void _onHistoryChanged() {
     // if the history is cleared, clear the initial message
     if (widget.viewModel.provider.history.isEmpty) {
-      setState(() => _initialMessage = null);
+      setState(() {
+        _initialMessage = null;
+        _isEditing = false;
+      });
     }
+  }
+
+  void _onCancelEdit() {
+    // TODO
+    debugPrint('cancel edit');
   }
 }

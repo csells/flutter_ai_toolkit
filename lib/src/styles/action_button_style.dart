@@ -84,6 +84,11 @@ class ActionButtonStyle {
         color = ToolkitColors.whiteIcon;
         bgColor = ToolkitColors.darkButtonBackground;
         tooltip = 'Close';
+      case ActionButtonType.cancel:
+        icon = ToolkitIcons.close;
+        color = ToolkitColors.whiteIcon;
+        bgColor = ToolkitColors.darkButtonBackground;
+        tooltip = 'Cancel';
       case ActionButtonType.copy:
         icon = ToolkitIcons.content_copy;
         color = ToolkitColors.whiteIcon;

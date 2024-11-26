@@ -22,6 +22,9 @@ enum ActionButtonType {
   /// Button to close an open menu.
   closeMenu,
 
+  /// Button to cancel an operation.
+  cancel,
+
   /// Button to copy selected text or content.
   copy,
 

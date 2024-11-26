@@ -28,6 +28,7 @@ class LlmChatViewStyle {
     this.cameraButtonStyle,
     this.stopButtonStyle,
     this.closeButtonStyle,
+    this.cancelButtonStyle,
     this.copyButtonStyle,
     this.editButtonStyle,
     this.galleryButtonStyle,
@@ -83,6 +84,10 @@ class LlmChatViewStyle {
       closeButtonStyle: ActionButtonStyle.resolve(
         style?.closeButtonStyle,
         defaultStyle: ActionButtonStyle.defaultStyle(ActionButtonType.close),
+      ),
+      cancelButtonStyle: ActionButtonStyle.resolve(
+        style?.cancelButtonStyle,
+        defaultStyle: ActionButtonStyle.defaultStyle(ActionButtonType.cancel),
       ),
       copyButtonStyle: ActionButtonStyle.resolve(
         style?.copyButtonStyle,
@@ -144,6 +149,8 @@ class LlmChatViewStyle {
             ActionButtonStyle.defaultStyle(ActionButtonType.camera),
         closeButtonStyle:
             ActionButtonStyle.defaultStyle(ActionButtonType.close),
+        cancelButtonStyle:
+            ActionButtonStyle.defaultStyle(ActionButtonType.cancel),
         copyButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.copy),
         editButtonStyle: ActionButtonStyle.defaultStyle(ActionButtonType.edit),
         actionButtonBarDecoration: BoxDecoration(
@@ -183,6 +190,9 @@ class LlmChatViewStyle {
 
   /// Style for the close button.
   final ActionButtonStyle? closeButtonStyle;
+
+  /// Style for the cancel button.
+  final ActionButtonStyle? cancelButtonStyle;
 
   /// Style for the copy button.
   final ActionButtonStyle? copyButtonStyle;
