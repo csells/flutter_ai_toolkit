@@ -1,3 +1,7 @@
+## 0.x.y
+
+* fixed [#12](https://github.com/csells/flutter_ai_toolkit/issues/12): would like some hover icons for copy+edit on web and desktop
+
 ## 0.6.4
 
 * fixed [#62](https://github.com/csells/flutter_ai_toolkit/issues/62): bug: getting an image back from the LLM that doesn't exist throws an exception
