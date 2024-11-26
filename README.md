@@ -19,7 +19,7 @@ The AI Toolkit is a set of AI chat-related widgets to make it easy to add an AI 
 - support for Cupertino as well as Material
 - chat session serialization/deserialization
 - swappable support for LLM providers; oob support for Gemini and Vertex
-- support for all Flutter platforms
+- support for many Flutter platforms: Android, iOS, web and macOS
 
 Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/demo/demo.dart) hosting the AI Tookit running on the web:
 
