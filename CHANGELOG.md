@@ -1,4 +1,4 @@
-## 0.x.y
+## 0.6.5
 
 * implemented [#12](https://github.com/csells/flutter_ai_toolkit/issues/12): would like some hover icons for copy+edit on web and desktop
 
