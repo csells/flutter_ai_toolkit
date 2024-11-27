@@ -107,7 +107,7 @@ class _LlmChatViewState extends State<LlmChatView>
 
   LlmResponse? _pendingPromptResponse;
   ChatMessage? _initialMessage;
-  var _isEditing = false;
+  ChatMessage? _associatedResponse;
   LlmResponse? _pendingSttResponse;
 
   @override
@@ -139,7 +139,10 @@ class _LlmChatViewState extends State<LlmChatView>
                 child: Stack(
                   children: [
                     ChatHistoryView(
-                      onEditMessage: _pendingPromptResponse == null
+                      // can only edit if we're not waiting on the LLM or if
+                      // we're not already editing an LLM response
+                      onEditMessage: _pendingPromptResponse == null &&
+                              _associatedResponse == null
                           ? _onEditMessage
                           : null,
                     ),
@@ -157,7 +160,8 @@ class _LlmChatViewState extends State<LlmChatView>
               ),
               ChatInput(
                 initialMessage: _initialMessage,
-                onCancelEdit: _isEditing ? _onCancelEdit : null,
+                onCancelEdit:
+                    _associatedResponse != null ? _onCancelEdit : null,
                 onSendMessage: _onSendMessage,
                 onCancelMessage:
                     _pendingPromptResponse == null ? null : _onCancelMessage,
@@ -176,7 +180,7 @@ class _LlmChatViewState extends State<LlmChatView>
     Iterable<Attachment> attachments,
   ) async {
     _initialMessage = null;
-    _isEditing = false;
+    _associatedResponse = null;
 
     // check the viewmodel for a user-provided message sender to use instead
     final sendMessageStream = widget.viewModel.messageSender ??
@@ -206,7 +210,7 @@ class _LlmChatViewState extends State<LlmChatView>
     // remove the last llm message
     final history = widget.viewModel.provider.history.toList();
     assert(history.last.origin.isLlm);
-    history.removeLast();
+    final llmMessage = history.removeLast();
 
     // remove the last user message
     assert(history.last.origin.isUser);
@@ -219,13 +223,13 @@ class _LlmChatViewState extends State<LlmChatView>
     // attachments for the user to edit
     setState(() {
       _initialMessage = userMessage;
-      _isEditing = true;
+      _associatedResponse = llmMessage;
     });
   }
 
   Future<void> _onTranslateStt(XFile file) async {
     _initialMessage = null;
-    _isEditing = false;
+    _associatedResponse = null;
 
     // use the LLM to translate the attached audio to text
     const prompt =
@@ -306,13 +310,23 @@ class _LlmChatViewState extends State<LlmChatView>
     if (widget.viewModel.provider.history.isEmpty) {
       setState(() {
         _initialMessage = null;
-        _isEditing = false;
+        _associatedResponse = null;
       });
     }
   }
 
   void _onCancelEdit() {
-    // TODO
-    debugPrint('cancel edit');
+    assert(_initialMessage != null);
+    assert(_associatedResponse != null);
+
+    // add the original message and response back to the history
+    final history = widget.viewModel.provider.history.toList();
+    history.addAll([_initialMessage!, _associatedResponse!]);
+    widget.viewModel.provider.history = history;
+
+    setState(() {
+      _initialMessage = null;
+      _associatedResponse = null;
+    });
   }
 }

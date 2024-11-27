@@ -73,7 +73,7 @@ class HoveringButtons extends StatelessWidget {
                                   child: Icon(
                                     chatStyle.editButtonStyle!.icon,
                                     size: _iconSize.toDouble(),
-                                    color: _invertColor(
+                                    color: invertColor(
                                       chatStyle.editButtonStyle!.iconColor,
                                     ),
                                   ),
@@ -86,7 +86,7 @@ class HoveringButtons extends StatelessWidget {
                                 child: Icon(
                                   chatStyle.copyButtonStyle!.icon,
                                   size: 12,
-                                  color: _invertColor(
+                                  color: invertColor(
                                     chatStyle.copyButtonStyle!.iconColor,
                                   ),
                                 ),
@@ -100,11 +100,4 @@ class HoveringButtons extends StatelessWidget {
             ),
           );
   }
-
-  Color _invertColor(Color? color) => Color.fromARGB(
-        color!.alpha,
-        255 - color.red,
-        255 - color.green,
-        255 - color.blue,
-      );
 }

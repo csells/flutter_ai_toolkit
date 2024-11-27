@@ -1,6 +1,8 @@
 ## 0.x.y
 
-* fixed [#12](https://github.com/csells/flutter_ai_toolkit/issues/12): would like some hover icons for copy+edit on web and desktop
+* implemented [#12](https://github.com/csells/flutter_ai_toolkit/issues/12): would like some hover icons for copy+edit on web and desktop
+
+* implemented [#9](https://github.com/csells/flutter_ai_toolkit/issues/9): need to be able to cancel a prompt edit and get back the last response unharmed
 
 ## 0.6.4
 

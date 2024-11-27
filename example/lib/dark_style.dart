@@ -27,6 +27,7 @@ LlmChatViewStyle darkChatViewStyle() {
     fileAttachmentStyle: _darkFileAttachmentStyle(),
     suggestionStyle: _darkSuggestionStyle(),
     closeButtonStyle: _darkActionButtonStyle(ActionButtonType.close),
+    cancelButtonStyle: _darkActionButtonStyle(ActionButtonType.cancel),
     copyButtonStyle: _darkActionButtonStyle(ActionButtonType.copy),
     editButtonStyle: _darkActionButtonStyle(ActionButtonType.edit),
     galleryButtonStyle: _darkActionButtonStyle(ActionButtonType.gallery),

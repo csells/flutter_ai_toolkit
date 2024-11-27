@@ -233,6 +233,7 @@ class _ChatPageState extends State<ChatPage>
       attachFileButtonStyle: halloweenMenuButtonStyle,
       cameraButtonStyle: halloweenMenuButtonStyle,
       closeButtonStyle: halloweenActionButtonStyle,
+      cancelButtonStyle: halloweenActionButtonStyle,
       closeMenuButtonStyle: halloweenActionButtonStyle,
       copyButtonStyle: halloweenMenuButtonStyle,
       editButtonStyle: halloweenMenuButtonStyle,

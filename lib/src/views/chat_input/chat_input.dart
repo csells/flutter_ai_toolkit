@@ -151,7 +151,7 @@ class _ChatInputState extends State<ChatInput> {
                   attachments: _attachments,
                   onRemove: onRemoveAttachment,
                 ),
-                const Gap(6),
+                if (_attachments.isNotEmpty) const Gap(6),
                 ValueListenableBuilder(
                   valueListenable: _textController,
                   builder: (context, value, child) => ListenableBuilder(
@@ -325,7 +325,9 @@ class _EditingIndicator extends StatelessWidget {
           children: [
             Text(
               'Editing',
-              style: ToolkitTextStyles.label,
+              style: ToolkitTextStyles.label.copyWith(
+                color: invertColor(cancelButtonStyle.iconColor),
+              ),
             ),
             const Gap(6),
             ActionButton(

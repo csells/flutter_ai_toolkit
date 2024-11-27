@@ -56,3 +56,19 @@ Future<void> copyToClipboard(BuildContext context, String text) async {
     AdaptiveSnackBar.show(context, 'Message copied to clipboard');
   }
 }
+
+/// Inverts the given color.
+///
+/// This function takes a [Color] object and returns a new [Color] object
+/// with the RGB values inverted. The alpha value remains unchanged.
+///
+/// Parameters:
+///   * [color]: The [Color] to be inverted. This parameter must not be null.
+///
+/// Returns: A new [Color] object with the inverted RGB values.
+Color invertColor(Color? color) => Color.fromARGB(
+      color!.alpha,
+      255 - color.red,
+      255 - color.green,
+      255 - color.blue,
+    );
