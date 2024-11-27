@@ -9,7 +9,6 @@ import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
 import '../../styles/llm_chat_view_style.dart';
 import '../../styles/llm_message_style.dart';
-import '../../styles/toolkit_colors.dart';
 import '../jumping_dots_progress_indicator/jumping_dots_progress_indicator.dart';
 import 'adaptive_copy_text.dart';
 import 'hovering_buttons.dart';
@@ -88,7 +87,6 @@ class LlmMessageView extends StatelessWidget {
                                             data: text,
                                             selectable: false,
                                             styleSheet: llmStyle.markdownStyle,
-                                            imageBuilder: _markdownImageBuilder,
                                           )
                                         : viewModel.responseBuilder!(
                                             context,
@@ -106,15 +104,5 @@ class LlmMessageView extends StatelessWidget {
           ),
           const Flexible(flex: 2, child: SizedBox()),
         ],
-      );
-
-  Widget _markdownImageBuilder(Uri uri, String? title, String? alt) =>
-      Image.network(
-        uri.toString(),
-        // use an error builder to avoid the unhandled exception
-        errorBuilder: (context, error, stack) => Placeholder(
-          color: ToolkitColors.red,
-          child: Text(error.toString()),
-        ),
       );
 }
