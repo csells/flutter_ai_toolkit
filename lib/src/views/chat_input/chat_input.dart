@@ -13,15 +13,13 @@ import '../../chat_view_model/chat_view_model_client.dart';
 import '../../dialogs/adaptive_snack_bar/adaptive_snack_bar.dart';
 import '../../providers/interface/attachments.dart';
 import '../../providers/interface/chat_message.dart';
-import '../../styles/action_button_style.dart';
 import '../../styles/chat_input_style.dart';
 import '../../styles/llm_chat_view_style.dart';
-import '../../styles/toolkit_text_styles.dart';
 import '../../utility.dart';
-import '../action_button/action_button.dart';
 import '../chat_text_field.dart';
 import 'attachments_action_bar.dart';
 import 'attachments_view.dart';
+import 'editing_indicator.dart';
 import 'input_button.dart';
 import 'input_state.dart';
 
@@ -220,7 +218,7 @@ class _ChatInputState extends State<ChatInput> {
                               Align(
                                 alignment: Alignment.topRight,
                                 child: widget.onCancelEdit != null
-                                    ? _EditingIndicator(
+                                    ? EditingIndicator(
                                         onCancelEdit: widget.onCancelEdit!,
                                         cancelButtonStyle:
                                             chatStyle.cancelButtonStyle!,
@@ -303,39 +301,4 @@ class _ChatInputState extends State<ChatInput> {
 
   void onRemoveAttachment(Attachment attachment) =>
       setState(() => _attachments.remove(attachment));
-}
-
-class _EditingIndicator extends StatelessWidget {
-  const _EditingIndicator({
-    required this.onCancelEdit,
-    required this.cancelButtonStyle,
-  });
-
-  final VoidCallback onCancelEdit;
-  final ActionButtonStyle cancelButtonStyle;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(
-          right: 16,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'Editing',
-              style: ToolkitTextStyles.label.copyWith(
-                color: invertColor(cancelButtonStyle.iconColor),
-              ),
-            ),
-            const Gap(6),
-            ActionButton(
-              onPressed: onCancelEdit,
-              style: cancelButtonStyle,
-              size: 16,
-            ),
-          ],
-        ),
-      );
 }

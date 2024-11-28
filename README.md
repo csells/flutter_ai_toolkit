@@ -21,11 +21,11 @@ The AI Toolkit is a set of AI chat-related widgets to make it easy to add an AI 
 - swappable support for LLM providers; oob support for Gemini and Vertex
 - support for the same Flutter platforms that Firebase supports: Android, iOS, web and macOS
 
-Here's an example of [a sample app](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/demo/demo.dart) hosting the AI Tookit running on the web:
+Here's [the online demo](https://flutter-ai-toolkit-examp-60bad.web.app/) hosting the AI Tookit:
 
 <img src="https://raw.githubusercontent.com/csells/flutter_ai_toolkit/main/README/screenshot.png" height="800"/>
 
-If you'd like to see it in action, check out [the online demo](https://flutter-ai-toolkit-examp-60bad.web.app/).
+The [source code for this demo](https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/demo/demo.dart) is available in the repo.
 
 ## Getting started
 Using the AI Toolkit is a matter of choosing which LLM provider you'd like to use (Gemini or Vertex), creating an instance and passing it to the `LlmChatView` widget, which is the main entry point for the AI Toolkit:
@@ -62,9 +62,15 @@ To configure the `GeminiProvider` you two things:
 2. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
 
 With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/gemini/gemini.dart">gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
+### gemini_api_key.dart
+Most of [the sample apps](https://github.com/csells/flutter_ai_toolkit/tree/main/example) reply on a Gemini API key, so for those to work, you'll need to plug your API key into a file called `gemini_api_key.dart` and put it in the `example/lib` folder (after cloning the repo, of course). Here's what it should look like:
+
+```dart
+// flutter_ai_toolkit/example/lib/gemini_api_key.dart
+const geminiApiKey = 'YOUR-API-KEY';
+```
 
 Note: Be careful not to check your API key into a git repo or share it with anyone.
-
 ## Vertex LLM Usage
 While Gemini AI is useful for quick prototyping, the recommended solution for production apps is Vertex AI in Firebase. And the reason for that is that there's no good way to keep your Gemini API key safe -- if you ship your Flutter app with the API key in there, someone can figure out how to dig it out.
 
@@ -116,7 +122,7 @@ class ChatPage extends StatelessWidget {
 ```
 If you like, use your Firebase project with the <a href="https://github.com/csells/flutter_ai_toolkit/blob/main/example/lib/vertex/vertex.dart">vertex.dart</a> sample. This sample is supported on Android, iOS, the web and macOS.
 
-Note: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check), which is beyond the scope of the sample code in this project.
+Note: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check).
 
 ## Device Access Permissions
 To enable the microphone feature, configure your app according to [the record package's permission setup instructions](https://pub.dev/packages/record#setup-permissions-and-others).
@@ -130,4 +136,4 @@ To enable the user to take a picture on their device, configurate your app accor
 To enable the user to take a picture on the web, configure your app according to [the camera plugin's setup instructions](https://pub.dev/packages/camera#setup).
 
 ## Feedback!
-Along the way, as you use this package, please [log issues and feature requests](https://github.com/csells/flutter_ai_toolkit/issues) as well as any [code you'd like to contribute](https://github.com/csells/flutter_ai_toolkit/pulls). I want your feedback and your contributions to ensure that the AI Toolkit is just as robust and useful as it can be for your real apps.
+Along the way, as you use this package, please [log issues and feature requests](https://github.com/csells/flutter_ai_toolkit/issues) as well as any [code you'd like to contribute](https://github.com/csells/flutter_ai_toolkit/pulls). I want your feedback and your contributions to ensure that the AI Toolkit is just as robust and useful as it can be for your real-world apps.
