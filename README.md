@@ -76,7 +76,7 @@ While Gemini AI is useful for quick prototyping, the recommended solution for pr
 
 To solve this problem as well as many others that you're going to have in a real-world production app, the model for initializing an instance of the Vertex AI LLM provider doesn't have an API key. Instead, it relies on a Firebase project, which you then initialize in your app. You can do that with the steps described in [the Get started with the Gemini API using the Vertex AI in Firebase SDKs docs](https://firebase.google.com/docs/vertex-ai/get-started?platform=flutter).
 
-Also make sure you configure your FlutterApp using the `flutterfire` CLI tool as described in [the Add Firebase to your Flutter app docs](https://firebase.google.com/docs/flutter/setup).
+Also make sure you configure your FlutterApp using the `flutterfire` CLI tool as described in [the Add Firebase to your Flutter app docs](https://firebase.google.com/docs/flutter/setup). **Make sure to run this tool from within the `example` directory.**
 
 After following these instructions, you're ready to use Firebase Vertex AI in your project. Start by initializing Firebase:
 
