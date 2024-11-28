@@ -66,7 +66,7 @@ With this in place, you're ready to write the Gemini code shown above. If you li
 Most of [the sample apps](https://github.com/csells/flutter_ai_toolkit/tree/main/example) reply on a Gemini API key, so for those to work, you'll need to plug your API key into a file called `gemini_api_key.dart` and put it in the `example/lib` folder (after cloning the repo, of course). Here's what it should look like:
 
 ```dart
-// flutter_ai_toolkit/example/lib/gemini_api_key.dart
+// example/lib/gemini_api_key.dart
 const geminiApiKey = 'YOUR-API-KEY';
 ```
 
